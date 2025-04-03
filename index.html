@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LITATA - 调试中心</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LITATA - 时尚社区</title>
     <style>
         * {
             margin: 0;
@@ -13,436 +13,340 @@
 
         body {
             font-family: "SF Pro Text", -apple, "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            background-color: #f6f8fa;
+            background-color: #fff;
             color: #333;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        header {
-            background: linear-gradient(135deg, #3a7bd5, #00d2ff);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .title {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .sidebar {
-            flex: 0 0 300px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 20px;
-            height: fit-content;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .nav-list {
-            list-style: none;
-        }
-
-        .nav-item {
-            margin-bottom: 10px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            border-radius: 8px;
-            color: #333;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            gap: 10px;
-        }
-
-        .nav-link:hover {
-            background-color: #f0f6ff;
-        }
-
-        .nav-link.active {
-            background-color: #3a7bd5;
-            color: white;
-        }
-
-        .nav-icon {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-        }
-
-        .nav-text {
-            font-size: 16px;
-        }
-
-        .view-container {
-            flex: 1;
-            min-width: 500px;
-            position: relative;
-        }
-
-        .device-wrapper {
-            width: 450px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .device-frame {
-            background: #111;
-            border-radius: 55px;
-            padding: 10px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1), 0 5px 10px rgba(0,0,0,0.1), inset 0 0 0 2px #222;
-        }
-
-        .device-screen {
-            width: 430px;
-            height: 932px;
-            background: #000;
-            border-radius: 45px;
+            height: 100vh;
+            width: 100vw;
             overflow: hidden;
             position: relative;
         }
 
-        .device-content {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background: white;
+        /* iPhone 16 Pro Max 视觉仿真容器 */
+        .iphone-container {
+            position: relative;
+            width: 430px;
+            height: 932px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+            border-radius: 55px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         }
 
-        .device-stripe {
+        /* 动态岛 */
+        .dynamic-island {
             position: absolute;
-            width: 180px;
-            height: 30px;
-            background: #111;
-            top: 15px;
+            width: 125px;
+            height: 35px;
+            background: #000;
+            border-radius: 20px;
+            top: 12px;
             left: 50%;
             transform: translateX(-50%);
-            border-radius: 20px;
-            z-index: 9;
+            z-index: 100;
         }
 
-        .device-header {
+        /* 状态栏 */
+        .status-bar {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            height: 100px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0));
-            z-index: 8;
-            pointer-events: none;
-        }
-
-        .device-footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-            z-index: 8;
-            pointer-events: none;
-        }
-
-        .device-power {
-            position: absolute;
-            right: -10px;
-            top: 170px;
-            width: 5px;
-            height: 80px;
-            background: #222;
-            border-radius: 0 2px 2px 0;
-        }
-
-        .device-volume-up {
-            position: absolute;
-            left: -10px;
-            top: 170px;
-            width: 5px;
-            height: 60px;
-            background: #222;
-            border-radius: 2px 0 0 2px;
-        }
-
-        .device-volume-down {
-            position: absolute;
-            left: -10px;
-            top: 250px;
-            width: 5px;
-            height: 60px;
-            background: #222;
-            border-radius: 2px 0 0 2px;
-        }
-
-        .controls {
-            margin-top: 20px;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .control-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            background-color: #f0f6ff;
-            color: #3a7bd5;
-            transition: all 0.2s ease;
-        }
-
-        .control-btn:hover {
-            background-color: #3a7bd5;
-            color: white;
-        }
-
-        .device-info {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .info-row {
+            width: 100%;
+            height: 50px;
+            padding: 10px 25px;
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 14px;
+            align-items: center;
+            z-index: 90;
         }
 
-        .info-label {
+        .status-bar .time {
             font-weight: 600;
-            color: #555;
+            font-size: 16px;
+            color: #fff;
         }
 
-        .info-value {
-            color: #3a7bd5;
+        .status-bar .right {
+            display: flex;
+            gap: 5px;
         }
 
-        @media (max-width: 900px) {
-            .container {
-                flex-direction: column;
+        .status-bar .right .icon {
+            width: 18px;
+            height: 18px;
+            color: #fff;
+        }
+
+        /* 主体内容区 */
+        .splash-container {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Logo 容器 */
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 80px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-            .sidebar {
-                flex: 1 0 100%;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
-            .view-container {
-                flex: 1 0 100%;
-            }
+        }
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .logo-text {
+            font-size: 50px;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .app-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .app-slogan {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            max-width: 280px;
+        }
+
+        /* 加载动画 */
+        .loading {
+            margin-top: 40px;
+            position: relative;
+            width: 120px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            position: absolute;
+            height: 100%;
+            width: 0%;
+            background: #fff;
+            border-radius: 4px;
+            transition: width 3s linear;
+        }
+
+        /* 倒计时 */
+        .countdown {
+            margin-top: 20px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .count-number {
+            font-weight: 700;
+            font-size: 18px;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* 跳过按钮 */
+        .skip-btn {
+            position: absolute;
+            bottom: 80px;
+            right: 30px;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            animation: fadeIn 1s ease-out 1s forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .skip-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* 底部安全区域 */
+        .bottom-safe-area {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 30px;
+            z-index: 10;
+        }
+
+        /* 背景图形 */
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .shape1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -100px;
+        }
+
+        .shape2 {
+            width: 200px;
+            height: 200px;
+            bottom: 100px;
+            left: -70px;
+        }
+
+        .shape3 {
+            width: 150px;
+            height: 150px;
+            top: 30%;
+            left: 40px;
+        }
+
+        .shape4 {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            right: 60px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="title">LITATA 调试中心</div>
-        <div class="subtitle">iPhone 16 Pro Max 视觉仿真</div>
-    </header>
-
-    <div class="container">
-        <div class="sidebar">
-            <div class="section-title">页面导航</div>
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a href="#" class="nav-link active" data-page="splash.html">
-                        <span class="nav-icon">🚀</span>
-                        <span class="nav-text">启动页</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="home.html">
-                        <span class="nav-icon">🏠</span>
-                        <span class="nav-text">首页（社区）</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="inspiration.html">
-                        <span class="nav-icon">✨</span>
-                        <span class="nav-text">灵感（穿搭）</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="wardrobe.html">
-                        <span class="nav-icon">👚</span>
-                        <span class="nav-text">衣橱</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="profile.html">
-                        <span class="nav-icon">👤</span>
-                        <span class="nav-text">我的空间</span>
-                    </a>
-                </li>
-            </ul>
-
-            <div class="section-title" style="margin-top: 20px;">功能模块</div>
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="home.html">
-                        <span class="nav-icon">🌤️</span>
-                        <span class="nav-text">天气定位模块</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="home.html">
-                        <span class="nav-icon">🔍</span>
-                        <span class="nav-text">多模态搜索</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="inspiration.html">
-                        <span class="nav-icon">📅</span>
-                        <span class="nav-text">天气卡片</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="inspiration.html">
-                        <span class="nav-icon">👗</span>
-                        <span class="nav-text">OOTD推荐</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="ai_outfit.html">
-                        <span class="nav-icon">🤖</span>
-                        <span class="nav-text">AI穿搭生成</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="upload.html">
-                        <span class="nav-icon">📸</span>
-                        <span class="nav-text">穿搭上传</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-page="profile.html">
-                        <span class="nav-icon">💎</span>
-                        <span class="nav-text">会员特权系统</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="view-container">
-            <div class="device-wrapper">
-                <div class="device-frame">
-                    <div class="device-screen">
-                        <iframe id="device-content" class="device-content" src="splash.html"></iframe>
-                        <div class="device-stripe"></div>
-                        <div class="device-header"></div>
-                        <div class="device-footer"></div>
-                    </div>
-                </div>
-                <div class="device-power"></div>
-                <div class="device-volume-up"></div>
-                <div class="device-volume-down"></div>
-                <div class="controls">
-                    <button class="control-btn" id="refresh-btn">刷新页面</button>
-                    <button class="control-btn" id="rotate-btn">旋转设备</button>
-                    <button class="control-btn" id="open-btn">单独打开</button>
-                </div>
-            </div>
-
-            <div class="device-info">
-                <div class="section-title">设备信息</div>
-                <div class="info-row">
-                    <div class="info-label">设备型号</div>
-                    <div class="info-value">iPhone 16 Pro Max</div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">分辨率</div>
-                    <div class="info-value">430 x 932 px</div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">像素密度</div>
-                    <div class="info-value">460 PPI</div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">当前页面</div>
-                    <div class="info-value" id="current-page">splash.html</div>
-                </div>
+    <div class="iphone-container">
+        <!-- 动态岛 -->
+        <div class="dynamic-island"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="time">10:30</div>
+            <div class="right">
+                <div class="icon">📶</div>
+                <div class="icon">📡</div>
+                <div class="icon">🔋</div>
             </div>
         </div>
+
+        <!-- 背景装饰图形 -->
+        <div class="bg-shape shape1"></div>
+        <div class="bg-shape shape2"></div>
+        <div class="bg-shape shape3"></div>
+        <div class="bg-shape shape4"></div>
+
+        <!-- 启动页主内容 -->
+        <div class="splash-container">
+            <div class="logo-container">
+                <div class="logo">
+                    <div class="logo-text">Li</div>
+                </div>
+                <div class="app-name">LITATA</div>
+                <div class="app-slogan">基于天气的穿搭社区，发现你的风格</div>
+            </div>
+            
+            <div class="loading">
+                <div class="loading-bar" id="loading-bar"></div>
+            </div>
+            
+            <div class="countdown">
+                <span>正在准备应用</span> 
+                <span class="count-number" id="count-down">3</span>
+            </div>
+        </div>
+        
+        <div class="skip-btn" id="skip-btn">点击跳过</div>
+        
+        <!-- 底部安全区域 -->
+        <div class="bottom-safe-area"></div>
     </div>
 
     <script>
-        // 页面导航功能
-        const navLinks = document.querySelectorAll('.nav-link');
-        const iframe = document.getElementById('device-content');
-        const currentPageInfo = document.getElementById('current-page');
-        const refreshBtn = document.getElementById('refresh-btn');
-        const rotateBtn = document.getElementById('rotate-btn');
-        const openBtn = document.getElementById('open-btn');
-        const deviceWrapper = document.querySelector('.device-wrapper');
-
-        // 设置当前活跃页面
-        function setActivePage(element, pageName) {
-            navLinks.forEach(link => link.classList.remove('active'));
-            element.classList.add('active');
-            iframe.src = pageName;
-            currentPageInfo.textContent = pageName;
-        }
-
-        // 监听导航点击
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const pageName = this.getAttribute('data-page');
-                setActivePage(this, pageName);
-            });
-        });
-
-        // 刷新按钮
-        refreshBtn.addEventListener('click', function() {
-            iframe.src = iframe.src;
-        });
-
-        // 设备旋转
-        let isLandscape = false;
-        rotateBtn.addEventListener('click', function() {
-            isLandscape = !isLandscape;
-            if (isLandscape) {
-                deviceWrapper.style.transform = 'rotate(90deg)';
-                deviceWrapper.style.marginTop = '250px';
-                deviceWrapper.style.marginBottom = '250px';
-            } else {
-                deviceWrapper.style.transform = 'none';
-                deviceWrapper.style.marginTop = '0';
-                deviceWrapper.style.marginBottom = '0';
+        document.addEventListener('DOMContentLoaded', function() {
+            // 更新实时时间
+            function updateTime() {
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                document.querySelector('.time').textContent = `${hours}:${minutes}`;
             }
-        });
-
-        // 单独打开按钮
-        openBtn.addEventListener('click', function() {
-            window.open(iframe.src, '_blank');
+            
+            updateTime();
+            
+            // 启动倒计时和加载进度条
+            const countDown = document.getElementById('count-down');
+            const loadingBar = document.getElementById('loading-bar');
+            const skipBtn = document.getElementById('skip-btn');
+            
+            // 设置进度条动画
+            loadingBar.style.width = '100%';
+            
+            // 倒计时功能
+            let count = 3;
+            const countInterval = setInterval(function() {
+                count--;
+                countDown.textContent = count;
+                
+                if (count <= 0) {
+                    clearInterval(countInterval);
+                    navigateToHome();
+                }
+            }, 1000);
+            
+            // 点击跳过
+            skipBtn.addEventListener('click', function() {
+                clearInterval(countInterval);
+                navigateToHome();
+            });
+            
+            // 导航到首页
+            function navigateToHome() {
+                window.location.href = 'home.html';
+            }
         });
     </script>
 </body>

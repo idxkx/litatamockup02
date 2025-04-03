@@ -541,6 +541,124 @@
             background-color: #fff;
             z-index: 10;
         }
+
+        /* 点击交互提示样式 */
+        .clickable {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clickable::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .clickable:active::after {
+            opacity: 1;
+        }
+
+        /* 点击提示波纹效果 */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10, 10);
+            opacity: 0;
+            transition: transform .5s, opacity 1s;
+        }
+
+        .ripple:active::after {
+            transform: scale(0, 0);
+            opacity: 0.3;
+            transition: 0s;
+        }
+
+        /* 提示标记 */
+        .tap-hint {
+            position: absolute;
+            background: rgba(58, 123, 213, 0.9);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            padding: 4px 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 10;
+            animation: pulse 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* 引导覆盖层 */
+        .tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .tutorial-message {
+            background: #3a7bd5;
+            border-radius: 15px;
+            padding: 20px;
+            width: 80%;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .tutorial-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .tutorial-text {
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .tutorial-btn {
+            background: white;
+            color: #3a7bd5;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -562,7 +680,7 @@
         <div class="app-container">
             <!-- 头部导航 -->
             <div class="header">
-                <span class="back-icon" id="back-btn">←</span>
+                <span class="back-icon ripple" id="back-btn">←</span>
                 <span>AI穿搭生成</span>
                 <span style="width: 20px;"></span>
             </div>
@@ -581,30 +699,31 @@
                     
                     <div class="ai-input-area">
                         <input type="text" class="ai-prompt-input" id="ai-prompt" placeholder="描述你想要的穿搭风格或灵感...">
-                        <button class="ai-submit-btn">→</button>
+                        <button class="ai-submit-btn ripple">→</button>
                     </div>
                 </div>
                 
                 <!-- 风格选择区域 -->
                 <div class="style-selection">
-                    <div class="section-title">选择风格</div>
+                    <div class="section-title">选择风格 <span style="font-size: 14px; color: #3a7bd5;">(点击卡片选择)</span></div>
                     <div class="styles-grid">
-                        <div class="style-card" data-style="简约通勤">
+                        <div class="style-card clickable ripple" data-style="简约通勤">
                             <img src="https://images.unsplash.com/photo-1612336307429-8a898d10e223?q=80&w=1887&auto=format&fit=crop" alt="简约通勤">
                             <div class="style-name">简约通勤</div>
                             <div class="style-marker">✓</div>
+                            <div class="tap-hint" style="top: 50%; left: 50%; transform: translate(-50%, -50%);">点击选择</div>
                         </div>
-                        <div class="style-card" data-style="韩系清新">
+                        <div class="style-card clickable ripple" data-style="韩系清新">
                             <img src="https://images.unsplash.com/photo-1618001789159-ffffe6f96ef2?q=80&w=1887&auto=format&fit=crop" alt="韩系清新">
                             <div class="style-name">韩系清新</div>
                             <div class="style-marker">✓</div>
                         </div>
-                        <div class="style-card" data-style="法式复古">
+                        <div class="style-card clickable ripple" data-style="法式复古">
                             <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=1887&auto=format&fit=crop" alt="法式复古">
                             <div class="style-name">法式复古</div>
                             <div class="style-marker">✓</div>
                         </div>
-                        <div class="style-card" data-style="运动街头">
+                        <div class="style-card clickable ripple" data-style="运动街头">
                             <img src="https://images.unsplash.com/photo-1523554888454-84137e72c3ce?q=80&w=1887&auto=format&fit=crop" alt="运动街头">
                             <div class="style-name">运动街头</div>
                             <div class="style-marker">✓</div>
@@ -614,21 +733,21 @@
                 
                 <!-- 场景选择区域 -->
                 <div class="scenario-selection">
-                    <div class="section-title">选择场景</div>
+                    <div class="section-title">选择场景 <span style="font-size: 14px; color: #3a7bd5;">(横向滑动查看更多)</span></div>
                     <div class="scenarios-container">
-                        <div class="scenario-item" data-scenario="日常通勤">日常通勤</div>
-                        <div class="scenario-item" data-scenario="休闲周末">休闲周末</div>
-                        <div class="scenario-item" data-scenario="约会聚餐">约会聚餐</div>
-                        <div class="scenario-item" data-scenario="商务职场">商务职场</div>
-                        <div class="scenario-item" data-scenario="运动健身">运动健身</div>
-                        <div class="scenario-item" data-scenario="度假旅行">度假旅行</div>
-                        <div class="scenario-item" data-scenario="派对聚会">派对聚会</div>
+                        <div class="scenario-item clickable ripple" data-scenario="日常通勤">日常通勤</div>
+                        <div class="scenario-item clickable ripple" data-scenario="休闲周末">休闲周末</div>
+                        <div class="scenario-item clickable ripple" data-scenario="约会聚餐">约会聚餐</div>
+                        <div class="scenario-item clickable ripple" data-scenario="商务职场">商务职场</div>
+                        <div class="scenario-item clickable ripple" data-scenario="运动健身">运动健身</div>
+                        <div class="scenario-item clickable ripple" data-scenario="度假旅行">度假旅行</div>
+                        <div class="scenario-item clickable ripple" data-scenario="派对聚会">派对聚会</div>
                     </div>
                 </div>
                 
                 <!-- 生成穿搭按钮 -->
                 <div class="generate-outfit">
-                    <button class="generate-btn" id="generate-btn">
+                    <button class="generate-btn ripple" id="generate-btn">
                         <span>✨</span>
                         <span>生成我的智能穿搭</span>
                     </button>
@@ -647,10 +766,10 @@
                         <div class="section-title">AI推荐穿搭</div>
                         
                         <div class="outfit-images">
-                            <div class="outfit-image">
+                            <div class="outfit-image clickable">
                                 <img src="https://images.unsplash.com/photo-1550246140-5119ae4790b8?q=80&w=1790&auto=format&fit=crop" alt="穿搭示例1">
                             </div>
-                            <div class="outfit-image">
+                            <div class="outfit-image clickable">
                                 <img src="https://images.unsplash.com/photo-1515734674582-29010bb37906?q=80&w=1887&auto=format&fit=crop" alt="穿搭示例2">
                             </div>
                         </div>
@@ -664,34 +783,34 @@
                         
                         <div class="section-title">单品清单</div>
                         <div class="outfit-items">
-                            <div class="outfit-item">
+                            <div class="outfit-item clickable ripple">
                                 <div class="item-icon">👔</div>
                                 <div class="item-name">米色翻领西装外套</div>
                             </div>
-                            <div class="outfit-item">
+                            <div class="outfit-item clickable ripple">
                                 <div class="item-icon">👚</div>
                                 <div class="item-name">白色基础款衬衫</div>
                             </div>
-                            <div class="outfit-item">
+                            <div class="outfit-item clickable ripple">
                                 <div class="item-icon">👖</div>
                                 <div class="item-name">高腰直筒西装裤</div>
                             </div>
-                            <div class="outfit-item">
+                            <div class="outfit-item clickable ripple">
                                 <div class="item-icon">👠</div>
                                 <div class="item-name">裸色尖头细跟高跟鞋</div>
                             </div>
-                            <div class="outfit-item">
+                            <div class="outfit-item clickable ripple">
                                 <div class="item-icon">👜</div>
                                 <div class="item-name">棕色结构感手提包</div>
                             </div>
                         </div>
                         
                         <div class="action-buttons">
-                            <button class="action-btn save-btn">
+                            <button class="action-btn save-btn ripple">
                                 <span>💾</span>
                                 <span>保存穿搭</span>
                             </button>
-                            <button class="action-btn share-btn">
+                            <button class="action-btn share-btn ripple">
                                 <span>📤</span>
                                 <span>分享</span>
                             </button>
@@ -702,19 +821,19 @@
             
             <!-- 底部导航栏 -->
             <div class="bottom-nav">
-                <div class="nav-item">
+                <div class="nav-item ripple">
                     <div class="nav-icon">🏠</div>
                     <div class="nav-text">首页</div>
                 </div>
-                <div class="nav-item active">
+                <div class="nav-item active ripple">
                     <div class="nav-icon">✨</div>
                     <div class="nav-text">灵感</div>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item ripple">
                     <div class="nav-icon">👚</div>
                     <div class="nav-text">衣橱</div>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item ripple">
                     <div class="nav-icon">👤</div>
                     <div class="nav-text">我的</div>
                 </div>
@@ -722,6 +841,20 @@
             
             <!-- 底部安全区域 -->
             <div class="bottom-safe-area"></div>
+        </div>
+
+        <!-- 引导覆盖层 -->
+        <div class="tutorial-overlay" id="tutorial-overlay">
+            <div class="tutorial-message">
+                <div class="tutorial-title">欢迎使用AI智能穿搭</div>
+                <div class="tutorial-text">
+                    点击风格卡片选择你喜欢的风格<br>
+                    点击场景标签选择使用场景<br>
+                    也可以直接输入描述你想要的风格<br>
+                    最后点击生成按钮获取AI推荐的穿搭
+                </div>
+                <button class="tutorial-btn" id="tutorial-btn">知道了，开始体验</button>
+            </div>
         </div>
     </div>
 
@@ -738,17 +871,45 @@
             const navItems = document.querySelectorAll('.nav-item');
             const saveBtn = document.querySelector('.save-btn');
             const shareBtn = document.querySelector('.share-btn');
+            const tutorialOverlay = document.getElementById('tutorial-overlay');
+            const tutorialBtn = document.getElementById('tutorial-btn');
+            const outfitItems = document.querySelectorAll('.outfit-item');
+            const tapHints = document.querySelectorAll('.tap-hint');
+            
+            // 隐藏引导页
+            tutorialBtn.addEventListener('click', function() {
+                tutorialOverlay.style.display = 'none';
+                
+                // 显示第一个交互提示，2秒后自动隐藏
+                setTimeout(function() {
+                    tapHints.forEach(hint => {
+                        hint.style.display = 'none';
+                    });
+                }, 3000);
+            });
             
             // 返回按钮
             backBtn.addEventListener('click', function() {
+                // 添加点击反馈
+                this.classList.add('active');
+                setTimeout(() => this.classList.remove('active'), 200);
+                
                 window.location.href = 'inspiration.html';
             });
             
             // 风格选择
             styleCards.forEach(card => {
                 card.addEventListener('click', function() {
+                    // 显示点击反馈
+                    this.classList.add('active');
+                    setTimeout(() => this.classList.remove('active'), 200);
+                    
                     // 切换选中状态
                     this.classList.toggle('selected');
+                    
+                    // 隐藏提示
+                    const hint = this.querySelector('.tap-hint');
+                    if (hint) hint.style.display = 'none';
                     
                     // 如果输入框为空，将选择的风格添加到输入框
                     if (aiPrompt.value.trim() === '') {
@@ -767,6 +928,10 @@
             // 场景选择
             scenarioItems.forEach(item => {
                 item.addEventListener('click', function() {
+                    // 显示点击反馈
+                    this.classList.add('active');
+                    setTimeout(() => this.classList.remove('active'), 200);
+                    
                     // 清除其他项的选中状态
                     scenarioItems.forEach(i => i.classList.remove('selected'));
                     
@@ -787,6 +952,10 @@
             
             // 生成穿搭按钮
             generateBtn.addEventListener('click', function() {
+                // 显示点击反馈
+                this.classList.add('active');
+                setTimeout(() => this.classList.remove('active'), 200);
+                
                 // 检查是否有选择风格或场景或输入描述
                 if (aiPrompt.value.trim() === '' && 
                     !document.querySelector('.style-card.selected') && 
@@ -810,13 +979,29 @@
                 }, 2000);
             });
             
+            // 单品项点击
+            outfitItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const itemName = this.querySelector('.item-name').textContent;
+                    alert(`查看${itemName}详情`);
+                });
+            });
+            
             // 保存穿搭按钮
             saveBtn.addEventListener('click', function() {
+                // 显示点击反馈
+                this.classList.add('active');
+                setTimeout(() => this.classList.remove('active'), 200);
+                
                 alert('穿搭已保存到我的收藏');
             });
             
             // 分享按钮
             shareBtn.addEventListener('click', function() {
+                // 显示点击反馈
+                this.classList.add('active');
+                setTimeout(() => this.classList.remove('active'), 200);
+                
                 alert('分享功能即将上线');
             });
             
@@ -824,6 +1009,10 @@
             navItems.forEach(item => {
                 item.addEventListener('click', function() {
                     const navText = this.querySelector('.nav-text').textContent;
+                    
+                    // 显示点击反馈
+                    this.classList.add('active-click');
+                    setTimeout(() => this.classList.remove('active-click'), 200);
                     
                     if (!this.classList.contains('active')) {
                         // 页面跳转逻辑
@@ -847,11 +1036,43 @@
             
             // AI输入框提交
             document.querySelector('.ai-submit-btn').addEventListener('click', function() {
+                // 显示点击反馈
+                this.classList.add('active');
+                setTimeout(() => this.classList.remove('active'), 200);
+                
                 if (aiPrompt.value.trim() !== '') {
                     generateBtn.click();
                 } else {
                     alert('请输入穿搭描述');
                 }
+            });
+            
+            // 穿搭图片点击
+            document.querySelectorAll('.outfit-image').forEach(image => {
+                image.addEventListener('click', function() {
+                    alert('查看穿搭大图');
+                });
+            });
+            
+            // 添加波纹效果
+            const ripples = document.querySelectorAll('.ripple');
+            
+            ripples.forEach(ripple => {
+                ripple.addEventListener('click', function(e) {
+                    const x = e.clientX - this.getBoundingClientRect().left;
+                    const y = e.clientY - this.getBoundingClientRect().top;
+                    
+                    const rippleEffect = document.createElement('span');
+                    rippleEffect.className = 'ripple-effect';
+                    rippleEffect.style.left = `${x}px`;
+                    rippleEffect.style.top = `${y}px`;
+                    
+                    this.appendChild(rippleEffect);
+                    
+                    setTimeout(() => {
+                        rippleEffect.remove();
+                    }, 600);
+                });
             });
         });
     </script>

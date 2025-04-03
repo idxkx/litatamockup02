@@ -123,6 +123,15 @@
         .scan-btn {
             background-color: #3a7bd5;
             color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .scan-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #fff;
         }
 
         /* 分类选项卡 */
@@ -394,7 +403,12 @@
                     <h1 class="page-title">我的衣橱</h1>
                     <div class="action-buttons">
                         <div class="action-btn">⚙️</div>
-                        <div class="action-btn scan-btn">📷</div>
+                        <div class="action-btn scan-btn">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 15.2C13.7674 15.2 15.2 13.7674 15.2 12C15.2 10.2326 13.7674 8.8 12 8.8C10.2326 8.8 8.8 10.2326 8.8 12C8.8 13.7674 10.2326 15.2 12 15.2Z"/>
+                                <path d="M9 2L7.17 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4H16.83L15 2H9ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17Z"/>
+                            </svg>
+                        </div>
                     </div>
                 </div>
                 
@@ -556,17 +570,104 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 模拟选项卡切换
+            // 添加showToast函数用于用户反馈
+            function showToast(message) {
+                const toast = document.createElement('div');
+                toast.textContent = message;
+                toast.style.position = 'fixed';
+                toast.style.bottom = '100px';
+                toast.style.left = '50%';
+                toast.style.transform = 'translateX(-50%)';
+                toast.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                toast.style.color = 'white';
+                toast.style.padding = '10px 20px';
+                toast.style.borderRadius = '20px';
+                toast.style.zIndex = '1000';
+                toast.style.fontSize = '14px';
+                toast.style.transition = 'opacity 0.3s';
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            document.body.removeChild(toast);
+                        }
+                    }, 300);
+                }, 2000);
+            }
+            
+            // 修复深蓝色牛仔外套图片
+            const denim = document.querySelector('.clothes-item img[alt="牛仔外套"]');
+            if (denim) {
+                denim.src = "https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000&auto=format&fit=crop";
+                denim.onerror = function() {
+                    this.src = "https://images.unsplash.com/photo-1592878849122-facb97520f9e?q=80&w=1000&auto=format&fit=crop";
+                    this.onerror = null; // 防止无限循环
+                };
+            }
+            
+            // 为所有图片添加错误处理
+            document.querySelectorAll('.clothes-img').forEach(img => {
+                if (!img.getAttribute('onerror')) {
+                    img.onerror = function() {
+                        if (this.src.includes('unsplash.com')) {
+                            this.src = "https://images.unsplash.com/photo-1551537482-f2075a1d41f2?q=80&w=387&auto=format&fit=crop";
+                        }
+                    };
+                }
+            });
+            
+            // 修复筛选功能
+            // 分类选项卡切换
             const tabItems = document.querySelectorAll('.tab-item');
             tabItems.forEach(tab => {
                 tab.addEventListener('click', function() {
+                    // 更新UI状态
                     tabItems.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
-                    alert(`切换到分类：${this.textContent}`);
+                    
+                    // 获取分类名称
+                    const category = this.textContent.trim();
+                    
+                    // 筛选逻辑
+                    const subcategories = document.querySelectorAll('.subcategory');
+                    
+                    if (category === '全部') {
+                        // 显示所有子分类
+                        subcategories.forEach(subcat => {
+                            subcat.style.display = 'block';
+                        });
+                    } else {
+                        // 根据分类名称过滤子分类
+                        subcategories.forEach(subcat => {
+                            const title = subcat.querySelector('.subcategory-title').textContent.trim();
+                            if (title.includes(category) || 
+                               (category === '上装' && (title.includes('上装') || title.includes('衬衫') || title.includes('T恤') || title.includes('卫衣') || title.includes('外套'))) ||
+                               (category === '下装' && (title.includes('下装') || title.includes('裤') || title.includes('裙'))) ||
+                               (category === '连体服饰' && (title.includes('连体') || title.includes('连衣裙') || title.includes('套装'))) ||
+                               (category === '鞋靴' && (title.includes('鞋') || title.includes('靴'))) ||
+                               (category === '配饰' && (title.includes('配饰') || title.includes('帽') || title.includes('包') || title.includes('首饰'))) ||
+                               (category === '功能服饰' && (title.includes('功能') || title.includes('运动') || title.includes('户外'))) ||
+                               (category === '特殊场景' && (title.includes('特殊') || title.includes('礼服') || title.includes('婚礼')))
+                            ) {
+                                subcat.style.display = 'block';
+                            } else {
+                                subcat.style.display = 'none';
+                            }
+                        });
+                    }
+                    
+                    // 添加iOS风格触感反馈
+                    if (window.navigator && window.navigator.vibrate) {
+                        window.navigator.vibrate(3);
+                    }
+                    
+                    showToast(`已切换到${category}分类`);
                 });
             });
             
-            // 模拟筛选条件切换
+            // 筛选条件切换
             const filterChips = document.querySelectorAll('.filter-chip');
             filterChips.forEach(chip => {
                 chip.addEventListener('click', function() {
@@ -575,83 +676,102 @@
                             if (index < 5) c.classList.remove('active');
                         });
                         this.classList.add('active');
+                        showToast('显示全部季节衣物');
                     } else if (this.textContent === '场景筛选') {
-                        alert('场景筛选选项：\n- 办公室\n- 休闲\n- 运动\n- 派对\n- 约会\n- 家居');
+                        showToast('打开场景筛选');
                     } else if (this.textContent === '清洁状态') {
-                        alert('清洁状态选项：\n- 全部\n- 已洗涤\n- 待洗涤\n- 干洗');
+                        showToast('打开清洁状态筛选');
                     } else {
                         document.querySelector('.filter-chip.active').classList.remove('active');
                         this.classList.add('active');
+                        showToast(`已筛选"${this.textContent}"衣物`);
+                    }
+                    
+                    // 添加iOS风格触感反馈
+                    if (window.navigator && window.navigator.vibrate) {
+                        window.navigator.vibrate(3);
                     }
                 });
             });
             
-            // 模拟搜索功能
+            // 搜索功能
             const searchInput = document.querySelector('.search-input');
             searchInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                    alert(`搜索：${this.value}`);
+                    showToast(`搜索: ${this.value}`);
+                    // 添加iOS风格触感反馈
+                    if (window.navigator && window.navigator.vibrate) {
+                        window.navigator.vibrate(3);
+                    }
                 }
             });
             
-            // 模拟查看全部
+            // 查看全部
             const viewAllBtns = document.querySelectorAll('.view-all');
             viewAllBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const categoryTitle = this.parentElement.textContent.trim().split('查看全部')[0].trim();
-                    alert(`查看全部：${categoryTitle}`);
+                    showToast(`查看全部：${categoryTitle}`);
+                    // 添加iOS风格触感反馈
+                    if (window.navigator && window.navigator.vibrate) {
+                        window.navigator.vibrate(3);
+                    }
                 });
             });
             
-            // 模拟衣物点击
+            // 衣物点击
             const clothesItems = document.querySelectorAll('.clothes-item');
             clothesItems.forEach(item => {
                 item.addEventListener('click', function() {
                     const itemName = this.querySelector('.item-name').textContent;
-                    alert(`查看衣物详情：${itemName}`);
+                    showToast(`查看衣物详情：${itemName}`);
+                    // 添加iOS风格触感反馈
+                    if (window.navigator && window.navigator.vibrate) {
+                        window.navigator.vibrate(5);
+                    }
                 });
             });
             
-            // 模拟添加按钮点击
+            // 添加按钮点击
             document.querySelector('.add-item-btn').addEventListener('click', function() {
-                alert('添加新衣物选项：\n- 手动添加\n- 智能扫描录入\n- 从购物平台导入');
+                showToast('添加新衣物');
+                // 添加iOS风格触感反馈
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(5);
+                }
             });
             
-            // 模拟扫描按钮点击
+            // 扫描按钮点击
             document.querySelector('.scan-btn').addEventListener('click', function() {
-                alert('智能扫描功能：\n拍照AI识别衣物属性，自动录入衣橱');
+                showToast('正在启动智能扫描识别...');
+                // 添加iOS风格触感反馈
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(5);
+                }
             });
             
-            // 模拟设置按钮点击
+            // 设置按钮点击
             document.querySelector('.action-btn:first-child').addEventListener('click', function() {
-                alert('衣橱设置：\n- 隐藏公有库衣物\n- 闲置标准设置\n- 分类管理\n- 导入/导出数据');
+                showToast('打开设置菜单');
+                // 添加iOS风格触感反馈
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(5);
+                }
             });
             
-            // 模拟页面导航
+            // 底部导航栏
             const navItems = document.querySelectorAll('.nav-item');
             navItems.forEach(item => {
                 item.addEventListener('click', function() {
                     navItems.forEach(i => i.classList.remove('active'));
                     this.classList.add('active');
                     
-                    // 获取导航项的文本
                     const navText = this.querySelector('.nav-text').textContent;
-                    console.log(`导航到：${navText}`);
+                    showToast(`导航到：${navText}`);
                     
-                    // 导航跳转逻辑
-                    switch(navText) {
-                        case '首页':
-                            // window.location.href = 'home.html';
-                            break;
-                        case '灵感':
-                            // window.location.href = 'inspiration.html';
-                            break;
-                        case '衣橱':
-                            // 当前页面，不跳转
-                            break;
-                        case '我的':
-                            // window.location.href = 'profile.html';
-                            break;
+                    // 添加iOS风格触感反馈
+                    if (window.navigator && window.navigator.vibrate) {
+                        window.navigator.vibrate(5);
                     }
                 });
             });

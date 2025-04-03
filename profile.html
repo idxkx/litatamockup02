@@ -506,6 +506,337 @@
             background-color: #fff;
             z-index: 10;
         }
+
+        /* 交互提示样式 */
+        .clickable {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .clickable:active {
+            transform: scale(0.98);
+        }
+
+        /* 点击波纹效果 */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10, 10);
+            opacity: 0;
+            transition: transform .5s, opacity 1s;
+        }
+
+        .ripple:active::after {
+            transform: scale(0, 0);
+            opacity: 0.3;
+            transition: 0s;
+        }
+
+        /* 操作提示 */
+        .tooltip {
+            position: absolute;
+            background: rgba(58, 123, 213, 0.9);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            padding: 5px 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            transform: translateY(10px);
+        }
+
+        .clickable:hover .tooltip {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 首次访问引导 */
+        .tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tutorial-content {
+            background: white;
+            width: 80%;
+            max-width: 350px;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .tutorial-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #3a7bd5;
+        }
+
+        .tutorial-text {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .tutorial-btn {
+            background: #3a7bd5;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* 顶部状态栏显示动态时间 */
+        .time-live {
+            animation: pulse 2s infinite;
+        }
+
+        /* 添加过渡效果 */
+        .user-info, .points-member, .body-data, .style-tags, .vip-module, .function-list {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .user-info:active, .points-member:active, .body-data:active, .style-tags:active, .vip-module:active, .function-list:active {
+            transform: scale(0.98);
+        }
+
+        /* 动态岛交互效果 */
+        .dynamic-island {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dynamic-island:hover {
+            transform: translateX(-50%) scale(1.05);
+        }
+
+        .dynamic-island:active {
+            transform: translateX(-50%) scale(0.95);
+        }
+
+        /* 徽章提示 */
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 16px;
+            height: 16px;
+            background-color: #ff3b30;
+            color: white;
+            border-radius: 50%;
+            font-size: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid white;
+        }
+
+        /* 新增功能弹出层 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 350px;
+            border-radius: 15px;
+            padding: 20px;
+            transform: scale(0.9);
+            opacity: 0;
+            animation: scaleIn 0.3s forwards;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .modal-input-group {
+            margin-bottom: 15px;
+        }
+
+        .modal-label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+        }
+
+        .modal-cancel {
+            background: #f2f2f2;
+            color: #666;
+        }
+
+        .modal-confirm {
+            background: #3a7bd5;
+            color: white;
+        }
+
+        /* 点赞动画效果 */
+        @keyframes like {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .liked {
+            color: #ff3b30 !important;
+            animation: like 0.5s ease;
+        }
+
+        /* 长按效果 */
+        .long-press-active {
+            background-color: rgba(0, 0, 0, 0.05);
+            transform: scale(0.97);
+        }
+
+        /* 滑动删除效果 */
+        .swipe-action {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .swipe-content {
+            transition: transform 0.3s;
+        }
+
+        .swipe-actions {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            display: flex;
+        }
+
+        .swipe-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .swipe-edit {
+            background-color: #3a7bd5;
+        }
+
+        .swipe-delete {
+            background-color: #ff3b30;
+        }
+
+        /* 拖动排序样式 */
+        .dragging {
+            opacity: 0.5;
+            background-color: #f8f8f8;
+            z-index: 10;
+        }
+
+        /* 下拉刷新效果 */
+        .pull-to-refresh {
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: -60px;
+            color: #999;
+            font-size: 14px;
+            transition: margin-top 0.3s;
+        }
+
+        .refreshing {
+            margin-top: 0;
+        }
+
+        .refresh-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(58, 123, 213, 0.3);
+            border-radius: 50%;
+            border-top-color: #3a7bd5;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -525,50 +856,68 @@
 
         <!-- 应用主内容 -->
         <div class="app-container">
+            <!-- 下拉刷新指示器 -->
+            <div class="pull-to-refresh" id="pull-refresh">
+                <span class="refresh-spinner"></span>
+                <span>下拉刷新</span>
+            </div>
+            
             <!-- 内容滚动区域 -->
-            <div class="profile-content">
+            <div class="profile-content" id="profile-content">
                 <!-- 个人信息头部 -->
                 <div class="profile-header">
-                    <div class="settings-btn">⚙️</div>
+                    <div class="settings-btn clickable ripple">⚙️</div>
                     
                     <div class="user-info">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=464&auto=format&fit=crop" alt="用户头像" class="avatar">
+                        <div class="avatar-container">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=464&auto=format&fit=crop" alt="用户头像" class="avatar clickable ripple" id="user-avatar">
+                            <div class="avatar-edit-hint">点击更换</div>
+                        </div>
                         <div class="user-details">
-                            <div class="user-name">Sarah Chen</div>
+                            <div class="user-name" id="user-name">Sarah Chen</div>
                             <div class="user-id">LITATA ID: 58721094</div>
-                            <div class="edit-profile">编辑个人资料</div>
+                            <div class="edit-profile clickable ripple" id="edit-profile-btn">
+                                编辑个人资料
+                                <div class="tooltip">点击编辑个人信息</div>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="points-member">
-                        <div class="points">
+                        <div class="points clickable ripple">
                             <div class="points-label">当前积分</div>
                             <div class="points-value">1,280</div>
+                            <div class="tooltip">点击查看积分明细</div>
                         </div>
-                        <div class="plus-member">
+                        <div class="plus-member clickable ripple">
                             <span>💎</span>
                             <span>LITATA Plus</span>
+                            <div class="tooltip">查看会员特权</div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- 社交数据看板 -->
                 <div class="stats-board">
-                    <div class="stat-item">
+                    <div class="stat-item clickable ripple" data-type="following">
                         <div class="stat-value">128</div>
                         <div class="stat-label">关注</div>
+                        <div class="tooltip">查看关注列表</div>
                     </div>
-                    <div class="stat-item">
+                    <div class="stat-item clickable ripple" data-type="followers">
                         <div class="stat-value">2,461</div>
                         <div class="stat-label">粉丝</div>
+                        <div class="tooltip">查看粉丝列表</div>
                     </div>
-                    <div class="stat-item">
+                    <div class="stat-item clickable ripple" data-type="outfits">
                         <div class="stat-value">86</div>
                         <div class="stat-label">穿搭</div>
+                        <div class="tooltip">查看我的穿搭</div>
                     </div>
-                    <div class="stat-item">
+                    <div class="stat-item clickable ripple" data-type="likes">
                         <div class="stat-value">3.2k</div>
                         <div class="stat-label">获赞</div>
+                        <div class="tooltip">查看赞我的人</div>
                     </div>
                 </div>
                 
@@ -576,22 +925,22 @@
                 <div class="body-data">
                     <div class="section-header">
                         <div class="section-title">身材维度</div>
-                        <div class="section-action">编辑 ></div>
+                        <div class="section-action clickable ripple">编辑 ></div>
                     </div>
                     <div class="body-metrics">
-                        <div class="metric">
+                        <div class="metric clickable">
                             <div class="metric-value">165cm</div>
                             <div class="metric-label">身高</div>
                         </div>
-                        <div class="metric">
+                        <div class="metric clickable">
                             <div class="metric-value">52kg</div>
                             <div class="metric-label">体重</div>
                         </div>
-                        <div class="metric">
+                        <div class="metric clickable">
                             <div class="metric-value">S</div>
                             <div class="metric-label">上装尺码</div>
                         </div>
-                        <div class="metric">
+                        <div class="metric clickable">
                             <div class="metric-value">26</div>
                             <div class="metric-label">裤装尺码</div>
                         </div>
@@ -602,21 +951,21 @@
                 <div class="style-tags">
                     <div class="section-header">
                         <div class="section-title">风格DNA</div>
-                        <div class="section-action">管理 ></div>
+                        <div class="section-action clickable ripple">管理 ></div>
                     </div>
                     <div class="tags-container">
-                        <div class="style-tag primary">简约通勤</div>
-                        <div class="style-tag primary">韩系清新</div>
-                        <div class="style-tag">法式复古</div>
-                        <div class="style-tag">温柔风</div>
-                        <div class="style-tag">学院风</div>
-                        <div class="style-tag">街头休闲</div>
+                        <div class="style-tag primary clickable ripple">简约通勤</div>
+                        <div class="style-tag primary clickable ripple">韩系清新</div>
+                        <div class="style-tag clickable ripple">法式复古</div>
+                        <div class="style-tag clickable ripple">温柔风</div>
+                        <div class="style-tag clickable ripple">学院风</div>
+                        <div class="style-tag clickable ripple">街头休闲</div>
                     </div>
                 </div>
                 
                 <!-- 会员特权 -->
                 <div class="vip-module">
-                    <div class="vip-banner">
+                    <div class="vip-banner clickable ripple">
                         <div class="vip-logo">
                             <span>💎</span>
                             <span>LITATA Plus</span>
@@ -627,36 +976,46 @@
                         </div>
                     </div>
                     <div class="vip-features">
-                        <div class="feature-item">
+                        <div class="feature-item clickable ripple">
                             <div class="feature-icon">👤</div>
                             <div class="feature-name">AI模特库</div>
+                            <div class="tooltip">查看高级模特</div>
                         </div>
-                        <div class="feature-item">
+                        <div class="feature-item clickable ripple">
                             <div class="feature-icon">🖼️</div>
                             <div class="feature-name">4K渲染</div>
+                            <div class="tooltip">高清图片渲染</div>
                         </div>
-                        <div class="feature-item">
+                        <div class="feature-item clickable ripple">
                             <div class="feature-icon">✨</div>
                             <div class="feature-name">场景生成</div>
+                            <div class="tooltip">生成穿搭场景</div>
                         </div>
-                        <div class="feature-item">
+                        <div class="feature-item clickable ripple">
                             <div class="feature-icon">🔗</div>
                             <div class="feature-name">一键分销</div>
+                            <div class="tooltip">社交平台分享</div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- 功能列表 -->
                 <div class="function-list">
-                    <div class="function-item">
-                        <div class="function-icon">🛒</div>
-                        <div class="function-info">
-                            <div class="function-title">积分商城</div>
-                            <div class="function-desc">使用积分兑换优惠券和精美礼品</div>
+                    <div class="function-item clickable ripple swipe-action" data-function="points-mall">
+                        <div class="swipe-content">
+                            <div class="function-icon">🛒</div>
+                            <div class="function-info">
+                                <div class="function-title">积分商城</div>
+                                <div class="function-desc">使用积分兑换优惠券和精美礼品</div>
+                            </div>
+                            <div class="function-arrow">›</div>
                         </div>
-                        <div class="function-arrow">›</div>
+                        <div class="swipe-actions">
+                            <div class="swipe-action-btn swipe-edit">编辑</div>
+                            <div class="swipe-action-btn swipe-delete">删除</div>
+                        </div>
                     </div>
-                    <div class="function-item">
+                    <div class="function-item clickable ripple">
                         <div class="function-icon">👔</div>
                         <div class="function-info">
                             <div class="function-title">我的收藏</div>
@@ -664,7 +1023,7 @@
                         </div>
                         <div class="function-arrow">›</div>
                     </div>
-                    <div class="function-item">
+                    <div class="function-item clickable ripple">
                         <div class="function-icon">🎁</div>
                         <div class="function-info">
                             <div class="function-title">邀请好友</div>
@@ -675,7 +1034,7 @@
                 </div>
                 
                 <div class="function-list">
-                    <div class="function-item">
+                    <div class="function-item clickable ripple">
                         <div class="function-icon">💬</div>
                         <div class="function-info">
                             <div class="function-title">意见反馈</div>
@@ -683,7 +1042,7 @@
                         </div>
                         <div class="function-arrow">›</div>
                     </div>
-                    <div class="function-item">
+                    <div class="function-item clickable ripple">
                         <div class="function-icon">⭐</div>
                         <div class="function-info">
                             <div class="function-title">关于我们</div>
@@ -697,19 +1056,19 @@
             
             <!-- 底部导航栏 -->
             <div class="bottom-nav">
-                <div class="nav-item">
+                <div class="nav-item ripple" id="nav-home">
                     <div class="nav-icon">🏠</div>
                     <div class="nav-text">首页</div>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item ripple" id="nav-inspiration">
                     <div class="nav-icon">✨</div>
                     <div class="nav-text">灵感</div>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item ripple" id="nav-wardrobe">
                     <div class="nav-icon">👚</div>
                     <div class="nav-text">衣橱</div>
                 </div>
-                <div class="nav-item active">
+                <div class="nav-item active ripple" id="nav-profile">
                     <div class="nav-icon">👤</div>
                     <div class="nav-text">我的</div>
                 </div>
@@ -718,42 +1077,416 @@
             <!-- 底部安全区域 -->
             <div class="bottom-safe-area"></div>
         </div>
+
+        <!-- 引导教程覆盖层 -->
+        <div class="tutorial-overlay" id="tutorial-overlay" style="display: none;">
+            <div class="tutorial-content">
+                <div class="tutorial-title">欢迎来到个人空间</div>
+                <div class="tutorial-text">
+                    这里展示了你的个人信息、社交数据和会员特权。<br><br>
+                    你可以点击各个功能卡片，查看详细内容或进行编辑。<br><br>
+                    向下滑动可以查看更多功能选项。
+                </div>
+                <button class="tutorial-btn" id="tutorial-btn">知道了</button>
+            </div>
+        </div>
+
+        <!-- 新增弹窗模板 -->
+        <div class="modal-overlay" id="profile-edit-modal">
+            <div class="modal-content">
+                <div class="modal-title">编辑个人资料</div>
+                <div class="modal-input-group">
+                    <label class="modal-label">昵称</label>
+                    <input type="text" class="modal-input" id="edit-name" value="Sarah Chen">
+                </div>
+                <div class="modal-input-group">
+                    <label class="modal-label">个性签名</label>
+                    <input type="text" class="modal-input" id="edit-bio" value="时尚是态度，穿搭是表达">
+                </div>
+                <div class="modal-buttons">
+                    <button class="modal-btn modal-cancel" id="edit-cancel">取消</button>
+                    <button class="modal-btn modal-confirm" id="edit-confirm">保存</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="metrics-edit-modal">
+            <div class="modal-content">
+                <div class="modal-title">编辑身材维度</div>
+                <div class="modal-input-group">
+                    <label class="modal-label">身高 (cm)</label>
+                    <input type="number" class="modal-input" id="edit-height" value="165">
+                </div>
+                <div class="modal-input-group">
+                    <label class="modal-label">体重 (kg)</label>
+                    <input type="number" class="modal-input" id="edit-weight" value="52">
+                </div>
+                <div class="modal-buttons">
+                    <button class="modal-btn modal-cancel" id="metrics-cancel">取消</button>
+                    <button class="modal-btn modal-confirm" id="metrics-confirm">保存</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // 更新实时时间
+            function updateTime() {
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                document.querySelector('.time').textContent = `${hours}:${minutes}`;
+            }
+            
+            updateTime();
+            setInterval(updateTime, 60000); // 每分钟更新一次
+            
+            // 动态岛点击效果
+            const dynamicIsland = document.querySelector('.dynamic-island');
+            dynamicIsland.addEventListener('click', function() {
+                alert('系统通知中心');
+            });
+            
+            // 编辑个人资料弹窗
+            const editProfileBtn = document.getElementById('edit-profile-btn');
+            const profileEditModal = document.getElementById('profile-edit-modal');
+            const editCancelBtn = document.getElementById('edit-cancel');
+            const editConfirmBtn = document.getElementById('edit-confirm');
+            
+            editProfileBtn.addEventListener('click', function() {
+                profileEditModal.style.display = 'flex';
+            });
+            
+            editCancelBtn.addEventListener('click', function() {
+                profileEditModal.style.display = 'none';
+            });
+            
+            editConfirmBtn.addEventListener('click', function() {
+                const newName = document.getElementById('edit-name').value;
+                document.getElementById('user-name').textContent = newName;
+                profileEditModal.style.display = 'none';
+                
+                // 显示保存成功提示
+                showToast('个人资料已更新');
+            });
+            
+            // 身材维度编辑弹窗
+            const metricsEditBtn = document.querySelector('.body-data .section-action');
+            const metricsEditModal = document.getElementById('metrics-edit-modal');
+            const metricsCancel = document.getElementById('metrics-cancel');
+            const metricsConfirm = document.getElementById('metrics-confirm');
+            
+            metricsEditBtn.addEventListener('click', function() {
+                metricsEditModal.style.display = 'flex';
+            });
+            
+            metricsCancel.addEventListener('click', function() {
+                metricsEditModal.style.display = 'none';
+            });
+            
+            metricsConfirm.addEventListener('click', function() {
+                const newHeight = document.getElementById('edit-height').value;
+                const newWeight = document.getElementById('edit-weight').value;
+                
+                document.querySelectorAll('.metric')[0].querySelector('.metric-value').textContent = `${newHeight}cm`;
+                document.querySelectorAll('.metric')[1].querySelector('.metric-value').textContent = `${newWeight}kg`;
+                
+                metricsEditModal.style.display = 'none';
+                showToast('身材维度已更新');
+            });
+            
+            // 点击遮罩层关闭弹窗
+            const modalOverlays = document.querySelectorAll('.modal-overlay');
+            modalOverlays.forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                    }
+                });
+            });
+            
+            // 轻提示功能
+            function showToast(message) {
+                // 创建toast元素
+                const toast = document.createElement('div');
+                toast.style.position = 'fixed';
+                toast.style.bottom = '100px';
+                toast.style.left = '50%';
+                toast.style.transform = 'translateX(-50%)';
+                toast.style.background = 'rgba(0, 0, 0, 0.7)';
+                toast.style.color = 'white';
+                toast.style.padding = '8px 16px';
+                toast.style.borderRadius = '20px';
+                toast.style.zIndex = '3000';
+                toast.style.fontSize = '14px';
+                toast.textContent = message;
+                
+                document.body.appendChild(toast);
+                
+                // 2秒后自动消失
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.5s';
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 500);
+                }, 2000);
+            }
+            
+            // 下拉刷新功能
+            let startY = 0;
+            let pullThreshold = 80;
+            const pullToRefresh = document.getElementById('pull-refresh');
+            const profileContent = document.getElementById('profile-content');
+            
+            profileContent.addEventListener('touchstart', function(e) {
+                if (profileContent.scrollTop === 0) {
+                    startY = e.touches[0].clientY;
+                }
+            });
+            
+            profileContent.addEventListener('touchmove', function(e) {
+                if (profileContent.scrollTop === 0 && e.touches[0].clientY > startY) {
+                    const pullDistance = e.touches[0].clientY - startY;
+                    if (pullDistance < pullThreshold) {
+                        pullToRefresh.style.marginTop = `-${60 - pullDistance * 0.6}px`;
+                        pullToRefresh.textContent = '下拉刷新';
+                    } else {
+                        pullToRefresh.textContent = '释放刷新';
+                    }
+                    e.preventDefault();
+                }
+            });
+            
+            profileContent.addEventListener('touchend', function(e) {
+                if (profileContent.scrollTop === 0) {
+                    const pullDistance = e.changedTouches[0].clientY - startY;
+                    
+                    if (pullDistance >= pullThreshold) {
+                        // 开始刷新
+                        pullToRefresh.classList.add('refreshing');
+                        pullToRefresh.innerHTML = '<span class="refresh-spinner"></span><span>正在刷新...</span>';
+                        
+                        // 模拟刷新过程
+                        setTimeout(function() {
+                            pullToRefresh.classList.remove('refreshing');
+                            pullToRefresh.style.marginTop = '-60px';
+                            pullToRefresh.innerHTML = '<span class="refresh-spinner"></span><span>下拉刷新</span>';
+                            showToast('刷新成功');
+                        }, 1500);
+                    } else {
+                        // 未达到刷新阈值，恢复初始状态
+                        pullToRefresh.style.marginTop = '-60px';
+                    }
+                }
+            });
+            
+            // 滑动功能项显示操作按钮
+            const functionItems = document.querySelectorAll('.function-item.swipe-action');
+            let touchStartX = 0;
+            let currentSwipe = null;
+            
+            functionItems.forEach(item => {
+                const content = item.querySelector('.swipe-content');
+                
+                item.addEventListener('touchstart', function(e) {
+                    touchStartX = e.touches[0].clientX;
+                    
+                    // 如果有其他打开的滑动项，先关闭
+                    if (currentSwipe && currentSwipe !== content) {
+                        currentSwipe.style.transform = 'translateX(0)';
+                    }
+                });
+                
+                item.addEventListener('touchmove', function(e) {
+                    const diffX = touchStartX - e.touches[0].clientX;
+                    
+                    if (diffX > 0 && diffX < 150) {
+                        content.style.transform = `translateX(-${diffX}px)`;
+                        currentSwipe = content;
+                    }
+                });
+                
+                item.addEventListener('touchend', function(e) {
+                    const diffX = touchStartX - e.changedTouches[0].clientX;
+                    
+                    if (diffX > 80) {
+                        // 划出操作按钮
+                        content.style.transform = 'translateX(-120px)';
+                    } else {
+                        // 恢复原位
+                        content.style.transform = 'translateX(0)';
+                        currentSwipe = null;
+                    }
+                });
+            });
+            
+            // 轻点头像修改
+            document.getElementById('user-avatar').addEventListener('click', function() {
+                alert('选择新的头像图片');
+            });
+            
+            // 风格标签点击切换状态
+            const styleTags = document.querySelectorAll('.style-tag');
+            styleTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    this.classList.toggle('primary');
+                    const styleText = this.textContent;
+                    
+                    if (this.classList.contains('primary')) {
+                        showToast(`已将"${styleText}"设为首选风格`);
+                    } else {
+                        showToast(`已取消"${styleText}"的首选状态`);
+                    }
+                });
+            });
+            
+            // 社交数据状态页面切换
+            const statItems = document.querySelectorAll('.stat-item');
+            statItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const type = this.getAttribute('data-type');
+                    const label = this.querySelector('.stat-label').textContent;
+                    
+                    // 显示对应的社交数据页面
+                    showToast(`正在跳转到${label}页面`);
+                });
+            });
+            
+            // 双击动态点赞效果
+            let lastTap = 0;
+            const statValues = document.querySelectorAll('.stat-value');
+            
+            statValues.forEach(value => {
+                value.addEventListener('click', function() {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+                    
+                    if (tapLength < 300 && tapLength > 0) {
+                        // 双击效果
+                        if (this.parentElement.getAttribute('data-type') === 'likes') {
+                            // 数字增加动画
+                            const currentValue = this.textContent;
+                            const numValue = parseFloat(currentValue.replace('k', '')) * (currentValue.includes('k') ? 1000 : 1);
+                            const newValue = numValue + 1;
+                            
+                            if (newValue >= 1000) {
+                                this.textContent = (newValue / 1000).toFixed(1) + 'k';
+                            } else {
+                                this.textContent = newValue;
+                            }
+                            
+                            // 点赞动画
+                            this.classList.add('liked');
+                            setTimeout(() => {
+                                this.classList.remove('liked');
+                            }, 600);
+                            
+                            showToast('谢谢您的点赞！');
+                        }
+                    }
+                    lastTap = currentTime;
+                });
+            });
+            
+            // 长按事件
+            let pressTimer;
+            const longPressItems = document.querySelectorAll('.function-item');
+            
+            longPressItems.forEach(item => {
+                item.addEventListener('touchstart', function() {
+                    pressTimer = setTimeout(() => {
+                        this.classList.add('long-press-active');
+                        vibrate();
+                        showToast('长按可以重新排序功能项');
+                    }, 800);
+                });
+                
+                item.addEventListener('touchend', function() {
+                    clearTimeout(pressTimer);
+                    this.classList.remove('long-press-active');
+                });
+                
+                item.addEventListener('touchmove', function() {
+                    clearTimeout(pressTimer);
+                    this.classList.remove('long-press-active');
+                });
+            });
+            
+            // 移动端震动效果
+            function vibrate() {
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
+            }
+            
+            // 显示引导教程（首次访问时）
+            const firstVisit = !localStorage.getItem('profileVisited');
+            if (firstVisit) {
+                document.getElementById('tutorial-overlay').style.display = 'flex';
+                localStorage.setItem('profileVisited', 'true');
+            }
+
+            // 关闭引导教程
+            document.getElementById('tutorial-btn').addEventListener('click', function() {
+                document.getElementById('tutorial-overlay').style.display = 'none';
+            });
+            
             // 模拟编辑个人资料点击
             document.querySelector('.edit-profile').addEventListener('click', function() {
-                alert('编辑个人资料');
+                showToast('正在打开编辑个人资料页面');
             });
             
             // 模拟设置按钮点击
             document.querySelector('.settings-btn').addEventListener('click', function() {
-                alert('打开设置界面');
+                showToast('正在打开设置界面');
             });
             
             // 模拟身材维度编辑点击
             document.querySelector('.body-data .section-action').addEventListener('click', function() {
-                alert('编辑身材维度');
+                showToast('正在打开身材维度编辑页面');
             });
             
             // 模拟风格DNA管理点击
             document.querySelector('.style-tags .section-action').addEventListener('click', function() {
-                alert('管理风格DNA');
+                showToast('正在打开风格DNA管理页面');
             });
             
             // 模拟功能项点击
-            const functionItems = document.querySelectorAll('.function-item');
-            functionItems.forEach(item => {
-                item.addEventListener('click', function() {
+            const allFunctionItems = document.querySelectorAll('.function-item');
+            allFunctionItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // 检查是否点击了滑动操作按钮
+                    if (e.target.classList.contains('swipe-edit')) {
+                        showToast('编辑功能项');
+                        e.stopPropagation();
+                        return;
+                    }
+                    
+                    if (e.target.classList.contains('swipe-delete')) {
+                        const title = this.querySelector('.function-title').textContent;
+                        showToast(`已从我的功能中移除"${title}"`);
+                        this.style.height = '0';
+                        this.style.padding = '0';
+                        this.style.overflow = 'hidden';
+                        this.style.borderBottom = 'none';
+                        this.style.transition = 'all 0.3s';
+                        setTimeout(() => {
+                            this.remove();
+                        }, 300);
+                        e.stopPropagation();
+                        return;
+                    }
+                    
                     const title = this.querySelector('.function-title').textContent;
-                    alert(`打开${title}`);
+                    showToast(`正在打开${title}`);
                 });
             });
             
             // 模拟会员特权点击
             document.querySelector('.vip-banner').addEventListener('click', function() {
-                alert('查看LITATA Plus会员详情');
+                showToast('正在查看LITATA Plus会员详情');
             });
             
             // 模拟特权功能点击
@@ -761,53 +1494,154 @@
             featureItems.forEach(item => {
                 item.addEventListener('click', function() {
                     const name = this.querySelector('.feature-name').textContent;
-                    alert(`打开${name}功能`);
+                    showToast(`正在打开${name}功能`);
                 });
             });
             
-            // 模拟页面导航
+            // 增强导航栏交互
             const navItems = document.querySelectorAll('.nav-item');
+            const navHome = document.getElementById('nav-home');
+            const navInspiration = document.getElementById('nav-inspiration');
+            const navWardrobe = document.getElementById('nav-wardrobe');
+            const navProfile = document.getElementById('nav-profile');
+            
+            // 为导航按钮添加点击事件
             navItems.forEach(item => {
                 item.addEventListener('click', function() {
+                    // 移除所有active类
                     navItems.forEach(i => i.classList.remove('active'));
+                    // 为当前点击项添加active类
                     this.classList.add('active');
                     
                     // 获取导航项的文本
                     const navText = this.querySelector('.nav-text').textContent;
                     console.log(`导航到：${navText}`);
                     
+                    // 添加iOS触感反馈
+                    if (window.navigator && window.navigator.vibrate) {
+                        window.navigator.vibrate(5);
+                    }
+                    
                     // 导航跳转逻辑
                     switch(navText) {
                         case '首页':
-                            // window.location.href = 'home.html';
+                            showToast('正在跳转到首页...');
+                            setTimeout(() => {
+                                window.location.href = 'home.html';
+                            }, 300);
                             break;
                         case '灵感':
-                            // window.location.href = 'inspiration.html';
+                            showToast('正在跳转到灵感页面...');
+                            setTimeout(() => {
+                                window.location.href = 'inspiration.html';
+                            }, 300);
                             break;
                         case '衣橱':
-                            // window.location.href = 'wardrobe.html';
+                            showToast('正在跳转到衣橱页面...');
+                            setTimeout(() => {
+                                window.location.href = 'wardrobe.html';
+                            }, 300);
                             break;
                         case '我的':
                             // 当前页面，不跳转
+                            showToast('当前已在个人页面');
                             break;
                     }
                 });
             });
             
-            // 模拟社交数据点击
-            const statItems = document.querySelectorAll('.stat-item');
-            statItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const label = this.querySelector('.stat-label').textContent;
-                    alert(`查看${label}详情`);
+            // 为特定导航按钮添加直接点击事件
+            navHome.addEventListener('click', function() {
+                // 添加iOS触感反馈
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(5);
+                }
+                
+                showToast('正在跳转到首页...');
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 300);
+            });
+            
+            navInspiration.addEventListener('click', function() {
+                // 添加iOS触感反馈
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(5);
+                }
+                
+                showToast('正在跳转到灵感页面...');
+                setTimeout(() => {
+                    window.location.href = 'inspiration.html';
+                }, 300);
+            });
+            
+            navWardrobe.addEventListener('click', function() {
+                // 添加iOS触感反馈
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(5);
+                }
+                
+                showToast('正在跳转到衣橱页面...');
+                setTimeout(() => {
+                    window.location.href = 'wardrobe.html';
+                }, 300);
+            });
+            
+            // 标记当前页面导航按钮
+            function updateActiveNav() {
+                const currentPath = window.location.pathname;
+                navItems.forEach(item => item.classList.remove('active'));
+                
+                if (currentPath.includes('home.html')) {
+                    navHome.classList.add('active');
+                } else if (currentPath.includes('inspiration.html')) {
+                    navInspiration.classList.add('active');
+                } else if (currentPath.includes('wardrobe.html')) {
+                    navWardrobe.classList.add('active');
+                } else if (currentPath.includes('profile.html') || currentPath === '/') {
+                    navProfile.classList.add('active');
+                }
+            }
+            
+            // 页面加载时更新导航状态
+            updateActiveNav();
+            
+            // 模拟身材数据点击
+            document.querySelectorAll('.metric').forEach(metric => {
+                metric.addEventListener('click', function() {
+                    const label = this.querySelector('.metric-label').textContent;
+                    showToast(`正在编辑${label}`);
                 });
             });
             
-            // 模拟风格标签点击
-            const styleTags = document.querySelectorAll('.style-tag');
-            styleTags.forEach(tag => {
-                tag.addEventListener('click', function() {
-                    alert(`查看"${this.textContent}"风格的穿搭推荐`);
+            // 模拟积分点击
+            document.querySelector('.points').addEventListener('click', function() {
+                showToast('正在查看积分明细和使用记录');
+            });
+
+            // 模拟会员卡点击
+            document.querySelector('.plus-member').addEventListener('click', function() {
+                showToast('正在查看会员特权详情');
+            });
+
+            // 添加波纹效果
+            document.querySelectorAll('.ripple').forEach(element => {
+                element.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple-effect');
+                    
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
                 });
             });
         });
