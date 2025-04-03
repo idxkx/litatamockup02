@@ -264,19 +264,89 @@
         /* 手风琴效果样式 */
         .expanded-content {
             margin-top: 10px;
-            border-top: 1px solid #f2f2f2;
+            border-top: 1px solid #f5f5f5;
             padding-top: 15px;
+            overflow: hidden;
+            display: none; /* 默认隐藏 */
         }
         
         .expanded-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 15px;
+            margin-top: 5px;
+            padding-top: 5px;
+            border-top: 1px dashed #f2f2f2;
         }
         
         /* 展开时的样式变化 */
         .subcategory.expanded .view-all {
             color: #ff7b4e;
+            position: relative;
+        }
+        
+        .subcategory.expanded .view-all::after {
+            content: '';
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid #ff7b4e;
+            margin-left: 5px;
+            transform: rotate(180deg);
+            transition: transform 0.3s ease;
+        }
+        
+        .subcategory:not(.expanded) .view-all::after {
+            content: '';
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #3a7bd5;
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        
+        /* 展开/收起按钮过渡效果 */
+        .view-all {
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            cursor: pointer;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background-color: rgba(0,0,0,0.03);
+        }
+        
+        .view-all:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        
+        /* 展开动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .expanded-content .clothes-item {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        /* 错开动画延迟 */
+        .expanded-content .clothes-item:nth-child(2n) {
+            animation-delay: 0.05s;
+        }
+        
+        .expanded-content .clothes-item:nth-child(3n) {
+            animation-delay: 0.1s;
+        }
+        
+        .expanded-content .clothes-item:nth-child(4n) {
+            animation-delay: 0.15s;
         }
         
         /* 网格大小适配 */
@@ -303,39 +373,38 @@
             margin-bottom: 25px;
         }
 
+        /* 状态指示器样式 */
+        .item-badge {
+            display: none; /* 隐藏所有状态标签 */
+        }
+
+        /* 衣物项样式统一 */
         .clothes-item {
             position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .clothes-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
         }
 
         .clothes-img {
             width: 100%;
             aspect-ratio: 1;
             object-fit: cover;
-            border-radius: 10px;
-            background-color: #f9f9f9;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .item-badge {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            padding: 2px 6px;
-            background-color: rgba(58, 123, 213, 0.8);
-            color: #fff;
-            border-radius: 10px;
-            font-size: 10px;
-            font-weight: 600;
-        }
-
-        .item-badge.unworn {
-            background-color: rgba(255, 77, 79, 0.8);
+            display: block;
         }
 
         .item-name {
             font-size: 12px;
             color: #666;
             margin-top: 5px;
+            padding: 0 3px 5px 3px;
             text-align: center;
             white-space: nowrap;
             overflow: hidden;
@@ -772,7 +841,7 @@
                         
                         <div class="clothes-item">
                             <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=436&auto=format&fit=crop" class="clothes-img" alt="西装外套">
-                            <div class="item-badge">常穿</div>
+                            <div class="item-badge">已穿着</div>
                             <div class="item-name">灰色西装外套</div>
                         </div>
                         
@@ -783,7 +852,7 @@
                         
                         <div class="clothes-item">
                             <img src="https://images.unsplash.com/photo-1584865288642-42078afe6942?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="格子大衣">
-                            <div class="item-badge unworn">闲置</div>
+                            <div class="item-badge idle">闲置</div>
                             <div class="item-name">驼色格子大衣</div>
                         </div>
                     </div>
@@ -799,7 +868,7 @@
                     <div class="clothes-grid">
                         <div class="clothes-item">
                             <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="牛仔裤">
-                            <div class="item-badge">常穿</div>
+                            <div class="item-badge">已穿着</div>
                             <div class="item-name">蓝色直筒牛仔裤</div>
                         </div>
                         
@@ -922,14 +991,29 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('页面已加载完成');
             
+            // 首先初始化衣物的数据属性
+            initClothesItemsAttributes();
+            
             // 处理导航栏点击
             setupNavigation();
             
             // 初始化分类滑块
             initCategorySlider();
             
-            // 初始化模拟数据
-            initializeWardrobeData();
+            // 添加购物车功能
+            setupShoppingCart();
+            
+            // 设置筛选栏
+            initFilterBar();
+            
+            // 初始化"查看全部"按钮
+            initViewAllButtons();
+            
+            // 初始化衣物悬停效果
+            initClothesItemHover();
+            
+            // 初始化衣物点击事件
+            initClothesItemClick();
             
             // 添加设置按钮点击处理
             document.querySelector('#settingsBtn').addEventListener('click', handleSettingsClick);
@@ -960,15 +1044,6 @@
             // 初始化拖放功能
             initializeOrganizerBar();
             makeItemsDraggable();
-            
-            // 初始化查看全部功能
-            initViewAllButtons();
-            
-            // 设置导航条颜色
-            const navigationBar = document.querySelector('.navigation-bar');
-            if (navigationBar) {
-                navigationBar.className = 'navigation-bar color-1';
-            }
         });
         
         // 扫描按钮点击处理函数
@@ -1115,6 +1190,7 @@
         // 全局变量，用于记录当前筛选状态
         let currentCategory = '全部';
         let currentSeason = '全部季节';
+        let currentScene = '日常';
         
         // 初始化设置项
         function initializeSettingsFeatures() {
@@ -1467,13 +1543,10 @@
 
         // 初始化分类滑块
         function initCategorySlider() {
-            const tabs = document.querySelectorAll('.tab-item');
-            const allSubcategories = document.querySelectorAll('.subcategory');
+            const tabs = document.querySelectorAll('.category-tabs .tab-item');
+            console.log(`找到 ${tabs.length} 个分类标签，文本内容:`, Array.from(tabs).map(t => t.textContent.trim()));
             
-            // 为每个衣物添加分类数据属性
-            initClothesItemsAttributes();
-            
-            tabs.forEach(tab => {
+            tabs.forEach((tab, index) => {
                 tab.addEventListener('click', function() {
                     // 移除其他标签的active类
                     tabs.forEach(t => t.classList.remove('active'));
@@ -1481,83 +1554,220 @@
                     this.classList.add('active');
                     
                     const category = this.textContent.trim();
+                    console.log(`点击分类标签: "${category}", 索引: ${index}`);
                     showToast(`已切换到${category}分类`);
                     
                     // 筛选相关衣物和子分类
                     filterByCategory(category);
                 });
             });
-            
-            // 初始化筛选栏
-            initFilterBar();
         }
         
-        // 初始化衣物的数据属性
+        // 初始化衣物数据属性
         function initClothesItemsAttributes() {
-            // 基础款-上装
-            const topsBasicItems = document.querySelectorAll('.subcategory:nth-of-type(1) .clothes-item');
-            topsBasicItems.forEach(item => {
-                item.setAttribute('data-category', '上装');
-                item.setAttribute('data-subcategory', '基础款');
+            console.log('正在初始化衣物数据属性');
+            
+            // 获取所有子分类
+            const subcategories = document.querySelectorAll('.subcategory');
+            console.log(`找到 ${subcategories.length} 个子分类`);
+            
+            // 遍历所有子分类，为衣物设置属性
+            subcategories.forEach((subcat, index) => {
+                const titleEl = subcat.querySelector('.subcategory-title');
+                if (!titleEl) {
+                    console.log(`子分类 ${index} 没有标题元素`);
+                    return;
+                }
                 
-                // 按衣物名称设置季节属性
-                const name = item.querySelector('.item-name').textContent.trim();
-                if (name.includes('T恤')) {
-                    item.setAttribute('data-season', '春季,夏季');
-                } else if (name.includes('衬衫')) {
-                    item.setAttribute('data-season', '春季,秋季');
-                } else if (name.includes('连衣裙')) {
-                    item.setAttribute('data-season', '春季,夏季');
+                // 直接获取子分类标题文本，例如"上装 - 基础款"
+                const titleText = titleEl.textContent.trim().split('>')[0].trim();
+                console.log(`处理子分类: "${titleText}"`);
+                
+                // 提取主要分类，例如"上装" 和子分类 "基础款"
+                const parts = titleText.split('-').map(part => part.trim());
+                if (parts.length < 2) {
+                    console.log(`子分类标题 "${titleText}" 格式不符合"分类-类型"格式`);
+                    return;
+                }
+                
+                const mainCategory = parts[0]; // 例如"上装"
+                const subcategoryType = parts[1]; // 例如"基础款"
+                
+                console.log(`提取分类: 主分类="${mainCategory}", 子分类="${subcategoryType}"`);
+                
+                // 获取该子分类下所有衣物
+                const items = subcat.querySelectorAll('.clothes-item');
+                console.log(`子分类 "${titleText}" 下有 ${items.length} 件衣物`);
+                
+                // 为每件衣物设置数据属性
+                items.forEach(item => {
+                    const nameEl = item.querySelector('.item-name');
+                    const name = nameEl ? nameEl.textContent.trim() : '未命名';
+                    
+                    // 设置主分类和子分类
+                    item.setAttribute('data-category', mainCategory);
+                    item.setAttribute('data-subcategory', subcategoryType);
+                    
+                    // 根据名称设置季节
+                    let seasons = [];
+                    if (name.includes('春') || name.toLowerCase().includes('spring')) seasons.push('春季');
+                    if (name.includes('夏') || name.toLowerCase().includes('summer')) seasons.push('夏季');
+                    if (name.includes('秋') || name.toLowerCase().includes('fall') || name.toLowerCase().includes('autumn')) seasons.push('秋季');
+                    if (name.includes('冬') || name.toLowerCase().includes('winter')) seasons.push('冬季');
+                    
+                    // 如果没有明确的季节，根据衣物类型推断
+                    if (seasons.length === 0) {
+                        if (name.includes('T恤') || name.includes('短袖') || name.includes('短裤')) {
+                            seasons.push('夏季');
+                        } else if (name.includes('毛衣') || name.includes('大衣') || name.includes('羽绒')) {
+                            seasons.push('冬季');
+                        } else if (name.includes('风衣') || name.includes('夹克')) {
+                            seasons.push('春季', '秋季');
+                        } else {
+                            seasons.push('春季', '夏季', '秋季', '冬季'); // 默认全季节
+                        }
+                    }
+                    
+                    item.setAttribute('data-season', seasons.join(','));
+                    
+                    // 根据名称设置场景
+                    let scenes = [];
+                    if (name.includes('休闲') || name.includes('日常')) scenes.push('日常', '休闲');
+                    if (name.includes('正装') || name.includes('西装') || name.includes('西服')) scenes.push('正式', '职场');
+                    if (name.includes('运动')) scenes.push('运动');
+                    if (name.includes('派对') || name.includes('约会')) scenes.push('约会');
+                    
+                    // 如果没有明确的场景，根据衣物类型推断
+                    if (scenes.length === 0) {
+                        if (subcategoryType.includes('基础') || name.includes('T恤')) {
+                            scenes.push('日常', '休闲');
+                        } else if (name.includes('外套') || name.includes('西装')) {
+                            scenes.push('职场', '正式');
+                        } else {
+                            scenes.push('日常'); // 默认日常场景
+                        }
+                    }
+                    
+                    item.setAttribute('data-scene', scenes.join(','));
+                    
+                    console.log(`衣物 "${name}" - 分类:${mainCategory}, 子分类:${subcategoryType}, 季节:${seasons.join(',')}, 场景:${scenes.join(',')}`);
+                });
+            });
+            
+            // 调试输出：统计各个分类的衣物数量
+            setTimeout(() => {
+                const allItems = document.querySelectorAll('.clothes-item');
+                const categoryCounts = {};
+                
+                allItems.forEach(item => {
+                    const cat = item.getAttribute('data-category');
+                    categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+                });
+                
+                console.log('分类统计:', categoryCounts);
+                
+                // 特别检查"上装"分类
+                const topsItems = Array.from(allItems).filter(item => 
+                    item.getAttribute('data-category') === '上装');
+                console.log(`"上装"分类共有 ${topsItems.length} 件衣物:`, 
+                    topsItems.map(item => item.querySelector('.item-name')?.textContent || '未命名'));
+            }, 100);
+            
+            console.log('衣物数据属性初始化完成');
+        }
+        
+        // 组合筛选（同时考虑分类、季节和场景）
+        function applyFilters() {
+            console.log(`应用筛选 - 分类:"${currentCategory}", 季节:"${currentSeason}", 场景:"${currentScene}"`);
+            
+            const clothesItems = document.querySelectorAll('.clothes-item');
+            console.log(`找到 ${clothesItems.length} 个衣物项`);
+            
+            // 更灵活的分类匹配函数
+            function categoryMatches(itemCategory, selectedCategory) {
+                if (selectedCategory === '全部') return true;
+                if (!itemCategory) return false;
+                
+                // 精确匹配
+                if (itemCategory === selectedCategory) return true;
+                
+                // 部分匹配（处理可能的空格或其他差异）
+                const normalizedItem = itemCategory.replace(/\s+/g, '');
+                const normalizedSelected = selectedCategory.replace(/\s+/g, '');
+                
+                return normalizedItem === normalizedSelected;
+            }
+            
+            // 根据当前选中的分类、季节和场景进行筛选
+            let visibleCount = 0;
+            clothesItems.forEach(item => {
+                const itemCategory = item.getAttribute('data-category');
+                const itemSeasons = item.getAttribute('data-season') || '';
+                const itemScenes = item.getAttribute('data-scene') || '';
+                const name = item.querySelector('.item-name')?.textContent || '未命名';
+                
+                const matchesCategory = categoryMatches(itemCategory, currentCategory);
+                const matchesSeason = currentSeason === '全部季节' || itemSeasons.includes(currentSeason);
+                const matchesScene = !currentScene || currentScene === '日常' || itemScenes.includes(currentScene);
+                
+                // 输出筛选详情
+                if (!matchesCategory) {
+                    console.log(`衣物 "${name}" 分类不匹配 - 衣物:"${itemCategory}", 选中:"${currentCategory}"`);
+                }
+                
+                if (matchesCategory && matchesSeason && matchesScene) {
+                    item.style.display = '';
+                    visibleCount++;
+                    console.log(`显示衣物: "${name}", 分类="${itemCategory}"`);
                 } else {
-                    item.setAttribute('data-season', '全部季节');
+                    item.style.display = 'none';
                 }
             });
             
-            // 外套-上装
-            const topsOuterItems = document.querySelectorAll('.subcategory:nth-of-type(2) .clothes-item');
-            topsOuterItems.forEach(item => {
-                item.setAttribute('data-category', '上装');
-                item.setAttribute('data-subcategory', '外套');
+            console.log(`筛选结果: 显示 ${visibleCount}/${clothesItems.length} 个衣物`);
+            
+            // 处理子分类的显示/隐藏
+            const subcategories = document.querySelectorAll('.subcategory');
+            subcategories.forEach(subcat => {
+                const titleEl = subcat.querySelector('.subcategory-title');
+                if (!titleEl) return;
                 
-                // 按衣物名称设置季节属性
-                const name = item.querySelector('.item-name').textContent.trim();
-                if (name.includes('牛仔')) {
-                    item.setAttribute('data-season', '春季,秋季');
-                } else if (name.includes('西装')) {
-                    item.setAttribute('data-season', '春季,秋季,冬季');
-                } else if (name.includes('皮夹克')) {
-                    item.setAttribute('data-season', '秋季,冬季');
-                } else if (name.includes('大衣')) {
-                    item.setAttribute('data-season', '冬季');
+                const titleText = titleEl.textContent.trim().split('>')[0].trim();
+                const parts = titleText.split('-').map(part => part.trim());
+                if (parts.length < 2) return;
+                
+                const subcatCategory = parts[0]; // 例如"上装"
+                
+                // 检查是否有可见的衣物
+                const visibleItems = Array.from(subcat.querySelectorAll('.clothes-item')).filter(
+                    item => item.style.display !== 'none'
+                );
+                
+                const hasVisibleItems = visibleItems.length > 0;
+                
+                // 更灵活的子分类匹配
+                const matchesCategory = categoryMatches(subcatCategory, currentCategory);
+                
+                if ((currentCategory === '全部' || matchesCategory) && hasVisibleItems) {
+                    subcat.style.display = '';
+                    console.log(`显示子分类: "${titleText}", 分类="${subcatCategory}", 匹配=${matchesCategory}`);
                 } else {
-                    item.setAttribute('data-season', '全部季节');
+                    subcat.style.display = 'none';
+                    console.log(`隐藏子分类: "${titleText}", 分类="${subcatCategory}", 匹配=${matchesCategory}, 有可见衣物=${hasVisibleItems}`);
                 }
             });
             
-            // 裤装-下装
-            const bottomsItems = document.querySelectorAll('.subcategory:nth-of-type(3) .clothes-item');
-            bottomsItems.forEach(item => {
-                item.setAttribute('data-category', '下装');
-                item.setAttribute('data-subcategory', '裤装');
-                
-                // 按衣物名称设置季节属性
-                const name = item.querySelector('.item-name').textContent.trim();
-                if (name.includes('牛仔')) {
-                    item.setAttribute('data-season', '春季,秋季,冬季');
-                } else if (name.includes('休闲')) {
-                    item.setAttribute('data-season', '春季,秋季');
-                } else if (name.includes('运动')) {
-                    item.setAttribute('data-season', '全部季节');
-                } else if (name.includes('西装')) {
-                    item.setAttribute('data-season', '春季,秋季,冬季');
-                } else {
-                    item.setAttribute('data-season', '全部季节');
-                }
-            });
+            // 处理没有结果的情况
+            if (visibleCount === 0) {
+                console.log('筛选结果为空，没有匹配的衣物');
+                showToast('没有符合条件的衣物');
+            }
         }
         
         // 按分类筛选衣物
         function filterByCategory(category) {
+            console.log(`执行分类筛选: "${category}"`);
+            
             // 更新当前选中的分类
             currentCategory = category;
             
@@ -1574,50 +1784,13 @@
             applyFilters();
         }
         
-        // 组合筛选（同时考虑分类和季节）
-        function applyFilters() {
-            const clothesItems = document.querySelectorAll('.clothes-item');
-            const subcategories = document.querySelectorAll('.subcategory');
+        // 按场景筛选衣物
+        function filterByScene(scene) {
+            // 更新当前选中的场景
+            currentScene = scene;
             
-            // 根据当前选中的分类和季节进行筛选
-            clothesItems.forEach(item => {
-                const itemCategory = item.getAttribute('data-category');
-                const itemSeasons = item.getAttribute('data-season');
-                
-                const matchesCategory = currentCategory === '全部' || itemCategory === currentCategory;
-                const matchesSeason = currentSeason === '全部季节' || (itemSeasons && itemSeasons.includes(currentSeason));
-                
-                if (matchesCategory && matchesSeason) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-            
-            // 处理子分类的显示/隐藏
-            subcategories.forEach(subcat => {
-                // 获取分类名称，例如"上装 - 基础款"中提取"上装"
-                const title = subcat.querySelector('.subcategory-title').textContent;
-                const subcatCategory = title.split('-')[0].trim();
-                
-                // 检查是否有可见的衣物
-                const hasVisibleItems = Array.from(subcat.querySelectorAll('.clothes-item')).some(
-                    item => item.style.display !== 'none'
-                );
-                
-                // 仅当分类匹配且有可见衣物时显示子分类
-                if ((currentCategory === '全部' || subcatCategory.includes(currentCategory)) && hasVisibleItems) {
-                    subcat.style.display = '';
-                } else {
-                    subcat.style.display = 'none';
-                }
-            });
-            
-            // 处理没有结果的情况
-            const anyVisibleItems = Array.from(clothesItems).some(item => item.style.display !== 'none');
-            if (!anyVisibleItems) {
-                showToast('没有符合条件的衣物');
-            }
+            // 调用组合筛选
+            applyFilters();
         }
 
         // 初始化模拟数据
@@ -1638,21 +1811,205 @@
         // 初始化筛选栏
         function initFilterBar() {
             const filterChips = document.querySelectorAll('.filter-chip');
+            let currentFilter = '全部季节';
             
-            filterChips.forEach(chip => {
+            // 添加新的场景筛选选项
+            const filterBar = document.querySelector('.filter-bar');
+            if (filterBar) {
+                // 移除现有的"场景筛选"选项
+                const sceneFilter = Array.from(filterChips).find(chip => chip.textContent.trim() === '场景筛选');
+                if (sceneFilter) {
+                    sceneFilter.remove();
+                }
+                
+                // 添加具体的场景筛选选项
+                const sceneFilters = ['日常', '职场', '约会', '运动', '正式', '休闲'];
+                sceneFilters.forEach(scene => {
+                    const sceneChip = document.createElement('div');
+                    sceneChip.className = 'filter-chip';
+                    sceneChip.textContent = scene;
+                    sceneChip.setAttribute('data-filter-type', 'scene');
+                    filterBar.appendChild(sceneChip);
+                });
+            }
+            
+            // 为所有筛选选项添加点击事件（包括新添加的）
+            const allFilterChips = document.querySelectorAll('.filter-chip');
+            allFilterChips.forEach(chip => {
                 chip.addEventListener('click', function() {
-                    // 移除其他筛选项的active类
-                    filterChips.forEach(c => c.classList.remove('active'));
+                    const filterType = this.getAttribute('data-filter-type') || 'season';
+                    const filter = this.textContent.trim();
+                    
+                    // 只移除同类筛选项的active类
+                    allFilterChips.forEach(c => {
+                        if ((c.getAttribute('data-filter-type') || 'season') === filterType) {
+                            c.classList.remove('active');
+                        }
+                    });
+                    
                     // 给当前筛选项添加active类
                     this.classList.add('active');
                     
-                    const filter = this.textContent.trim();
-                    showToast(`筛选: ${filter}`);
+                    showToast(`${filterType === 'scene' ? '场景' : '季节'}筛选: ${filter}`);
                     
-                    // 筛选衣物
-                    filterBySeason(filter);
+                    // 根据筛选类型调用不同的筛选函数
+                    if (filterType === 'scene') {
+                        filterByScene(filter);
+                    } else {
+                        filterBySeason(filter);
+                    }
                 });
             });
+            
+            // 标记季节筛选选项
+            const seasonFilters = ['全部季节', '春季', '夏季', '秋季', '冬季'];
+            allFilterChips.forEach(chip => {
+                const text = chip.textContent.trim();
+                if (seasonFilters.includes(text)) {
+                    chip.setAttribute('data-filter-type', 'season');
+                }
+            });
+        }
+
+        // 初始化查看全部功能
+        function initViewAllButtons() {
+            console.log('初始化查看全部按钮');
+            const viewAllButtons = document.querySelectorAll('.view-all');
+            console.log(`找到 ${viewAllButtons.length} 个查看全部按钮`);
+            
+            viewAllButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    console.log('查看全部按钮被点击');
+                    
+                    // 获取父级子分类容器
+                    const subcategory = this.closest('.subcategory');
+                    
+                    if (!subcategory) {
+                        console.error('无法找到父级子分类容器');
+                        return;
+                    }
+                    
+                    // 检查是否已有扩展内容
+                    let expandedContent = subcategory.querySelector('.expanded-content');
+                    const isExpanded = subcategory.classList.contains('expanded');
+                    
+                    if (isExpanded) {
+                        // 已展开，需要收起
+                        subcategory.classList.remove('expanded');
+                        this.textContent = '查看全部 >';
+                        this.style.color = '';
+                        
+                        if (expandedContent) {
+                            expandedContent.style.display = 'none';
+                        }
+                        
+                        showToast(`收起${getSimpleTitle(subcategory)}`);
+                    } else {
+                        // 未展开，需要展开
+                        subcategory.classList.add('expanded');
+                        this.textContent = '收起';
+                        this.style.color = '#ff7b4e';
+                        
+                        if (!expandedContent) {
+                            // 如果不存在扩展内容，创建它
+                            expandedContent = createExpandedContent(subcategory);
+                            subcategory.appendChild(expandedContent);
+                        }
+                        
+                        // 显示扩展内容
+                        expandedContent.style.display = 'block';
+                        
+                        showToast(`展开更多${getSimpleTitle(subcategory)}`);
+                    }
+                });
+            });
+        }
+        
+        // 获取简化的子分类标题（仅提取主要文本）
+        function getSimpleTitle(subcategory) {
+            const titleElement = subcategory.querySelector('.subcategory-title');
+            if (!titleElement) return '子分类';
+            
+            // 获取标题文本，移除子元素文本
+            const text = titleElement.textContent.split('查看全部')[0].trim();
+            return text.split('>')[0].trim();
+        }
+        
+        // 创建扩展内容
+        function createExpandedContent(subcategory) {
+            console.log('创建扩展内容');
+            
+            // 创建内容容器
+            const expandedContent = document.createElement('div');
+            expandedContent.className = 'expanded-content';
+            expandedContent.style.display = 'block'; // 直接显示
+            
+            // 创建网格
+            const expandedGrid = document.createElement('div');
+            expandedGrid.className = 'expanded-grid';
+            
+            // 获取子分类信息以确定要添加的衣物
+            const subcategoryTitle = getSimpleTitle(subcategory);
+            console.log(`为子分类 "${subcategoryTitle}" 创建扩展内容`);
+            
+            // 确定要添加的衣物列表
+            let itemsToAdd = [];
+            
+            if (subcategoryTitle.includes('上装') && subcategoryTitle.includes('基础款')) {
+                itemsToAdd = [
+                    {name: '白色基础T恤', image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=387&auto=format&fit=crop'},
+                    {name: '黑色休闲卫衣', image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80&w=387&auto=format&fit=crop'},
+                    {name: '灰色棉质衬衫', image: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=387&auto=format&fit=crop'},
+                    {name: '条纹长袖T恤', image: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=387&auto=format&fit=crop'}
+                ];
+            } else if (subcategoryTitle.includes('上装') && subcategoryTitle.includes('外套')) {
+                itemsToAdd = [
+                    {name: '深蓝色牛仔夹克', image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=387&auto=format&fit=crop'},
+                    {name: '黑色皮夹克', image: 'https://images.unsplash.com/photo-1548126032-079a0fb0099d?q=80&w=387&auto=format&fit=crop'},
+                    {name: '灰色西装外套', image: 'https://images.unsplash.com/photo-1525450824786-227cbef70703?q=80&w=387&auto=format&fit=crop'},
+                    {name: '米色风衣', image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=387&auto=format&fit=crop'}
+                ];
+            } else if (subcategoryTitle.includes('下装') && subcategoryTitle.includes('裤装')) {
+                itemsToAdd = [
+                    {name: '深蓝色直筒牛仔裤', image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=387&auto=format&fit=crop'},
+                    {name: '卡其色休闲裤', image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=387&auto=format&fit=crop'},
+                    {name: '黑色运动裤', image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?q=80&w=387&auto=format&fit=crop'},
+                    {name: '灰色西装裤', image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=387&auto=format&fit=crop'}
+                ];
+            } else {
+                itemsToAdd = [
+                    {name: '基础服饰1', image: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=387&auto=format&fit=crop'},
+                    {name: '基础服饰2', image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=387&auto=format&fit=crop'},
+                    {name: '基础服饰3', image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80&w=387&auto=format&fit=crop'},
+                    {name: '基础服饰4', image: 'https://images.unsplash.com/photo-1525450824786-227cbef70703?q=80&w=387&auto=format&fit=crop'}
+                ];
+            }
+            
+            // 添加衣物到网格
+            itemsToAdd.forEach(item => {
+                // 创建衣物项
+                const clothesItem = document.createElement('div');
+                clothesItem.className = 'clothes-item';
+                
+                // 设置显示内容
+                clothesItem.innerHTML = `
+                    <img src="${item.image}" class="clothes-img" alt="${item.name}">
+                    <div class="item-name">${item.name}</div>
+                `;
+                
+                // 添加点击事件
+                clothesItem.addEventListener('click', function() {
+                    showToast(`查看衣物: ${item.name}`);
+                });
+                
+                // 添加到网格
+                expandedGrid.appendChild(clothesItem);
+            });
+            
+            // 将网格添加到扩展内容
+            expandedContent.appendChild(expandedGrid);
+            
+            return expandedContent;
         }
     </script>
 </body>
