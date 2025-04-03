@@ -1873,143 +1873,177 @@
 
         // 初始化查看全部功能
         function initViewAllButtons() {
-            console.log('初始化查看全部按钮');
+            console.log("开始初始化查看全部按钮");
+            
+            // 清除之前可能存在的事件监听器
+            document.querySelectorAll('.expanded-content').forEach(item => {
+                if(item.parentNode) {
+                    item.parentNode.removeChild(item);
+                }
+            });
+            
+            // 获取所有查看全部按钮并添加事件监听器
             const viewAllButtons = document.querySelectorAll('.view-all');
             console.log(`找到 ${viewAllButtons.length} 个查看全部按钮`);
             
             viewAllButtons.forEach(button => {
-                button.addEventListener('click', function(event) {
+                // 移除可能存在的旧事件监听器
+                const newButton = button.cloneNode(true);
+                if (button.parentNode) {
+                    button.parentNode.replaceChild(newButton, button);
+                }
+                
+                // 添加新的事件监听器
+                newButton.addEventListener('click', function(e) {
                     console.log('查看全部按钮被点击');
+                    e.preventDefault();
+                    e.stopPropagation();
                     
-                    // 获取父级子分类容器
+                    // 获取包含此按钮的子分类容器
                     const subcategory = this.closest('.subcategory');
-                    
                     if (!subcategory) {
-                        console.error('无法找到父级子分类容器');
+                        console.error('找不到父级子分类容器');
                         return;
                     }
                     
-                    // 检查是否已有扩展内容
-                    let expandedContent = subcategory.querySelector('.expanded-content');
+                    // 获取子分类标题
+                    const titleEl = subcategory.querySelector('.subcategory-title');
+                    const subcategoryTitle = titleEl ? titleEl.textContent.split('查看全部')[0].trim() : '未知子分类';
+                    
+                    // 检查当前是否已经展开
                     const isExpanded = subcategory.classList.contains('expanded');
+                    console.log(`当前状态: ${isExpanded ? '已展开' : '未展开'}, 子分类: ${subcategoryTitle}`);
                     
                     if (isExpanded) {
-                        // 已展开，需要收起
-                        subcategory.classList.remove('expanded');
+                        // 收起内容
+                        console.log('执行收起操作');
                         this.textContent = '查看全部 >';
                         this.style.color = '';
+                        subcategory.classList.remove('expanded');
                         
+                        // 隐藏扩展内容
+                        const expandedContent = subcategory.querySelector('.expanded-content');
                         if (expandedContent) {
                             expandedContent.style.display = 'none';
                         }
                         
-                        showToast(`收起${getSimpleTitle(subcategory)}`);
+                        showToast(`已收起${subcategoryTitle}`);
                     } else {
-                        // 未展开，需要展开
-                        subcategory.classList.add('expanded');
+                        // 展开内容
+                        console.log('执行展开操作');
                         this.textContent = '收起';
                         this.style.color = '#ff7b4e';
+                        subcategory.classList.add('expanded');
+                        
+                        // 获取或创建扩展内容
+                        let expandedContent = subcategory.querySelector('.expanded-content');
                         
                         if (!expandedContent) {
-                            // 如果不存在扩展内容，创建它
-                            expandedContent = createExpandedContent(subcategory);
+                            console.log('创建新的扩展内容');
+                            expandedContent = document.createElement('div');
+                            expandedContent.className = 'expanded-content';
+                            expandedContent.style.display = 'block';
+                            
+                            // 根据分类获取对应的衣物列表
+                            const clothesItems = generateItemsForCategory(subcategoryTitle);
+                            
+                            // 添加网格容器
+                            const grid = document.createElement('div');
+                            grid.className = 'expanded-grid';
+                            
+                            // 向网格中添加衣物
+                            clothesItems.forEach(item => {
+                                const clothesItem = document.createElement('div');
+                                clothesItem.className = 'clothes-item';
+                                clothesItem.innerHTML = `
+                                    <img src="${item.img}" class="clothes-img" alt="${item.name}">
+                                    <div class="item-name">${item.name}</div>
+                                `;
+                                
+                                // 设置数据属性，与筛选逻辑保持一致
+                                if (subcategoryTitle.includes('上装')) {
+                                    clothesItem.setAttribute('data-category', '上装');
+                                } else if (subcategoryTitle.includes('下装')) {
+                                    clothesItem.setAttribute('data-category', '下装');
+                                }
+                                clothesItem.setAttribute('data-season', '春季,夏季,秋季,冬季');
+                                clothesItem.setAttribute('data-scene', '日常');
+                                
+                                // 添加点击事件
+                                clothesItem.addEventListener('click', function() {
+                                    showToast(`查看衣物: ${item.name}`);
+                                });
+                                
+                                grid.appendChild(clothesItem);
+                            });
+                            
+                            // 将网格添加到扩展内容
+                            expandedContent.appendChild(grid);
+                            
+                            // 将扩展内容添加到子分类
                             subcategory.appendChild(expandedContent);
+                        } else {
+                            // 如果已存在，显示它
+                            expandedContent.style.display = 'block';
                         }
                         
-                        // 显示扩展内容
-                        expandedContent.style.display = 'block';
-                        
-                        showToast(`展开更多${getSimpleTitle(subcategory)}`);
+                        showToast(`已展开${subcategoryTitle}`);
                     }
                 });
             });
+            
+            console.log("查看全部按钮初始化完成");
         }
         
-        // 获取简化的子分类标题（仅提取主要文本）
-        function getSimpleTitle(subcategory) {
-            const titleElement = subcategory.querySelector('.subcategory-title');
-            if (!titleElement) return '子分类';
+        // 根据分类生成对应的衣物数据
+        function generateItemsForCategory(categoryTitle) {
+            console.log(`为分类 "${categoryTitle}" 生成扩展衣物`);
             
-            // 获取标题文本，移除子元素文本
-            const text = titleElement.textContent.split('查看全部')[0].trim();
-            return text.split('>')[0].trim();
-        }
-        
-        // 创建扩展内容
-        function createExpandedContent(subcategory) {
-            console.log('创建扩展内容');
-            
-            // 创建内容容器
-            const expandedContent = document.createElement('div');
-            expandedContent.className = 'expanded-content';
-            expandedContent.style.display = 'block'; // 直接显示
-            
-            // 创建网格
-            const expandedGrid = document.createElement('div');
-            expandedGrid.className = 'expanded-grid';
-            
-            // 获取子分类信息以确定要添加的衣物
-            const subcategoryTitle = getSimpleTitle(subcategory);
-            console.log(`为子分类 "${subcategoryTitle}" 创建扩展内容`);
-            
-            // 确定要添加的衣物列表
-            let itemsToAdd = [];
-            
-            if (subcategoryTitle.includes('上装') && subcategoryTitle.includes('基础款')) {
-                itemsToAdd = [
-                    {name: '白色基础T恤', image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=387&auto=format&fit=crop'},
-                    {name: '黑色休闲卫衣', image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80&w=387&auto=format&fit=crop'},
-                    {name: '灰色棉质衬衫', image: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=387&auto=format&fit=crop'},
-                    {name: '条纹长袖T恤', image: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=387&auto=format&fit=crop'}
+            if (categoryTitle.includes('上装') && categoryTitle.includes('基础款')) {
+                return [
+                    { name: '白色基础T恤', img: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=387&auto=format&fit=crop' },
+                    { name: '黑色休闲卫衣', img: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=387&auto=format&fit=crop' },
+                    { name: '灰色棉质衬衫', img: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=387&auto=format&fit=crop' },
+                    { name: '条纹长袖T恤', img: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=387&auto=format&fit=crop' }
                 ];
-            } else if (subcategoryTitle.includes('上装') && subcategoryTitle.includes('外套')) {
-                itemsToAdd = [
-                    {name: '深蓝色牛仔夹克', image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=387&auto=format&fit=crop'},
-                    {name: '黑色皮夹克', image: 'https://images.unsplash.com/photo-1548126032-079a0fb0099d?q=80&w=387&auto=format&fit=crop'},
-                    {name: '灰色西装外套', image: 'https://images.unsplash.com/photo-1525450824786-227cbef70703?q=80&w=387&auto=format&fit=crop'},
-                    {name: '米色风衣', image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?q=80&w=387&auto=format&fit=crop'}
+            } else if (categoryTitle.includes('上装') && categoryTitle.includes('外套')) {
+                return [
+                    { name: '深蓝色牛仔夹克', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=387&auto=format&fit=crop' },
+                    { name: '黑色皮夹克', img: 'https://images.unsplash.com/photo-1548126032-079a0fb0099d?w=387&auto=format&fit=crop' },
+                    { name: '灰色西装外套', img: 'https://images.unsplash.com/photo-1525450824786-227cbef70703?w=387&auto=format&fit=crop' },
+                    { name: '米色风衣', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=387&auto=format&fit=crop' }
                 ];
-            } else if (subcategoryTitle.includes('下装') && subcategoryTitle.includes('裤装')) {
-                itemsToAdd = [
-                    {name: '深蓝色直筒牛仔裤', image: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=387&auto=format&fit=crop'},
-                    {name: '卡其色休闲裤', image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=387&auto=format&fit=crop'},
-                    {name: '黑色运动裤', image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?q=80&w=387&auto=format&fit=crop'},
-                    {name: '灰色西装裤', image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=387&auto=format&fit=crop'}
+            } else if (categoryTitle.includes('下装') && categoryTitle.includes('裤装')) {
+                return [
+                    { name: '深蓝色直筒牛仔裤', img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=387&auto=format&fit=crop' },
+                    { name: '卡其色休闲裤', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=387&auto=format&fit=crop' },
+                    { name: '黑色运动裤', img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=387&auto=format&fit=crop' },
+                    { name: '灰色西装裤', img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=387&auto=format&fit=crop' }
                 ];
             } else {
-                itemsToAdd = [
-                    {name: '基础服饰1', image: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?q=80&w=387&auto=format&fit=crop'},
-                    {name: '基础服饰2', image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=387&auto=format&fit=crop'},
-                    {name: '基础服饰3', image: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?q=80&w=387&auto=format&fit=crop'},
-                    {name: '基础服饰4', image: 'https://images.unsplash.com/photo-1525450824786-227cbef70703?q=80&w=387&auto=format&fit=crop'}
+                return [
+                    { name: '基础服饰1', img: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=387&auto=format&fit=crop' },
+                    { name: '基础服饰2', img: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=387&auto=format&fit=crop' },
+                    { name: '基础服饰3', img: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=387&auto=format&fit=crop' },
+                    { name: '基础服饰4', img: 'https://images.unsplash.com/photo-1525450824786-227cbef70703?w=387&auto=format&fit=crop' }
                 ];
             }
-            
-            // 添加衣物到网格
-            itemsToAdd.forEach(item => {
-                // 创建衣物项
-                const clothesItem = document.createElement('div');
-                clothesItem.className = 'clothes-item';
-                
-                // 设置显示内容
-                clothesItem.innerHTML = `
-                    <img src="${item.image}" class="clothes-img" alt="${item.name}">
-                    <div class="item-name">${item.name}</div>
-                `;
-                
-                // 添加点击事件
-                clothesItem.addEventListener('click', function() {
-                    showToast(`查看衣物: ${item.name}`);
+        }
+        
+        // 初始化衣物悬停效果
+        function initClothesItemHover() {
+            // 为所有衣物项添加悬停效果
+            document.querySelectorAll('.clothes-item').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 3px 8px rgba(0,0,0,0.1)';
                 });
                 
-                // 添加到网格
-                expandedGrid.appendChild(clothesItem);
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                });
             });
-            
-            // 将网格添加到扩展内容
-            expandedContent.appendChild(expandedGrid);
-            
-            return expandedContent;
         }
     </script>
 </body>
