@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LITATA - 我的空间</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Pro Text", -apple, "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* iPhone 16 Pro Max 视觉仿真容器 */
+        .iphone-container {
+            position: relative;
+            width: 430px;
+            height: 932px;
+            margin: 0 auto;
+            background-color: #f8f8f8;
+            border-radius: 55px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 动态岛 */
+        .dynamic-island {
+            position: absolute;
+            width: 125px;
+            height: 35px;
+            background: #000;
+            border-radius: 20px;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            padding: 10px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 90;
+        }
+
+        .status-bar .time {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .status-bar .right {
+            display: flex;
+            gap: 5px;
+        }
+
+        .status-bar .right .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 主体内容区 */
+        .app-container {
+            height: 100%;
+            width: 100%;
+            padding-top: 60px;
+            padding-bottom: 85px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 内容滚动区域 */
+        .profile-content {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .profile-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 个人信息头部 */
+        .profile-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+            color: #fff;
+            position: relative;
+        }
+
+        .settings-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            font-size: 18px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fff;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .user-id {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+
+        .edit-profile {
+            display: inline-block;
+            padding: 4px 12px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        /* 积分和会员状态 */
+        .points-member {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            margin-top: 10px;
+        }
+
+        .points {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .points-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .points-value {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .plus-member {
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* 数据看板 */
+        .stats-board {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            background-color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* 身体数据 */
+        .body-data {
+            background-color: #fff;
+            border-radius: 15px;
+            margin: 0 15px 15px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 15px;
+            border-bottom: 1px solid #f2f2f2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .section-action {
+            font-size: 14px;
+            color: #3a7bd5;
+        }
+
+        .body-metrics {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+        }
+
+        .metric {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .metric-value {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* 风格标签 */
+        .style-tags {
+            background-color: #fff;
+            border-radius: 15px;
+            margin: 0 15px 15px;
+            overflow: hidden;
+        }
+
+        .tags-container {
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .style-tag {
+            padding: 6px 15px;
+            background-color: #f2f2f2;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .style-tag.primary {
+            background-color: rgba(58, 123, 213, 0.1);
+            color: #3a7bd5;
+            font-weight: 500;
+        }
+
+        /* 会员特权模块 */
+        .vip-module {
+            background-color: #fff;
+            border-radius: 15px;
+            margin: 0 15px 15px;
+            overflow: hidden;
+        }
+
+        .vip-banner {
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(90deg, #3a7bd5, #00d2ff);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vip-banner::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -100px;
+            right: -50px;
+        }
+
+        .vip-banner::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            bottom: -70px;
+            left: 30px;
+        }
+
+        .vip-logo {
+            position: absolute;
+            top: 50%;
+            left: 25px;
+            transform: translateY(-50%);
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .vip-desc {
+            position: absolute;
+            top: 50%;
+            right: 25px;
+            transform: translateY(-50%);
+            text-align: right;
+            color: #fff;
+        }
+
+        .vip-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .vip-text {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .vip-features {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(58, 123, 213, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            color: #3a7bd5;
+            margin-bottom: 8px;
+        }
+
+        .feature-name {
+            font-size: 12px;
+            color: #333;
+        }
+
+        /* 功能列表 */
+        .function-list {
+            background-color: #fff;
+            border-radius: 15px;
+            margin: 0 15px 15px;
+            overflow: hidden;
+        }
+
+        .function-item {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        .function-item:last-child {
+            border-bottom: none;
+        }
+
+        .function-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+        }
+
+        .function-info {
+            flex: 1;
+        }
+
+        .function-title {
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .function-desc {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .function-arrow {
+            color: #ccc;
+            font-size: 16px;
+        }
+
+        /* 底部导航栏 */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 85px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .nav-item.active .nav-icon {
+            color: #3a7bd5;
+            transform: scale(1.1);
+        }
+
+        .nav-item.active .nav-text {
+            color: #3a7bd5;
+            font-weight: 500;
+        }
+
+        /* 底部安全区域 */
+        .bottom-safe-area {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+            background-color: #fff;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 动态岛 -->
+        <div class="dynamic-island"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="time">10:30</div>
+            <div class="right">
+                <div class="icon">📶</div>
+                <div class="icon">📡</div>
+                <div class="icon">🔋</div>
+            </div>
+        </div>
+
+        <!-- 应用主内容 -->
+        <div class="app-container">
+            <!-- 内容滚动区域 -->
+            <div class="profile-content">
+                <!-- 个人信息头部 -->
+                <div class="profile-header">
+                    <div class="settings-btn">⚙️</div>
+                    
+                    <div class="user-info">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=464&auto=format&fit=crop" alt="用户头像" class="avatar">
+                        <div class="user-details">
+                            <div class="user-name">Sarah Chen</div>
+                            <div class="user-id">LITATA ID: 58721094</div>
+                            <div class="edit-profile">编辑个人资料</div>
+                        </div>
+                    </div>
+                    
+                    <div class="points-member">
+                        <div class="points">
+                            <div class="points-label">当前积分</div>
+                            <div class="points-value">1,280</div>
+                        </div>
+                        <div class="plus-member">
+                            <span>💎</span>
+                            <span>LITATA Plus</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 社交数据看板 -->
+                <div class="stats-board">
+                    <div class="stat-item">
+                        <div class="stat-value">128</div>
+                        <div class="stat-label">关注</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">2,461</div>
+                        <div class="stat-label">粉丝</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">86</div>
+                        <div class="stat-label">穿搭</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">3.2k</div>
+                        <div class="stat-label">获赞</div>
+                    </div>
+                </div>
+                
+                <!-- 身体数据 -->
+                <div class="body-data">
+                    <div class="section-header">
+                        <div class="section-title">身材维度</div>
+                        <div class="section-action">编辑 ></div>
+                    </div>
+                    <div class="body-metrics">
+                        <div class="metric">
+                            <div class="metric-value">165cm</div>
+                            <div class="metric-label">身高</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">52kg</div>
+                            <div class="metric-label">体重</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">S</div>
+                            <div class="metric-label">上装尺码</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">26</div>
+                            <div class="metric-label">裤装尺码</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 风格标签 -->
+                <div class="style-tags">
+                    <div class="section-header">
+                        <div class="section-title">风格DNA</div>
+                        <div class="section-action">管理 ></div>
+                    </div>
+                    <div class="tags-container">
+                        <div class="style-tag primary">简约通勤</div>
+                        <div class="style-tag primary">韩系清新</div>
+                        <div class="style-tag">法式复古</div>
+                        <div class="style-tag">温柔风</div>
+                        <div class="style-tag">学院风</div>
+                        <div class="style-tag">街头休闲</div>
+                    </div>
+                </div>
+                
+                <!-- 会员特权 -->
+                <div class="vip-module">
+                    <div class="vip-banner">
+                        <div class="vip-logo">
+                            <span>💎</span>
+                            <span>LITATA Plus</span>
+                        </div>
+                        <div class="vip-desc">
+                            <div class="vip-title">尊享会员特权</div>
+                            <div class="vip-text">剩余 328 天</div>
+                        </div>
+                    </div>
+                    <div class="vip-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">👤</div>
+                            <div class="feature-name">AI模特库</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🖼️</div>
+                            <div class="feature-name">4K渲染</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✨</div>
+                            <div class="feature-name">场景生成</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🔗</div>
+                            <div class="feature-name">一键分销</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 功能列表 -->
+                <div class="function-list">
+                    <div class="function-item">
+                        <div class="function-icon">🛒</div>
+                        <div class="function-info">
+                            <div class="function-title">积分商城</div>
+                            <div class="function-desc">使用积分兑换优惠券和精美礼品</div>
+                        </div>
+                        <div class="function-arrow">›</div>
+                    </div>
+                    <div class="function-item">
+                        <div class="function-icon">👔</div>
+                        <div class="function-info">
+                            <div class="function-title">我的收藏</div>
+                            <div class="function-desc">查看已收藏的穿搭和灵感</div>
+                        </div>
+                        <div class="function-arrow">›</div>
+                    </div>
+                    <div class="function-item">
+                        <div class="function-icon">🎁</div>
+                        <div class="function-info">
+                            <div class="function-title">邀请好友</div>
+                            <div class="function-desc">邀请好友加入，双方各得50积分</div>
+                        </div>
+                        <div class="function-arrow">›</div>
+                    </div>
+                </div>
+                
+                <div class="function-list">
+                    <div class="function-item">
+                        <div class="function-icon">💬</div>
+                        <div class="function-info">
+                            <div class="function-title">意见反馈</div>
+                            <div class="function-desc">帮助我们改进产品和服务</div>
+                        </div>
+                        <div class="function-arrow">›</div>
+                    </div>
+                    <div class="function-item">
+                        <div class="function-icon">⭐</div>
+                        <div class="function-info">
+                            <div class="function-title">关于我们</div>
+                            <div class="function-desc">了解LITATA的故事和团队</div>
+                        </div>
+                        <div class="function-arrow">›</div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="bottom-nav">
+                <div class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-text">首页</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">✨</div>
+                    <div class="nav-text">灵感</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👚</div>
+                    <div class="nav-text">衣橱</div>
+                </div>
+                <div class="nav-item active">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-text">我的</div>
+                </div>
+            </div>
+            
+            <!-- 底部安全区域 -->
+            <div class="bottom-safe-area"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 模拟编辑个人资料点击
+            document.querySelector('.edit-profile').addEventListener('click', function() {
+                alert('编辑个人资料');
+            });
+            
+            // 模拟设置按钮点击
+            document.querySelector('.settings-btn').addEventListener('click', function() {
+                alert('打开设置界面');
+            });
+            
+            // 模拟身材维度编辑点击
+            document.querySelector('.body-data .section-action').addEventListener('click', function() {
+                alert('编辑身材维度');
+            });
+            
+            // 模拟风格DNA管理点击
+            document.querySelector('.style-tags .section-action').addEventListener('click', function() {
+                alert('管理风格DNA');
+            });
+            
+            // 模拟功能项点击
+            const functionItems = document.querySelectorAll('.function-item');
+            functionItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const title = this.querySelector('.function-title').textContent;
+                    alert(`打开${title}`);
+                });
+            });
+            
+            // 模拟会员特权点击
+            document.querySelector('.vip-banner').addEventListener('click', function() {
+                alert('查看LITATA Plus会员详情');
+            });
+            
+            // 模拟特权功能点击
+            const featureItems = document.querySelectorAll('.feature-item');
+            featureItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const name = this.querySelector('.feature-name').textContent;
+                    alert(`打开${name}功能`);
+                });
+            });
+            
+            // 模拟页面导航
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 获取导航项的文本
+                    const navText = this.querySelector('.nav-text').textContent;
+                    console.log(`导航到：${navText}`);
+                    
+                    // 导航跳转逻辑
+                    switch(navText) {
+                        case '首页':
+                            // window.location.href = 'home.html';
+                            break;
+                        case '灵感':
+                            // window.location.href = 'inspiration.html';
+                            break;
+                        case '衣橱':
+                            // window.location.href = 'wardrobe.html';
+                            break;
+                        case '我的':
+                            // 当前页面，不跳转
+                            break;
+                    }
+                });
+            });
+            
+            // 模拟社交数据点击
+            const statItems = document.querySelectorAll('.stat-item');
+            statItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const label = this.querySelector('.stat-label').textContent;
+                    alert(`查看${label}详情`);
+                });
+            });
+            
+            // 模拟风格标签点击
+            const styleTags = document.querySelectorAll('.style-tag');
+            styleTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    alert(`查看"${this.textContent}"风格的穿搭推荐`);
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

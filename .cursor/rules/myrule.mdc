@@ -1,0 +1,18 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+- 需求
+-- 模拟iphone16 pro max手机界面进行视觉仿真稿设计，有界面专门用于演示
+-- 这是一个视觉仿真稿，只需要使用html、css、js等前端技术去实现
+-- 如果没有数据可以自行创造需用于演示的数据
+-- [requirements.txt](mdc:requirements.txt) 是我描述需求的文档，需要你先阅读理解需求文档
+-- [map.txt](mdc:map.txt) 中生成你理解的产品每一个功能列表与开发进度，
+-- 如果需要图片素材可以从图床搜图提供的链接获取
+-- 如果需要icon或者button图标可以从icon设计中获取
+
+
+- 技能
+-- **图床搜图**：从https://unsplash.com/可搜索获取图片丰富页面。
+-- **icon设计**：从https://iconfinder.com/可搜索获取icon图标丰富页面。

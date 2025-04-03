@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LITATA - 上传穿搭</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Pro Text", -apple, "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* iPhone 16 Pro Max 视觉仿真容器 */
+        .iphone-container {
+            position: relative;
+            width: 430px;
+            height: 932px;
+            margin: 0 auto;
+            background-color: #f8f8f8;
+            border-radius: 55px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 动态岛 */
+        .dynamic-island {
+            position: absolute;
+            width: 125px;
+            height: 35px;
+            background: #000;
+            border-radius: 20px;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            padding: 10px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 90;
+        }
+
+        .status-bar .time {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .status-bar .right {
+            display: flex;
+            gap: 5px;
+        }
+
+        .status-bar .right .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 主体内容区 */
+        .app-container {
+            height: 100%;
+            width: 100%;
+            padding-top: 60px;
+            padding-bottom: 85px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 头部导航 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close-btn {
+            font-size: 16px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .publish-btn {
+            padding: 6px 15px;
+            background-color: #3a7bd5;
+            color: #fff;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+        }
+
+        .publish-btn:disabled {
+            background-color: #d1d1d1;
+            color: #888;
+        }
+
+        /* 内容滚动区域 */
+        .upload-content {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 20px;
+        }
+
+        .upload-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 照片上传区域 */
+        .photo-upload {
+            width: 100%;
+            height: 400px;
+            background-color: #f0f6ff;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #3a7bd5;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .upload-btn {
+            padding: 8px 25px;
+            background-color: #3a7bd5;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .photo-actions {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            display: none;
+        }
+
+        .photo-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* 文字描述区域 */
+        .description-area {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .description-input {
+            width: 100%;
+            min-height: 100px;
+            border: none;
+            resize: none;
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+            color: #333;
+        }
+
+        .description-input::placeholder {
+            color: #aaa;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* 标签选择区域 */
+        .tags-area {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .area-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background-color: #f2f2f2;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tag.selected {
+            background-color: #3a7bd5;
+            color: #fff;
+        }
+
+        /* 位置选择区域 */
+        .location-area {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .location-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .location-icon {
+            font-size: 20px;
+            color: #3a7bd5;
+        }
+
+        .location-text {
+            font-size: 16px;
+            color: #333;
+            flex: 1;
+        }
+
+        .location-arrow {
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        /* 天气和穿搭关联 */
+        .weather-link {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .weather-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            border-radius: 10px;
+        }
+
+        .weather-icon {
+            font-size: 36px;
+            color: #3a7bd5;
+        }
+
+        .weather-info {
+            flex: 1;
+        }
+
+        .weather-temp {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .weather-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            border-radius: 24px;
+            transition: .4s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .4s;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #3a7bd5;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+
+        /* 底部导航栏 */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 85px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .nav-item.active .nav-icon {
+            color: #3a7bd5;
+            transform: scale(1.1);
+        }
+
+        .nav-item.active .nav-text {
+            color: #3a7bd5;
+            font-weight: 500;
+        }
+
+        /* 底部安全区域 */
+        .bottom-safe-area {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+            background-color: #fff;
+            z-index: 10;
+        }
+
+        /* 文件上传隐藏输入框 */
+        #photo-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 动态岛 -->
+        <div class="dynamic-island"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="time">10:30</div>
+            <div class="right">
+                <div class="icon">📶</div>
+                <div class="icon">📡</div>
+                <div class="icon">🔋</div>
+            </div>
+        </div>
+
+        <!-- 应用主内容 -->
+        <div class="app-container">
+            <!-- 头部导航 -->
+            <div class="header">
+                <a href="#" class="close-btn" id="close-btn">取消</a>
+                <div class="header-title">发布穿搭</div>
+                <button class="publish-btn" id="publish-btn" disabled>发布</button>
+            </div>
+            
+            <!-- 内容滚动区域 -->
+            <div class="upload-content">
+                <!-- 照片上传区域 -->
+                <div class="photo-upload" id="photo-area">
+                    <div class="upload-placeholder" id="upload-placeholder">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-text">添加照片（最多4张）</div>
+                        <button class="upload-btn" id="upload-btn">添加照片</button>
+                    </div>
+                    <img src="" alt="预览图" class="preview-image" id="preview-image">
+                    <div class="photo-actions" id="photo-actions">
+                        <div class="photo-action">🔄</div>
+                        <div class="photo-action">✂️</div>
+                        <div class="photo-action">❌</div>
+                    </div>
+                    <input type="file" id="photo-input" accept="image/*">
+                </div>
+                
+                <!-- 文字描述区域 -->
+                <div class="description-area">
+                    <textarea class="description-input" id="description-input" placeholder="分享你的穿搭故事..."></textarea>
+                    <div class="char-count">0/300</div>
+                </div>
+                
+                <!-- 风格标签区域 -->
+                <div class="tags-area">
+                    <div class="area-title">
+                        <span>风格标签</span>
+                        <span style="font-size: 14px; color: #999; font-weight: normal;">最多选择3个</span>
+                    </div>
+                    <div class="tags-container">
+                        <div class="tag" data-tag="简约通勤">简约通勤</div>
+                        <div class="tag" data-tag="韩系清新">韩系清新</div>
+                        <div class="tag" data-tag="法式复古">法式复古</div>
+                        <div class="tag" data-tag="日系学院">日系学院</div>
+                        <div class="tag" data-tag="运动休闲">运动休闲</div>
+                        <div class="tag" data-tag="甜酷风">甜酷风</div>
+                        <div class="tag" data-tag="欧美街头">欧美街头</div>
+                        <div class="tag" data-tag="温柔风">温柔风</div>
+                        <div class="tag" data-tag="Y2K">Y2K</div>
+                        <div class="tag" data-tag="街头潮牌">街头潮牌</div>
+                    </div>
+                </div>
+                
+                <!-- 位置选择区域 -->
+                <div class="location-area">
+                    <div class="area-title">位置信息</div>
+                    <div class="location-input" id="location-selector">
+                        <div class="location-icon">📍</div>
+                        <div class="location-text">添加位置</div>
+                        <div class="location-arrow">›</div>
+                    </div>
+                </div>
+                
+                <!-- 天气和穿搭关联 -->
+                <div class="weather-link">
+                    <div class="area-title">
+                        <span>关联今日天气</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="weather-toggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="weather-card">
+                        <div class="weather-icon">☀️</div>
+                        <div class="weather-info">
+                            <div class="weather-temp">26°C</div>
+                            <div class="weather-desc">晴朗 · 北京 · 2023.10.15</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="bottom-nav">
+                <div class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-text">首页</div>
+                </div>
+                <div class="nav-item active">
+                    <div class="nav-icon">✨</div>
+                    <div class="nav-text">灵感</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👚</div>
+                    <div class="nav-text">衣橱</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-text">我的</div>
+                </div>
+            </div>
+            
+            <!-- 底部安全区域 -->
+            <div class="bottom-safe-area"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const photoInput = document.getElementById('photo-input');
+            const uploadBtn = document.getElementById('upload-btn');
+            const previewImage = document.getElementById('preview-image');
+            const uploadPlaceholder = document.getElementById('upload-placeholder');
+            const photoActions = document.getElementById('photo-actions');
+            const descriptionInput = document.getElementById('description-input');
+            const charCount = document.querySelector('.char-count');
+            const publishBtn = document.getElementById('publish-btn');
+            const closeBtn = document.getElementById('close-btn');
+            const locationSelector = document.getElementById('location-selector');
+            const weatherToggle = document.getElementById('weather-toggle');
+            const tags = document.querySelectorAll('.tag');
+            
+            // 更新发布按钮状态
+            function updatePublishBtnState() {
+                if (previewImage.style.display === 'block' && descriptionInput.value.trim() !== '') {
+                    publishBtn.disabled = false;
+                } else {
+                    publishBtn.disabled = true;
+                }
+            }
+            
+            // 上传照片按钮
+            uploadBtn.addEventListener('click', function() {
+                photoInput.click();
+            });
+            
+            // 照片选择处理
+            photoInput.addEventListener('change', function(e) {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
+                        previewImage.style.display = 'block';
+                        uploadPlaceholder.style.display = 'none';
+                        photoActions.style.display = 'flex';
+                        updatePublishBtnState();
+                    }
+                    
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+            
+            // 字数统计
+            descriptionInput.addEventListener('input', function() {
+                const length = this.value.length;
+                charCount.textContent = `${length}/300`;
+                
+                if (length > 300) {
+                    this.value = this.value.slice(0, 300);
+                    charCount.textContent = '300/300';
+                }
+                
+                updatePublishBtnState();
+            });
+            
+            // 标签选择
+            let selectedTags = [];
+            tags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const tagName = this.getAttribute('data-tag');
+                    
+                    if (this.classList.contains('selected')) {
+                        // 取消选择
+                        this.classList.remove('selected');
+                        selectedTags = selectedTags.filter(t => t !== tagName);
+                    } else {
+                        // 选择标签
+                        if (selectedTags.length < 3) {
+                            this.classList.add('selected');
+                            selectedTags.push(tagName);
+                        } else {
+                            alert('最多选择3个标签');
+                        }
+                    }
+                });
+            });
+            
+            // 位置选择器
+            locationSelector.addEventListener('click', function() {
+                const locations = ['北京市朝阳区', '上海市静安区', '广州市天河区', '深圳市南山区'];
+                const randomLocation = locations[Math.floor(Math.random() * locations.length)];
+                this.querySelector('.location-text').textContent = randomLocation;
+            });
+            
+            // 发布按钮
+            publishBtn.addEventListener('click', function() {
+                alert('发布成功！你的穿搭已分享到社区。');
+                // 这里可以添加跳转逻辑
+            });
+            
+            // 照片操作按钮
+            const actionBtns = document.querySelectorAll('.photo-action');
+            actionBtns.forEach((btn, index) => {
+                btn.addEventListener('click', function() {
+                    if (index === 2) { // 删除按钮
+                        previewImage.style.display = 'none';
+                        uploadPlaceholder.style.display = 'flex';
+                        photoActions.style.display = 'none';
+                        photoInput.value = '';
+                        updatePublishBtnState();
+                    } else {
+                        alert('图片编辑功能将在下一版本提供');
+                    }
+                });
+            });
+            
+            // 取消按钮
+            closeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (previewImage.style.display === 'block' || descriptionInput.value.trim() !== '') {
+                    if (confirm('确定要放弃编辑？')) {
+                        // 这里可以添加跳转逻辑
+                        window.location.href = 'inspiration.html'; 
+                    }
+                } else {
+                    // 没有编辑内容，直接返回
+                    window.location.href = 'inspiration.html';
+                }
+            });
+            
+            // 导航跳转
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    if (!this.classList.contains('active')) {
+                        const navText = this.querySelector('.nav-text').textContent;
+                        
+                        // 确认是否放弃编辑
+                        if (previewImage.style.display === 'block' || descriptionInput.value.trim() !== '') {
+                            if (confirm('确定要放弃编辑吗？')) {
+                                // 页面跳转逻辑
+                                switch(navText) {
+                                    case '首页':
+                                        window.location.href = 'home.html';
+                                        break;
+                                    case '灵感':
+                                        window.location.href = 'inspiration.html';
+                                        break;
+                                    case '衣橱':
+                                        window.location.href = 'wardrobe.html';
+                                        break;
+                                    case '我的':
+                                        window.location.href = 'profile.html';
+                                        break;
+                                }
+                            }
+                        } else {
+                            // 没有编辑内容，直接跳转
+                            switch(navText) {
+                                case '首页':
+                                    window.location.href = 'home.html';
+                                    break;
+                                case '灵感':
+                                    window.location.href = 'inspiration.html';
+                                    break;
+                                case '衣橱':
+                                    window.location.href = 'wardrobe.html';
+                                    break;
+                                case '我的':
+                                    window.location.href = 'profile.html';
+                                    break;
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LITATA - 首页(社区)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Pro Text", -apple, "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* iPhone 16 Pro Max 视觉仿真容器 */
+        .iphone-container {
+            position: relative;
+            width: 430px;
+            height: 932px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 55px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 动态岛 */
+        .dynamic-island {
+            position: absolute;
+            width: 125px;
+            height: 35px;
+            background: #000;
+            border-radius: 20px;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            padding: 10px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 90;
+        }
+
+        .status-bar .time {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .status-bar .right {
+            display: flex;
+            gap: 5px;
+        }
+
+        .status-bar .right .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 主体内容区 */
+        .app-container {
+            height: 100%;
+            width: 100%;
+            padding-top: 60px;
+            padding-bottom: 85px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部栏 */
+        .top-bar {
+            width: 100%;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+        }
+
+        /* 定位模块 */
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .location-icon {
+            width: 20px;
+            height: 20px;
+            color: #3a7bd5;
+            animation: pulse 2s infinite;
+        }
+
+        .weather-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .weather-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 搜索栏 */
+        .search-bar {
+            flex: 1;
+            max-width: 230px;
+            height: 38px;
+            margin: 0 15px;
+            padding: 0 15px;
+            background-color: #f2f2f2;
+            border-radius: 19px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-icon {
+            width: 16px;
+            height: 16px;
+            color: #999;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            background-color: transparent;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: #999;
+        }
+
+        .camera-icon {
+            width: 16px;
+            height: 16px;
+            color: #3a7bd5;
+        }
+
+        /* 消息盒子 */
+        .message-box {
+            position: relative;
+        }
+
+        .message-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .message-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 18px;
+            height: 18px;
+            background-color: #ff4d4f;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        /* 内容区域 - 瀑布流 */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            scrollbar-width: none; /* 隐藏滚动条 */
+            -ms-overflow-style: none;
+        }
+
+        .content-area::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 瀑布流容器 */
+        .waterfall {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding-bottom: 20px;
+        }
+
+        /* 卡片样式 */
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .card:nth-child(odd) {
+            transform: translateY(20px);
+        }
+
+        .card-image {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+        }
+
+        .card-video-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+        }
+
+        .card-video-container::after {
+            content: "▶";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 20px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-video-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 12px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #333;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-user {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            gap: 6px;
+        }
+
+        .user-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-size: 12px;
+            color: #666;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .action-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .find-clothes-button {
+            margin-top: 10px;
+            width: 100%;
+            height: 32px;
+            background-color: rgba(58, 123, 213, 0.1);
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            color: #3a7bd5;
+            font-weight: 500;
+        }
+
+        /* 广告卡片 */
+        .ad-card {
+            background-color: rgba(58, 123, 213, 0.05);
+            position: relative;
+        }
+
+        .ad-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        /* 公告卡片 */
+        .announcement-card {
+            background-color: rgba(255, 149, 0, 0.05);
+            border: 1px dashed rgba(255, 149, 0, 0.3);
+            grid-column: 1 / -1;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .announcement-icon {
+            font-size: 24px;
+            color: #ff9500;
+        }
+
+        .announcement-content {
+            flex: 1;
+        }
+
+        .announcement-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .announcement-text {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* 底部导航栏 */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 85px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .nav-item.active .nav-icon {
+            color: #3a7bd5;
+            transform: scale(1.1);
+        }
+
+        .nav-item.active .nav-text {
+            color: #3a7bd5;
+            font-weight: 500;
+        }
+
+        /* 下拉刷新提示 */
+        .pull-refresh {
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #999;
+            font-size: 14px;
+            transform: translateY(-60px);
+        }
+
+        .refresh-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            animation: rotating 2s linear infinite;
+        }
+
+        @keyframes rotating {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.6;
+            }
+        }
+
+        /* 主内容下方安全区域 */
+        .bottom-safe-area {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+            background-color: #fff;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 动态岛 -->
+        <div class="dynamic-island"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="time">10:30</div>
+            <div class="right">
+                <div class="icon">📶</div>
+                <div class="icon">📡</div>
+                <div class="icon">🔋</div>
+            </div>
+        </div>
+
+        <!-- 应用主内容 -->
+        <div class="app-container">
+            <!-- 顶部栏 -->
+            <div class="top-bar">
+                <div class="location">
+                    <div class="location-icon">📍</div>
+                    <div>北京</div>
+                    <div class="weather-info">
+                        <div class="weather-icon">☀️</div>
+                        <div>25°</div>
+                    </div>
+                </div>
+                
+                <div class="search-bar">
+                    <div class="search-icon">🔍</div>
+                    <input type="text" class="search-input" placeholder="搜索穿搭灵感">
+                    <div class="camera-icon">📷</div>
+                </div>
+                
+                <div class="message-box">
+                    <div class="message-icon">💬</div>
+                    <div class="message-badge">3</div>
+                </div>
+            </div>
+            
+            <!-- 内容区域 -->
+            <div class="content-area">
+                <!-- 下拉刷新提示 -->
+                <div class="pull-refresh">
+                    <div class="refresh-icon">🔄</div>
+                    <div>下拉刷新</div>
+                </div>
+                
+                <!-- 瀑布流 -->
+                <div class="waterfall">
+                    <!-- 公告卡片 -->
+                    <div class="announcement-card">
+                        <div class="announcement-icon">📢</div>
+                        <div class="announcement-content">
+                            <div class="announcement-title">气候穿搭大赛开始啦！</div>
+                            <div class="announcement-text">分享你的秋季穿搭，赢取LITATA Plus会员年卡</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 卡片1 -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?q=80&w=486&auto=format&fit=crop" alt="穿搭" class="card-image">
+                        <div class="card-content">
+                            <div class="card-title">今日上身|温暖又时髦的oversized毛衣穿搭，暖暖的秋日感</div>
+                            <div class="card-user">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=387&auto=format&fit=crop" alt="用户头像" class="user-avatar">
+                                <div class="user-name">时尚达人Mia</div>
+                            </div>
+                            <div class="card-actions">
+                                <div class="action-button">
+                                    <div class="action-icon">❤️</div>
+                                    <div>1.2k</div>
+                                </div>
+                                <div class="action-button">
+                                    <div class="action-icon">💬</div>
+                                    <div>86</div>
+                                </div>
+                                <div class="action-button">
+                                    <div class="action-icon">⭐</div>
+                                    <div>收藏</div>
+                                </div>
+                            </div>
+                            <div class="find-clothes-button">👕 同款寻衣</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 卡片2 -->
+                    <div class="card">
+                        <div class="card-video-container">
+                            <img src="https://images.unsplash.com/photo-1525450824786-227cbef70703?q=80&w=387&auto=format&fit=crop" alt="视频缩略图" class="card-video-thumbnail">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">秋日南方湿润天气|防潮穿搭技巧大放送</div>
+                            <div class="card-user">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=387&auto=format&fit=crop" alt="用户头像" class="user-avatar">
+                                <div class="user-name">潮流博主Noah</div>
+                            </div>
+                            <div class="card-actions">
+                                <div class="action-button">
+                                    <div class="action-icon">❤️</div>
+                                    <div>874</div>
+                                </div>
+                                <div class="action-button">
+                                    <div class="action-icon">💬</div>
+                                    <div>124</div>
+                                </div>
+                                <div class="action-button">
+                                    <div class="action-icon">⭐</div>
+                                    <div>收藏</div>
+                                </div>
+                            </div>
+                            <div class="find-clothes-button">👕 同款寻衣</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 卡片3 -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=387&auto=format&fit=crop" alt="穿搭" class="card-image">
+                        <div class="card-content">
+                            <div class="card-title">轻松准备一周穿搭|早秋上班族实用搭配指南</div>
+                            <div class="card-user">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=388&auto=format&fit=crop" alt="用户头像" class="user-avatar">
+                                <div class="user-name">职场风尚家</div>
+                            </div>
+                            <div class="card-actions">
+                                <div class="action-button">
+                                    <div class="action-icon">❤️</div>
+                                    <div>2.5k</div>
+                                </div>
+                                <div class="action-button">
+                                    <div class="action-icon">💬</div>
+                                    <div>230</div>
+                                </div>
+                                <div class="action-button">
+                                    <div class="action-icon">⭐</div>
+                                    <div>收藏</div>
+                                </div>
+                            </div>
+                            <div class="find-clothes-button">👕 同款寻衣</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 广告卡片 -->
+                    <div class="card ad-card">
+                        <div class="ad-badge">广告</div>
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1470&auto=format&fit=crop" alt="商品广告" class="card-image">
+                        <div class="card-content">
+                            <div class="card-title">限时优惠|ZARA秋季新款上市，会员尊享8折</div>
+                            <div class="card-user">
+                                <img src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=1746&auto=format&fit=crop" alt="品牌logo" class="user-avatar">
+                                <div class="user-name">ZARA官方旗舰店</div>
+                            </div>
+                            <div class="find-clothes-button">🛒 查看活动</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 卡片5 -->
+                    <div class="card">
+                        <img src="https://images.unsplash.com/photo-1550614000-4895a10e1bfd?q=80&w=387&auto=format&fit=crop" alt="穿搭" class="card-image">
+                        <div class="card-content">
+                            <div class="card-title">秋日降温必备|高级感毛呢大衣选购指南</div>
+                            <div class="card-user">
+                                <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?q=80&w=387&auto=format&fit=crop" alt="用户头像" class="user-avatar">
+                                <div class="user-name">品质生活家</div>
+                            </div>
+                            <div class="card-actions">
+                                <div class="action-button">
+                                    <div class="action-icon">❤️</div>
+                                    <div>1.7k</div>
+                                </div>
+                                <div class="action-button">
+                                    <div class="action-icon">💬</div>
+                                    <div>156</div>
+                                </div>
+                                <div class="action-button">
+                                    <div class="action-icon">⭐</div>
+                                    <div>收藏</div>
+                                </div>
+                            </div>
+                            <div class="find-clothes-button">👕 同款寻衣</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 卡片6 -->
+                    <div class="card">
+                        <div class="card-video-container">
+                            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=420&auto=format&fit=crop" alt="视频缩略图" class="card-video-thumbnail">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">如何打造百搭衣橱|10件单品解决搭配难题</div>
+                            <div class="card-user">
+                                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=387&auto=format&fit=crop" alt="用户头像" class="user-avatar">
+                                <div class="user-name">简约搭配师</div>
+                            </div>
+                            <div class="card-actions">
+                                <div class="action-button">
+                                    <div class="action-icon">❤️</div>
+                                    <div>3.1k</div>
+                                </div>
+                                <div class="action-button">
+                                    <div class="action-icon">💬</div>
+                                    <div>342</div>
+                                </div>
+                                <div class="action-button">
+                                    <div class="action-icon">⭐</div>
+                                    <div>收藏</div>
+                                </div>
+                            </div>
+                            <div class="find-clothes-button">👕 同款寻衣</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="bottom-nav">
+                <div class="nav-item active">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-text">首页</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">✨</div>
+                    <div class="nav-text">灵感</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👚</div>
+                    <div class="nav-text">衣橱</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-text">我的</div>
+                </div>
+            </div>
+            
+            <!-- 底部安全区域 -->
+            <div class="bottom-safe-area"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 模拟页面导航
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 获取导航项的文本
+                    const navText = this.querySelector('.nav-text').textContent;
+                    console.log(`导航到：${navText}`);
+                    
+                    // 导航跳转逻辑
+                    switch(navText) {
+                        case '首页':
+                            // 当前页面，不跳转
+                            break;
+                        case '灵感':
+                            // window.location.href = 'inspiration.html';
+                            break;
+                        case '衣橱':
+                            // window.location.href = 'wardrobe.html';
+                            break;
+                        case '我的':
+                            // window.location.href = 'profile.html';
+                            break;
+                    }
+                });
+            });
+            
+            // 模拟消息盒子点击
+            document.querySelector('.message-box').addEventListener('click', function() {
+                console.log('打开消息盒子');
+                alert('消息盒子功能开发中');
+            });
+            
+            // 模拟搜索功能
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    console.log(`搜索: ${this.value}`);
+                    alert(`搜索: ${this.value}`);
+                }
+            });
+            
+            // 模拟搜索相机点击
+            document.querySelector('.camera-icon').addEventListener('click', function() {
+                console.log('打开图片搜索');
+                alert('图片搜索功能开发中');
+            });
+            
+            // 模拟定位点击
+            document.querySelector('.location').addEventListener('click', function() {
+                console.log('点击定位');
+                alert('模拟请求定位权限');
+            });
+            
+            // 模拟卡片交互
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                // 点赞
+                const likeButton = card.querySelector('.action-button:nth-child(1)');
+                if (likeButton) {
+                    likeButton.addEventListener('click', function() {
+                        const likeCount = this.querySelector('div:last-child');
+                        let count = parseInt(likeCount.textContent.replace(/[^0-9]/g, ''));
+                        const icon = this.querySelector('.action-icon');
+                        
+                        if (icon.style.color === 'red') {
+                            icon.style.color = '';
+                            count -= 1;
+                        } else {
+                            icon.style.color = 'red';
+                            count += 1;
+                        }
+                        
+                        likeCount.textContent = count > 1000 ? (count / 1000).toFixed(1) + 'k' : count;
+                    });
+                }
+                
+                // 评论
+                const commentButton = card.querySelector('.action-button:nth-child(2)');
+                if (commentButton) {
+                    commentButton.addEventListener('click', function() {
+                        console.log('打开评论');
+                        alert('评论功能开发中');
+                    });
+                }
+                
+                // 收藏
+                const favoriteButton = card.querySelector('.action-button:nth-child(3)');
+                if (favoriteButton) {
+                    favoriteButton.addEventListener('click', function() {
+                        const icon = this.querySelector('.action-icon');
+                        icon.textContent = icon.textContent === '⭐' ? '★' : '⭐';
+                        icon.style.color = icon.textContent === '★' ? 'gold' : '';
+                        
+                        const text = this.querySelector('div:last-child');
+                        text.textContent = icon.textContent === '★' ? '已收藏' : '收藏';
+                    });
+                }
+                
+                // 同款寻衣
+                const findClothesButton = card.querySelector('.find-clothes-button');
+                if (findClothesButton) {
+                    findClothesButton.addEventListener('click', function() {
+                        console.log('寻找同款');
+                        alert('同款寻衣功能开发中');
+                    });
+                }
+            });
+            
+            // 模拟下拉刷新
+            const contentArea = document.querySelector('.content-area');
+            let startY = 0;
+            let isRefreshing = false;
+            
+            contentArea.addEventListener('touchstart', function(e) {
+                startY = e.touches[0].clientY;
+            });
+            
+            contentArea.addEventListener('touchmove', function(e) {
+                if (contentArea.scrollTop === 0) {
+                    const moveY = e.touches[0].clientY - startY;
+                    if (moveY > 50 && !isRefreshing) {
+                        isRefreshing = true;
+                        document.querySelector('.pull-refresh').style.transform = 'translateY(0)';
+                        document.querySelector('.refresh-icon').style.animationPlayState = 'running';
+                    }
+                }
+            });
+            
+            contentArea.addEventListener('touchend', function() {
+                if (isRefreshing) {
+                    setTimeout(() => {
+                        document.querySelector('.pull-refresh').style.transform = 'translateY(-60px)';
+                        document.querySelector('.refresh-icon').style.animationPlayState = 'paused';
+                        isRefreshing = false;
+                        alert('内容已刷新');
+                    }, 1500);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

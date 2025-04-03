@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LITATA - 启动页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Pro Text", -apple, "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* iPhone 16 Pro Max 视觉仿真容器 */
+        .iphone-container {
+            position: relative;
+            width: 430px;
+            height: 932px;
+            margin: 0 auto;
+            background-color: #000;
+            border-radius: 55px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        /* 动态岛 */
+        .dynamic-island {
+            position: absolute;
+            width: 125px;
+            height: 35px;
+            background: #000;
+            border-radius: 20px;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            padding: 10px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 90;
+        }
+
+        .status-bar .time {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .status-bar .right {
+            display: flex;
+            gap: 5px;
+        }
+
+        .status-bar .right .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 主内容区 */
+        .splash-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        /* 品牌Logo */
+        .brand-logo {
+            width: 180px;
+            height: 180px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .logo-circle {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+            opacity: 0;
+            transform: scale(0.8);
+            animation: fadeInLogo 1s ease-out forwards 0.5s;
+        }
+
+        .logo-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            animation: fadeInText 0.8s ease-out forwards 1s;
+        }
+
+        /* 标语 */
+        .tagline {
+            font-size: 24px;
+            font-weight: 300;
+            text-align: center;
+            max-width: 80%;
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards 1.5s;
+        }
+
+        /* 跳过提示 */
+        .skip-hint {
+            position: absolute;
+            bottom: 80px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            opacity: 0;
+            animation: fadeInUp 0.5s ease-out forwards 2.5s;
+        }
+
+        /* 渐变背景 */
+        .splash-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 30%, #1a1a1a 0%, #000 70%);
+            z-index: 1;
+        }
+
+        /* 波浪效果 */
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="%233a7bd5" fill-opacity="0.2" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,266.7C672,267,768,245,864,229.3C960,213,1056,203,1152,208C1248,213,1344,235,1392,245.3L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            opacity: 0;
+            animation: fadeInWave 1.5s ease-out forwards 2s;
+        }
+
+        /* 动画定义 */
+        @keyframes fadeInLogo {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInText {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInWave {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* 加载动画 */
+        .loading-bar {
+            position: absolute;
+            bottom: 40px;
+            width: 120px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            width: 0%;
+            background: #fff;
+            border-radius: 3px;
+            animation: loadingProgress 3s linear forwards;
+        }
+
+        @keyframes loadingProgress {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 动态岛 -->
+        <div class="dynamic-island"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="time">10:30</div>
+            <div class="right">
+                <div class="icon">📶</div>
+                <div class="icon">📡</div>
+                <div class="icon">🔋</div>
+            </div>
+        </div>
+
+        <!-- 背景 -->
+        <div class="splash-bg"></div>
+        <div class="wave"></div>
+        
+        <!-- 主内容 -->
+        <div class="splash-content">
+            <div class="brand-logo">
+                <div class="logo-circle"></div>
+                <div class="logo-text">LITATA</div>
+            </div>
+            <div class="tagline">让天气与穿搭完美融合的时尚社区</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <div class="skip-hint">点击屏幕跳过</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 模拟加载完成后自动跳转
+            setTimeout(() => {
+                // 这里可以添加页面跳转逻辑，模拟跳转到首页
+                console.log('加载完成，准备跳转到首页');
+                // window.location.href = 'home.html';
+            }, 3000);
+
+            // 点击跳过功能
+            document.querySelector('.iphone-container').addEventListener('click', function() {
+                console.log('用户点击跳过，立即跳转到首页');
+                // window.location.href = 'home.html';
+            });
+
+            // 模拟首次启动检测
+            const isFirstLaunch = !localStorage.getItem('appLaunched');
+            if (!isFirstLaunch) {
+                console.log('非首次启动，显示跳过提示');
+                document.querySelector('.skip-hint').style.animation = 'fadeInUp 0.5s ease-out forwards 0.5s';
+            }
+            localStorage.setItem('appLaunched', 'true');
+        });
+    </script>
+</body>
+</html> 

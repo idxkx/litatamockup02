@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LITATA - AI智能穿搭</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Pro Text", -apple, "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* iPhone 16 Pro Max 视觉仿真容器 */
+        .iphone-container {
+            position: relative;
+            width: 430px;
+            height: 932px;
+            margin: 0 auto;
+            background-color: #f8f8f8;
+            border-radius: 55px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 动态岛 */
+        .dynamic-island {
+            position: absolute;
+            width: 125px;
+            height: 35px;
+            background: #000;
+            border-radius: 20px;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            padding: 10px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 90;
+        }
+
+        .status-bar .time {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .status-bar .right {
+            display: flex;
+            gap: 5px;
+        }
+
+        .status-bar .right .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 主体内容区 */
+        .app-container {
+            height: 100%;
+            width: 100%;
+            padding-top: 60px;
+            padding-bottom: 85px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 头部导航 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .header .back-icon {
+            font-size: 20px;
+            color: #333;
+        }
+
+        /* 内容滚动区域 */
+        .ai-content {
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .ai-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* AI穿搭板块 */
+        .ai-banner {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-banner::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -150px;
+            right: -100px;
+        }
+
+        .ai-banner::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            bottom: -100px;
+            left: 50px;
+        }
+
+        .ai-title-area {
+            z-index: 2;
+            color: #fff;
+        }
+
+        .ai-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .ai-input-area {
+            position: relative;
+            z-index: 2;
+        }
+
+        .ai-prompt-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 25px;
+            border: none;
+            background: rgba(255, 255, 255, 0.95);
+            font-size: 16px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .ai-prompt-input::placeholder {
+            color: #aaa;
+        }
+
+        .ai-submit-btn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #3a7bd5;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            border: none;
+        }
+
+        /* 风格选择区域 */
+        .style-selection {
+            padding: 20px;
+            background: #fff;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .styles-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .style-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            height: 130px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .style-card:active {
+            transform: scale(0.98);
+        }
+
+        .style-card.selected {
+            border: 3px solid #3a7bd5;
+        }
+
+        .style-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .style-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .style-marker {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #3a7bd5;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .style-card.selected .style-marker {
+            opacity: 1;
+        }
+
+        /* 场景选择区域 */
+        .scenario-selection {
+            padding: 20px;
+            background: #fff;
+            margin-top: 10px;
+        }
+
+        .scenarios-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding-bottom: 10px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .scenarios-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scenario-item {
+            flex: 0 0 auto;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: #f0f6ff;
+            color: #3a7bd5;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .scenario-item.selected {
+            background: #3a7bd5;
+            color: white;
+        }
+
+        /* 生成穿搭按钮 */
+        .generate-outfit {
+            margin: 20px;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 12px;
+            background: #3a7bd5;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(58, 123, 213, 0.3);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .generate-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 8px rgba(58, 123, 213, 0.3);
+        }
+
+        /* 结果展示区域 */
+        .result-container {
+            display: none;
+            padding: 20px;
+            background: #fff;
+            margin-top: 10px;
+        }
+
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(58, 123, 213, 0.2);
+            border-top: 5px solid #3a7bd5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .outfit-result {
+            display: none;
+        }
+
+        .outfit-images {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .outfit-image {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            aspect-ratio: 3/4;
+        }
+
+        .outfit-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .outfit-details {
+            background: #f8f8f8;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .outfit-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .outfit-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .outfit-items {
+            margin-top: 15px;
+        }
+
+        .outfit-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .outfit-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-icon {
+            width: 30px;
+            height: 30px;
+            background: #f0f6ff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #3a7bd5;
+            margin-right: 15px;
+            font-size: 16px;
+        }
+
+        .item-name {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .save-btn {
+            background: #3a7bd5;
+            color: white;
+            border: none;
+        }
+
+        .share-btn {
+            background: white;
+            color: #3a7bd5;
+            border: 1px solid #3a7bd5;
+        }
+
+        /* 底部导航栏 */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 85px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-bottom: 20px;
+            z-index: 10;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .nav-item.active .nav-icon {
+            color: #3a7bd5;
+            transform: scale(1.1);
+        }
+
+        .nav-item.active .nav-text {
+            color: #3a7bd5;
+            font-weight: 500;
+        }
+
+        /* 底部安全区域 */
+        .bottom-safe-area {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+            background-color: #fff;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 动态岛 -->
+        <div class="dynamic-island"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="time">10:30</div>
+            <div class="right">
+                <div class="icon">📶</div>
+                <div class="icon">📡</div>
+                <div class="icon">🔋</div>
+            </div>
+        </div>
+
+        <!-- 应用主内容 -->
+        <div class="app-container">
+            <!-- 头部导航 -->
+            <div class="header">
+                <span class="back-icon" id="back-btn">←</span>
+                <span>AI穿搭生成</span>
+                <span style="width: 20px;"></span>
+            </div>
+            
+            <!-- 内容滚动区域 -->
+            <div class="ai-content">
+                <!-- AI穿搭Banner -->
+                <div class="ai-banner">
+                    <div class="ai-title-area">
+                        <div class="ai-title">
+                            <span>✨</span>
+                            <span>AI智能穿搭</span>
+                        </div>
+                        <div class="ai-subtitle">根据风格和场景，定制专属你的搭配</div>
+                    </div>
+                    
+                    <div class="ai-input-area">
+                        <input type="text" class="ai-prompt-input" id="ai-prompt" placeholder="描述你想要的穿搭风格或灵感...">
+                        <button class="ai-submit-btn">→</button>
+                    </div>
+                </div>
+                
+                <!-- 风格选择区域 -->
+                <div class="style-selection">
+                    <div class="section-title">选择风格</div>
+                    <div class="styles-grid">
+                        <div class="style-card" data-style="简约通勤">
+                            <img src="https://images.unsplash.com/photo-1612336307429-8a898d10e223?q=80&w=1887&auto=format&fit=crop" alt="简约通勤">
+                            <div class="style-name">简约通勤</div>
+                            <div class="style-marker">✓</div>
+                        </div>
+                        <div class="style-card" data-style="韩系清新">
+                            <img src="https://images.unsplash.com/photo-1618001789159-ffffe6f96ef2?q=80&w=1887&auto=format&fit=crop" alt="韩系清新">
+                            <div class="style-name">韩系清新</div>
+                            <div class="style-marker">✓</div>
+                        </div>
+                        <div class="style-card" data-style="法式复古">
+                            <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=1887&auto=format&fit=crop" alt="法式复古">
+                            <div class="style-name">法式复古</div>
+                            <div class="style-marker">✓</div>
+                        </div>
+                        <div class="style-card" data-style="运动街头">
+                            <img src="https://images.unsplash.com/photo-1523554888454-84137e72c3ce?q=80&w=1887&auto=format&fit=crop" alt="运动街头">
+                            <div class="style-name">运动街头</div>
+                            <div class="style-marker">✓</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 场景选择区域 -->
+                <div class="scenario-selection">
+                    <div class="section-title">选择场景</div>
+                    <div class="scenarios-container">
+                        <div class="scenario-item" data-scenario="日常通勤">日常通勤</div>
+                        <div class="scenario-item" data-scenario="休闲周末">休闲周末</div>
+                        <div class="scenario-item" data-scenario="约会聚餐">约会聚餐</div>
+                        <div class="scenario-item" data-scenario="商务职场">商务职场</div>
+                        <div class="scenario-item" data-scenario="运动健身">运动健身</div>
+                        <div class="scenario-item" data-scenario="度假旅行">度假旅行</div>
+                        <div class="scenario-item" data-scenario="派对聚会">派对聚会</div>
+                    </div>
+                </div>
+                
+                <!-- 生成穿搭按钮 -->
+                <div class="generate-outfit">
+                    <button class="generate-btn" id="generate-btn">
+                        <span>✨</span>
+                        <span>生成我的智能穿搭</span>
+                    </button>
+                </div>
+                
+                <!-- 结果展示区域 -->
+                <div class="result-container" id="result-container">
+                    <!-- 加载中状态 -->
+                    <div class="loading-indicator" id="loading-indicator">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-text">AI正在为你设计完美搭配...</div>
+                    </div>
+                    
+                    <!-- 穿搭结果 -->
+                    <div class="outfit-result" id="outfit-result">
+                        <div class="section-title">AI推荐穿搭</div>
+                        
+                        <div class="outfit-images">
+                            <div class="outfit-image">
+                                <img src="https://images.unsplash.com/photo-1550246140-5119ae4790b8?q=80&w=1790&auto=format&fit=crop" alt="穿搭示例1">
+                            </div>
+                            <div class="outfit-image">
+                                <img src="https://images.unsplash.com/photo-1515734674582-29010bb37906?q=80&w=1887&auto=format&fit=crop" alt="穿搭示例2">
+                            </div>
+                        </div>
+                        
+                        <div class="outfit-details">
+                            <div class="outfit-title">简约知性通勤风</div>
+                            <div class="outfit-description">
+                                这套搭配结合了简约大方的设计元素和精致的细节，适合职场通勤或重要会议场合。整体色调协调统一，展现出职业女性的干练与时尚感。
+                            </div>
+                        </div>
+                        
+                        <div class="section-title">单品清单</div>
+                        <div class="outfit-items">
+                            <div class="outfit-item">
+                                <div class="item-icon">👔</div>
+                                <div class="item-name">米色翻领西装外套</div>
+                            </div>
+                            <div class="outfit-item">
+                                <div class="item-icon">👚</div>
+                                <div class="item-name">白色基础款衬衫</div>
+                            </div>
+                            <div class="outfit-item">
+                                <div class="item-icon">👖</div>
+                                <div class="item-name">高腰直筒西装裤</div>
+                            </div>
+                            <div class="outfit-item">
+                                <div class="item-icon">👠</div>
+                                <div class="item-name">裸色尖头细跟高跟鞋</div>
+                            </div>
+                            <div class="outfit-item">
+                                <div class="item-icon">👜</div>
+                                <div class="item-name">棕色结构感手提包</div>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="action-btn save-btn">
+                                <span>💾</span>
+                                <span>保存穿搭</span>
+                            </button>
+                            <button class="action-btn share-btn">
+                                <span>📤</span>
+                                <span>分享</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="bottom-nav">
+                <div class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-text">首页</div>
+                </div>
+                <div class="nav-item active">
+                    <div class="nav-icon">✨</div>
+                    <div class="nav-text">灵感</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👚</div>
+                    <div class="nav-text">衣橱</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-text">我的</div>
+                </div>
+            </div>
+            
+            <!-- 底部安全区域 -->
+            <div class="bottom-safe-area"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const backBtn = document.getElementById('back-btn');
+            const aiPrompt = document.getElementById('ai-prompt');
+            const styleCards = document.querySelectorAll('.style-card');
+            const scenarioItems = document.querySelectorAll('.scenario-item');
+            const generateBtn = document.getElementById('generate-btn');
+            const resultContainer = document.getElementById('result-container');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const outfitResult = document.getElementById('outfit-result');
+            const navItems = document.querySelectorAll('.nav-item');
+            const saveBtn = document.querySelector('.save-btn');
+            const shareBtn = document.querySelector('.share-btn');
+            
+            // 返回按钮
+            backBtn.addEventListener('click', function() {
+                window.location.href = 'inspiration.html';
+            });
+            
+            // 风格选择
+            styleCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // 切换选中状态
+                    this.classList.toggle('selected');
+                    
+                    // 如果输入框为空，将选择的风格添加到输入框
+                    if (aiPrompt.value.trim() === '') {
+                        const selectedStyles = Array.from(document.querySelectorAll('.style-card.selected'))
+                            .map(card => card.getAttribute('data-style'));
+                        
+                        if (selectedStyles.length > 0) {
+                            aiPrompt.value = selectedStyles.join('、') + '风格';
+                        } else {
+                            aiPrompt.value = '';
+                        }
+                    }
+                });
+            });
+            
+            // 场景选择
+            scenarioItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // 清除其他项的选中状态
+                    scenarioItems.forEach(i => i.classList.remove('selected'));
+                    
+                    // 设置当前项为选中状态
+                    this.classList.add('selected');
+                    
+                    // 更新输入框
+                    const selectedStyle = aiPrompt.value.split('，')[0] || '';
+                    const selectedScenario = this.getAttribute('data-scenario');
+                    
+                    if (selectedStyle) {
+                        aiPrompt.value = selectedStyle + '，' + selectedScenario + '场景';
+                    } else {
+                        aiPrompt.value = selectedScenario + '场景';
+                    }
+                });
+            });
+            
+            // 生成穿搭按钮
+            generateBtn.addEventListener('click', function() {
+                // 检查是否有选择风格或场景或输入描述
+                if (aiPrompt.value.trim() === '' && 
+                    !document.querySelector('.style-card.selected') && 
+                    !document.querySelector('.scenario-item.selected')) {
+                    alert('请选择风格或场景，或输入穿搭描述');
+                    return;
+                }
+                
+                // 显示结果容器和加载状态
+                resultContainer.style.display = 'block';
+                loadingIndicator.style.display = 'block';
+                outfitResult.style.display = 'none';
+                
+                // 模拟AI生成过程
+                setTimeout(function() {
+                    loadingIndicator.style.display = 'none';
+                    outfitResult.style.display = 'block';
+                    
+                    // 滚动到结果区域
+                    resultContainer.scrollIntoView({ behavior: 'smooth' });
+                }, 2000);
+            });
+            
+            // 保存穿搭按钮
+            saveBtn.addEventListener('click', function() {
+                alert('穿搭已保存到我的收藏');
+            });
+            
+            // 分享按钮
+            shareBtn.addEventListener('click', function() {
+                alert('分享功能即将上线');
+            });
+            
+            // 底部导航
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const navText = this.querySelector('.nav-text').textContent;
+                    
+                    if (!this.classList.contains('active')) {
+                        // 页面跳转逻辑
+                        switch(navText) {
+                            case '首页':
+                                window.location.href = 'home.html';
+                                break;
+                            case '灵感':
+                                window.location.href = 'inspiration.html';
+                                break;
+                            case '衣橱':
+                                window.location.href = 'wardrobe.html';
+                                break;
+                            case '我的':
+                                window.location.href = 'profile.html';
+                                break;
+                        }
+                    }
+                });
+            });
+            
+            // AI输入框提交
+            document.querySelector('.ai-submit-btn').addEventListener('click', function() {
+                if (aiPrompt.value.trim() !== '') {
+                    generateBtn.click();
+                } else {
+                    alert('请输入穿搭描述');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

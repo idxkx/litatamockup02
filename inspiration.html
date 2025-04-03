@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LITATA - 灵感(穿搭)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "SF Pro Text", -apple, "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* iPhone 16 Pro Max 视觉仿真容器 */
+        .iphone-container {
+            position: relative;
+            width: 430px;
+            height: 932px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 55px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 动态岛 */
+        .dynamic-island {
+            position: absolute;
+            width: 125px;
+            height: 35px;
+            background: #000;
+            border-radius: 20px;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            padding: 10px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 90;
+        }
+
+        .status-bar .time {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .status-bar .right {
+            display: flex;
+            gap: 5px;
+        }
+
+        .status-bar .right .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* 主体内容区 */
+        .app-container {
+            height: 100%;
+            width: 100%;
+            padding-top: 60px;
+            padding-bottom: 85px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 天气卡片区域 */
+        .weather-card {
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+            color: #fff;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .weather-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .location-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .location-icon {
+            font-size: 16px;
+        }
+
+        .location-name {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .weather-more {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .weather-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .current-weather {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .weather-icon-large {
+            font-size: 40px;
+            margin-right: 5px;
+        }
+
+        .temperature {
+            font-size: 38px;
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        .weather-details {
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .weather-description {
+            font-weight: 500;
+        }
+
+        .weather-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* 天气预报滚动区域 */
+        .forecast-container {
+            margin-top: 5px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            white-space: nowrap;
+            padding-bottom: 8px;
+        }
+
+        .forecast-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .forecast-day {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 0 12px;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .forecast-day:first-child {
+            padding-left: 0;
+        }
+
+        .forecast-day:last-child {
+            border-right: none;
+        }
+
+        .day-name {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .forecast-icon {
+            font-size: 24px;
+            margin: 2px 0;
+        }
+
+        .forecast-temp {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* 今日穿搭卡片 */
+        .ootd-card {
+            margin: 15px 20px;
+            background-color: #fff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .ootd-header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f2f2f2;
+        }
+
+        .ootd-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .ai-badge {
+            background-color: rgba(58, 123, 213, 0.1);
+            color: #3a7bd5;
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .ootd-image-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+        }
+
+        .ootd-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .outfit-items {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .outfit-item {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .outfit-item:nth-child(1) {
+            background-color: #D6E1FF;
+        }
+
+        .outfit-item:nth-child(2) {
+            background-color: #212121;
+        }
+
+        .outfit-item:nth-child(3) {
+            background-color: #D6C1A6;
+        }
+
+        .ootd-detail {
+            padding: 15px;
+        }
+
+        .ootd-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .ootd-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background-color: #f2f2f2;
+            font-size: 12px;
+            color: #666;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .upload-own-btn {
+            width: 100%;
+            height: 40px;
+            background-color: #3a7bd5;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 我的灵感库 */
+        .my-inspiration {
+            margin: 0 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .sort-button {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* 灵感库列表 */
+        .inspiration-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .inspiration-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .inspiration-img {
+            width: 100%;
+            aspect-ratio: 1/1.3;
+            object-fit: cover;
+        }
+
+        .item-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 10px 10px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            color: #fff;
+        }
+
+        .item-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-stats {
+            display: flex;
+            font-size: 12px;
+            gap: 10px;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        /* 创建灵感按钮 */
+        .create-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #3a7bd5;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-size: 30px;
+            z-index: 50;
+        }
+
+        /* 创建方式菜单 */
+        .create-menu {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 60;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .create-menu.show {
+            transform: translateY(0);
+        }
+
+        .menu-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f2f2f2;
+            position: relative;
+        }
+
+        .menu-title {
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 15px;
+            top: 12px;
+            font-size: 18px;
+        }
+
+        .creation-options {
+            padding: 20px;
+        }
+
+        .option {
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .option-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f2f2f2;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+
+        .option-title {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .option-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            padding-left: 50px;
+        }
+
+        .use-option-btn {
+            margin-left: 50px;
+            padding: 8px 15px;
+            background-color: #f2f2f2;
+            border: none;
+            border-radius: 15px;
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            width: fit-content;
+        }
+
+        .ai-option {
+            border-color: rgba(58, 123, 213, 0.3);
+            background-color: rgba(58, 123, 213, 0.05);
+        }
+
+        .ai-option .option-icon {
+            background-color: #3a7bd5;
+            color: #fff;
+        }
+
+        .ai-option .use-option-btn {
+            background-color: #3a7bd5;
+            color: #fff;
+        }
+
+        /* 底部导航栏 */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 85px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .nav-item.active .nav-icon {
+            color: #3a7bd5;
+            transform: scale(1.1);
+        }
+
+        .nav-item.active .nav-text {
+            color: #3a7bd5;
+            font-weight: 500;
+        }
+
+        /* 内容滚动区域 */
+        .scroll-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 20px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .scroll-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 底部安全区域 */
+        .bottom-safe-area {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+            background-color: #fff;
+            z-index: 10;
+        }
+
+        /* 遮罩层 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 55;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="iphone-container">
+        <!-- 动态岛 -->
+        <div class="dynamic-island"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="time">10:30</div>
+            <div class="right">
+                <div class="icon">📶</div>
+                <div class="icon">📡</div>
+                <div class="icon">🔋</div>
+            </div>
+        </div>
+
+        <!-- 应用主内容 -->
+        <div class="app-container">
+            <!-- 天气卡片 -->
+            <div class="weather-card">
+                <div class="weather-header">
+                    <div class="location-info">
+                        <div class="location-icon">📍</div>
+                        <div class="location-name">北京</div>
+                    </div>
+                    <div class="weather-more">
+                        天气日历 <span>〉</span>
+                    </div>
+                </div>
+                
+                <div class="weather-main">
+                    <div class="current-weather">
+                        <div class="weather-icon-large">☀️</div>
+                        <div class="temperature">25°</div>
+                    </div>
+                    <div class="weather-details">
+                        <div class="weather-description">晴朗</div>
+                        <div class="weather-stats">
+                            <div>湿度: 45%</div>
+                            <div>空气: 良好</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="forecast-container">
+                    <div class="forecast-day">
+                        <div class="day-name">昨天</div>
+                        <div class="forecast-icon">⛅</div>
+                        <div class="forecast-temp">23°</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="day-name">今天</div>
+                        <div class="forecast-icon">☀️</div>
+                        <div class="forecast-temp">25°</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="day-name">周四</div>
+                        <div class="forecast-icon">☀️</div>
+                        <div class="forecast-temp">26°</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="day-name">周五</div>
+                        <div class="forecast-icon">🌤️</div>
+                        <div class="forecast-temp">24°</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="day-name">周六</div>
+                        <div class="forecast-icon">🌦️</div>
+                        <div class="forecast-temp">22°</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="day-name">周日</div>
+                        <div class="forecast-icon">🌧️</div>
+                        <div class="forecast-temp">20°</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="day-name">周一</div>
+                        <div class="forecast-icon">🌤️</div>
+                        <div class="forecast-temp">21°</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="day-name">周二</div>
+                        <div class="forecast-icon">☀️</div>
+                        <div class="forecast-temp">23°</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 滚动内容 -->
+            <div class="scroll-content">
+                <!-- 今日OOTD推荐 -->
+                <div class="ootd-card">
+                    <div class="ootd-header">
+                        <div class="ootd-title">今日穿搭推荐</div>
+                        <div class="ai-badge">AI推荐</div>
+                    </div>
+                    <div class="ootd-image-container">
+                        <img src="https://images.unsplash.com/photo-1551042156-e15c8acd3413?q=80&w=387&auto=format&fit=crop" class="ootd-image" alt="今日穿搭">
+                        <div class="outfit-items">
+                            <div class="outfit-item">👚</div>
+                            <div class="outfit-item">👖</div>
+                            <div class="outfit-item">👞</div>
+                        </div>
+                    </div>
+                    <div class="ootd-detail">
+                        <div class="ootd-description">清爽舒适的秋日穿搭，适合今日温暖晴朗的天气。简约高级感衬衫搭配修身牛仔裤，打造知性通勤风格。</div>
+                        <div class="ootd-tags">
+                            <div class="tag">办公室</div>
+                            <div class="tag">通勤</div>
+                            <div class="tag">秋季</div>
+                            <div class="tag">简约</div>
+                        </div>
+                        <button class="upload-own-btn">📷 上传我的穿搭</button>
+                    </div>
+                </div>
+                
+                <!-- 我的灵感库 -->
+                <div class="my-inspiration">
+                    <div class="section-header">
+                        <div class="section-title">我的灵感</div>
+                        <div class="sort-button">
+                            最近更新 <span>▼</span>
+                        </div>
+                    </div>
+                    
+                    <div class="inspiration-list">
+                        <!-- 灵感项1 -->
+                        <div class="inspiration-item">
+                            <img src="https://images.unsplash.com/photo-1612215327100-60fc5c4e7938?q=80&w=387&auto=format&fit=crop" class="inspiration-img" alt="灵感">
+                            <div class="item-overlay">
+                                <div class="item-title">周末约会棉麻Look</div>
+                                <div class="item-stats">
+                                    <div class="stat">❤️ 128</div>
+                                    <div class="stat">💬 16</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 灵感项2 -->
+                        <div class="inspiration-item">
+                            <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?q=80&w=387&auto=format&fit=crop" class="inspiration-img" alt="灵感">
+                            <div class="item-overlay">
+                                <div class="item-title">温暖针织开衫搭配</div>
+                                <div class="item-stats">
+                                    <div class="stat">❤️ 87</div>
+                                    <div class="stat">💬 9</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 灵感项3 -->
+                        <div class="inspiration-item">
+                            <img src="https://images.unsplash.com/photo-1600950207944-0d63e8edbc3f?q=80&w=464&auto=format&fit=crop" class="inspiration-img" alt="灵感">
+                            <div class="item-overlay">
+                                <div class="item-title">早秋风衣穿搭指南</div>
+                                <div class="item-stats">
+                                    <div class="stat">❤️ 215</div>
+                                    <div class="stat">💬 32</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 灵感项4 -->
+                        <div class="inspiration-item">
+                            <img src="https://images.unsplash.com/photo-1568252542512-9fe8fe6c5fc9?q=80&w=419&auto=format&fit=crop" class="inspiration-img" alt="灵感">
+                            <div class="item-overlay">
+                                <div class="item-title">极简主义职场穿搭</div>
+                                <div class="item-stats">
+                                    <div class="stat">❤️ 176</div>
+                                    <div class="stat">💬 24</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 创建灵感按钮 -->
+            <div class="create-btn">+</div>
+            
+            <!-- 创建方式菜单 -->
+            <div class="create-menu">
+                <div class="menu-header">
+                    <div class="menu-title">创建穿搭灵感</div>
+                    <div class="close-btn">×</div>
+                </div>
+                <div class="creation-options">
+                    <!-- 上传图片选项 -->
+                    <div class="option">
+                        <div class="option-header">
+                            <div class="option-icon">📷</div>
+                            <div class="option-title">上传图片</div>
+                        </div>
+                        <div class="option-description">上传你的穿搭照片或从相册中选择图片</div>
+                        <button class="use-option-btn">选择图片 ›</button>
+                    </div>
+                    
+                    <!-- 上传视频选项 -->
+                    <div class="option">
+                        <div class="option-header">
+                            <div class="option-icon">🎬</div>
+                            <div class="option-title">上传视频</div>
+                        </div>
+                        <div class="option-description">分享穿搭视频教程，展示更多细节</div>
+                        <button class="use-option-btn">选择视频 ›</button>
+                    </div>
+                    
+                    <!-- AI生成选项 -->
+                    <div class="option ai-option">
+                        <div class="option-header">
+                            <div class="option-icon">✨</div>
+                            <div class="option-title">AI智能搭配</div>
+                        </div>
+                        <div class="option-description">基于你的衣橱和场景需求，AI自动生成穿搭方案</div>
+                        <button class="use-option-btn">开始生成 ›</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 遮罩层 -->
+            <div class="overlay"></div>
+            
+            <!-- 底部导航栏 -->
+            <div class="bottom-nav">
+                <div class="nav-item">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-text">首页</div>
+                </div>
+                <div class="nav-item active">
+                    <div class="nav-icon">✨</div>
+                    <div class="nav-text">灵感</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👚</div>
+                    <div class="nav-text">衣橱</div>
+                </div>
+                <div class="nav-item">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-text">我的</div>
+                </div>
+            </div>
+            
+            <!-- 底部安全区域 -->
+            <div class="bottom-safe-area"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 模拟页面导航
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 获取导航项的文本
+                    const navText = this.querySelector('.nav-text').textContent;
+                    console.log(`导航到：${navText}`);
+                    
+                    // 导航跳转逻辑
+                    switch(navText) {
+                        case '首页':
+                            // window.location.href = 'home.html';
+                            break;
+                        case '灵感':
+                            // 当前页面，不跳转
+                            break;
+                        case '衣橱':
+                            // window.location.href = 'wardrobe.html';
+                            break;
+                        case '我的':
+                            // window.location.href = 'profile.html';
+                            break;
+                    }
+                });
+            });
+            
+            // 处理排序按钮点击
+            document.querySelector('.sort-button').addEventListener('click', function() {
+                alert('排序选项：\n1. 最近更新\n2. 未读留言\n3. 修改时间\n4. 点赞量\n5. 收藏量\n6. 评论量\n7. 转发量');
+            });
+            
+            // 处理创建按钮点击
+            const createBtn = document.querySelector('.create-btn');
+            const createMenu = document.querySelector('.create-menu');
+            const overlay = document.querySelector('.overlay');
+            const closeBtn = document.querySelector('.close-btn');
+            
+            createBtn.addEventListener('click', function() {
+                createMenu.classList.add('show');
+                overlay.classList.add('show');
+            });
+            
+            closeBtn.addEventListener('click', function() {
+                createMenu.classList.remove('show');
+                overlay.classList.remove('show');
+            });
+            
+            overlay.addEventListener('click', function() {
+                createMenu.classList.remove('show');
+                overlay.classList.remove('show');
+            });
+            
+            // 处理上传我的穿搭按钮点击
+            document.querySelector('.upload-own-btn').addEventListener('click', function() {
+                createMenu.classList.add('show');
+                overlay.classList.add('show');
+            });
+            
+            // 处理创建选项按钮点击
+            const optionBtns = document.querySelectorAll('.use-option-btn');
+            optionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const optionTitle = this.closest('.option').querySelector('.option-title').textContent;
+                    alert(`你选择了：${optionTitle}\n此功能正在开发中...`);
+                    createMenu.classList.remove('show');
+                    overlay.classList.remove('show');
+                });
+            });
+            
+            // 处理天气日历点击
+            document.querySelector('.weather-more').addEventListener('click', function() {
+                alert('天气日历功能正在开发中...');
+            });
+            
+            // 模拟天气卡片滑动
+            const forecastContainer = document.querySelector('.forecast-container');
+            forecastContainer.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                this.scrollLeft += e.deltaY;
+            });
+            
+            // 处理灵感项点击
+            const inspirationItems = document.querySelectorAll('.inspiration-item');
+            inspirationItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const title = this.querySelector('.item-title').textContent;
+                    alert(`查看穿搭详情：${title}`);
+                });
+            });
+            
+            // 处理OOTD卡片中的衣物项点击
+            const outfitItems = document.querySelectorAll('.outfit-item');
+            outfitItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    alert('查看此单品详情');
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
