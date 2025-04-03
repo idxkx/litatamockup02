@@ -1019,7 +1019,7 @@
                         <div class="function-icon">👔</div>
                         <div class="function-info">
                             <div class="function-title">我的收藏</div>
-                            <div class="function-desc">查看已收藏的穿搭和灵感</div>
+                            <div class="function-desc">查看已收藏的穿搭</div>
                         </div>
                         <div class="function-arrow">›</div>
                     </div>
@@ -1062,7 +1062,7 @@
                 </div>
                 <div class="nav-item ripple" id="nav-inspiration">
                     <div class="nav-icon">✨</div>
-                    <div class="nav-text">灵感</div>
+                    <div class="nav-text">穿搭</div>
                 </div>
                 <div class="nav-item ripple" id="nav-wardrobe">
                     <div class="nav-icon">👚</div>
@@ -1530,10 +1530,10 @@
                                 window.location.href = 'home.html';
                             }, 300);
                             break;
-                        case '灵感':
-                            showToast('正在跳转到灵感页面...');
+                        case '穿搭':
+                            showToast('正在跳转到穿搭页面...');
                             setTimeout(() => {
-                                window.location.href = 'inspiration.html';
+                                window.location.href = 'outfit.html';
                             }, 300);
                             break;
                         case '衣橱':
@@ -1569,9 +1569,9 @@
                     window.navigator.vibrate(5);
                 }
                 
-                showToast('正在跳转到灵感页面...');
+                showToast('正在跳转到穿搭页面...');
                 setTimeout(() => {
-                    window.location.href = 'inspiration.html';
+                    window.location.href = 'outfit.html';
                 }, 300);
             });
             
@@ -1594,7 +1594,7 @@
                 
                 if (currentPath.includes('home.html')) {
                     navHome.classList.add('active');
-                } else if (currentPath.includes('inspiration.html')) {
+                } else if (currentPath.includes('outfit.html')) {
                     navInspiration.classList.add('active');
                 } else if (currentPath.includes('wardrobe.html')) {
                     navWardrobe.classList.add('active');

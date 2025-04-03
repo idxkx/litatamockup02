@@ -1140,7 +1140,7 @@
                 
                 <div class="search-bar">
                     <div class="search-icon">🔍</div>
-                    <input type="text" class="search-input" placeholder="搜索穿搭灵感">
+                    <input type="text" class="search-input" placeholder="搜索穿搭">
                     <div class="camera-icon">📷</div>
                 </div>
                 
@@ -1334,7 +1334,7 @@
                 </div>
                 <div class="nav-item" id="nav-inspiration">
                     <div class="nav-icon">✨</div>
-                    <div class="nav-text">灵感</div>
+                    <div class="nav-text">穿搭</div>
                 </div>
                 <div class="nav-item" id="nav-wardrobe">
                     <div class="nav-icon">👚</div>
@@ -1586,10 +1586,10 @@
                             // 当前页面，不跳转
                             showToast('当前已在首页');
                             break;
-                        case '灵感':
-                            showToast('正在跳转到灵感页面...');
+                        case '穿搭':
+                            showToast('正在跳转到穿搭页面...');
                             setTimeout(() => {
-                                window.location.href = 'inspiration.html';
+                                window.location.href = 'outfit.html';
                             }, 300);
                             break;
                         case '衣橱':
@@ -1615,9 +1615,9 @@
                     window.navigator.vibrate(5);
                 }
                 
-                showToast('正在跳转到灵感页面...');
+                showToast('正在跳转到穿搭页面...');
                 setTimeout(() => {
-                    window.location.href = 'inspiration.html';
+                    window.location.href = 'outfit.html';
                 }, 300);
             });
             

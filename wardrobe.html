@@ -257,6 +257,42 @@
             font-size: 13px;
             color: #3a7bd5;
             font-weight: normal;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* 手风琴效果样式 */
+        .expanded-content {
+            margin-top: 10px;
+            border-top: 1px solid #f2f2f2;
+            padding-top: 15px;
+        }
+        
+        .expanded-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        /* 展开时的样式变化 */
+        .subcategory.expanded .view-all {
+            color: #ff7b4e;
+        }
+        
+        /* 网格大小适配 */
+        .clothes-container.grid-small .expanded-grid,
+        .expanded-grid.grid-small {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        
+        .clothes-container.grid-medium .expanded-grid,
+        .expanded-grid.grid-medium {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .clothes-container.grid-large .expanded-grid,
+        .expanded-grid.grid-large {
+            grid-template-columns: repeat(1, 1fr);
         }
 
         /* 衣物网格 */
@@ -378,6 +414,253 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             z-index: 50;
         }
+
+        /* 设置模态框和菜单 */
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 200;
+            display: none;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .settings-modal.show {
+            opacity: 1;
+        }
+        
+        .settings-menu {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            max-height: 60%;
+            background-color: #f2f2f6;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 210;
+            overflow: hidden;
+            display: none;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        
+        .settings-menu.show {
+            transform: translateY(0);
+        }
+        
+        .settings-header {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f2f2f6;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+        
+        .settings-header:before {
+            content: '';
+            position: absolute;
+            top: 0px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 4px;
+            background-color: #d1d1d6;
+            border-radius: 2px;
+            margin-top: 5px;
+        }
+        
+        .settings-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #111;
+        }
+        
+        .close-settings {
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: #007aff;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .settings-content {
+            padding: 0;
+            max-height: calc(60% - 50px);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .settings-item {
+            margin-bottom: 10px;
+            background-color: #fff;
+        }
+        
+        .settings-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 15px;
+            margin: 0;
+            color: #8E8E93;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background-color: #f2f2f6;
+        }
+        
+        .settings-item-options {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .settings-option {
+            padding: 12px 15px;
+            color: #000;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background-color: #fff;
+        }
+        
+        .settings-option:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-option:after {
+            content: '›';
+            font-size: 20px;
+            color: #bbb;
+            font-weight: 300;
+        }
+        
+        /* 相机模态框 */
+        .camera-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 200;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .camera-modal.show {
+            opacity: 1;
+        }
+        
+        .camera-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 5;
+        }
+        
+        .camera-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .close-camera {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .camera-viewfinder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .camera-placeholder {
+            text-align: center;
+            color: #fff;
+        }
+        
+        .camera-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        #cameraView {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .camera-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+        
+        #startCameraBtn {
+            padding: 12px 25px;
+            background-color: #fff;
+            color: #000;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .camera-capture-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 4px solid #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .capture-icon {
+            width: 30px;
+            height: 30px;
+            background-color: #fff;
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
@@ -400,15 +683,14 @@
             <!-- 顶部导航 -->
             <div class="wardrobe-header">
                 <div class="header-row">
-                    <h1 class="page-title">我的衣橱</h1>
+                    <h1 class="page-title">衣橱</h1>
                     <div class="action-buttons">
-                        <div class="action-btn">⚙️</div>
-                        <div class="action-btn scan-btn">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 15.2C13.7674 15.2 15.2 13.7674 15.2 12C15.2 10.2326 13.7674 8.8 12 8.8C10.2326 8.8 8.8 10.2326 8.8 12C8.8 13.7674 10.2326 15.2 12 15.2Z"/>
-                                <path d="M9 2L7.17 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4H16.83L15 2H9ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17Z"/>
-                            </svg>
-                        </div>
+                        <button class="action-btn scan-btn" id="scanBtn">
+                            📷
+                        </button>
+                        <button class="action-btn settings-icon" id="settingsBtn">
+                            ⚙️
+                        </button>
                     </div>
                 </div>
                 
@@ -451,27 +733,26 @@
                         <span class="view-all">查看全部 ></span>
                     </div>
                     
-                    <div class="clothes-grid">
+                    <div class="clothes-grid clothes-container">
                         <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=464&auto=format&fit=crop" class="clothes-img" alt="白色T恤">
-                            <div class="item-badge">常穿</div>
-                            <div class="item-name">基础白色T恤</div>
+                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=380&auto=format&fit=crop" alt="T恤衫" class="clothes-img">
+                            <div class="item-badge unworn">未穿着</div>
+                            <div class="item-name">T恤衫</div>
                         </div>
-                        
                         <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1598032895397-b9472444bf93?q=80&w=580&auto=format&fit=crop" class="clothes-img" alt="蓝色条纹衬衫">
-                            <div class="item-name">蓝色条纹衬衫</div>
+                            <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=387&auto=format&fit=crop" alt="牛仔裤" class="clothes-img">
+                            <div class="item-badge">已穿着</div>
+                            <div class="item-name">牛仔裤</div>
                         </div>
-                        
                         <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1626497764746-6dc36546b388?q=80&w=726&auto=format&fit=crop" class="clothes-img" alt="黑色卫衣">
-                            <div class="item-name">黑色基础卫衣</div>
+                            <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=388&auto=format&fit=crop" alt="衬衫" class="clothes-img">
+                            <div class="item-badge">已穿着</div>
+                            <div class="item-name">衬衫</div>
                         </div>
-                        
                         <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1603344797033-f0f4f587ab60?q=80&w=435&auto=format&fit=crop" class="clothes-img" alt="灰色POLO衫">
-                            <div class="item-badge unworn">闲置</div>
-                            <div class="item-name">灰色POLO衫</div>
+                            <img src="https://images.unsplash.com/photo-1550639525-c97d455acf70?q=80&w=387&auto=format&fit=crop" alt="连衣裙" class="clothes-img">
+                            <div class="item-badge">已穿着</div>
+                            <div class="item-name">连衣裙</div>
                         </div>
                     </div>
                 </div>
@@ -485,7 +766,7 @@
                     
                     <div class="clothes-grid">
                         <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1644416149789-dca31052b445?q=80&w=464&auto=format&fit=crop" class="clothes-img" alt="牛仔外套">
+                            <img src="https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?q=80&w=369&auto=format&fit=crop" class="clothes-img" alt="牛仔外套">
                             <div class="item-name">深蓝色牛仔外套</div>
                         </div>
                         
@@ -501,7 +782,7 @@
                         </div>
                         
                         <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1548883354-94bcfe321cbb?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="格子大衣">
+                            <img src="https://images.unsplash.com/photo-1584865288642-42078afe6942?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="格子大衣">
                             <div class="item-badge unworn">闲置</div>
                             <div class="item-name">驼色格子大衣</div>
                         </div>
@@ -551,7 +832,7 @@
                 </div>
                 <div class="nav-item">
                     <div class="nav-icon">✨</div>
-                    <div class="nav-text">灵感</div>
+                    <div class="nav-text">穿搭</div>
                 </div>
                 <div class="nav-item active">
                     <div class="nav-icon">👚</div>
@@ -568,214 +849,811 @@
         </div>
     </div>
 
+    <!-- 设置模态框和菜单 -->
+    <div class="settings-modal">
+        <div class="settings-menu">
+            <div class="settings-header">
+                <div></div>
+                <h3>设置</h3>
+                <button class="close-settings">✕</button>
+            </div>
+            <div class="settings-content">
+                <div class="settings-item">
+                    <div class="settings-item-title">外观</div>
+                    <div class="settings-item-options">
+                        <div class="settings-option" data-setting="grid-size">
+                            <span>网格大小</span>
+                        </div>
+                        <div class="settings-option" data-setting="theme">
+                            <span>主题</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-item-title">管理</div>
+                    <div class="settings-item-options">
+                        <div class="settings-option" data-setting="categories">
+                            <span>分类管理</span>
+                        </div>
+                        <div class="settings-option" data-setting="tags">
+                            <span>标签管理</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-item-title">数据</div>
+                    <div class="settings-item-options">
+                        <div class="settings-option" data-setting="backup">
+                            <span>备份数据</span>
+                        </div>
+                        <div class="settings-option" data-setting="import">
+                            <span>导入数据</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 相机模态框 -->
+    <div class="camera-modal">
+        <div class="camera-header">
+            <button class="close-camera">✕</button>
+            <h3>拍照搜索</h3>
+            <div></div>
+        </div>
+        <div class="camera-viewfinder">
+            <div class="camera-placeholder">
+                <div class="camera-icon">📷</div>
+                <p>点击下方按钮开启相机</p>
+            </div>
+            <video id="cameraView" autoplay playsinline style="display: none;"></video>
+        </div>
+        <div class="camera-controls">
+            <button class="camera-btn" id="startCameraBtn">开启相机</button>
+            <button class="camera-capture-btn" id="captureBtn" style="display: none;">
+                <div class="capture-icon"></div>
+            </button>
+        </div>
+    </div>
+
     <script>
+        // 执行页面初始化
         document.addEventListener('DOMContentLoaded', function() {
-            // 添加showToast函数用于用户反馈
-            function showToast(message) {
-                const toast = document.createElement('div');
-                toast.textContent = message;
-                toast.style.position = 'fixed';
-                toast.style.bottom = '100px';
-                toast.style.left = '50%';
-                toast.style.transform = 'translateX(-50%)';
-                toast.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-                toast.style.color = 'white';
-                toast.style.padding = '10px 20px';
-                toast.style.borderRadius = '20px';
-                toast.style.zIndex = '1000';
-                toast.style.fontSize = '14px';
-                toast.style.transition = 'opacity 0.3s';
-                document.body.appendChild(toast);
-                
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    setTimeout(() => {
-                        if (toast.parentNode) {
-                            document.body.removeChild(toast);
-                        }
-                    }, 300);
-                }, 2000);
-            }
+            console.log('页面已加载完成');
             
-            // 修复深蓝色牛仔外套图片
-            const denim = document.querySelector('.clothes-item img[alt="牛仔外套"]');
-            if (denim) {
-                denim.src = "https://images.unsplash.com/photo-1578681994506-b8f463449011?q=80&w=1000&auto=format&fit=crop";
-                denim.onerror = function() {
-                    this.src = "https://images.unsplash.com/photo-1592878849122-facb97520f9e?q=80&w=1000&auto=format&fit=crop";
-                    this.onerror = null; // 防止无限循环
-                };
-            }
+            // 处理导航栏点击
+            setupNavigation();
             
-            // 为所有图片添加错误处理
-            document.querySelectorAll('.clothes-img').forEach(img => {
-                if (!img.getAttribute('onerror')) {
-                    img.onerror = function() {
-                        if (this.src.includes('unsplash.com')) {
-                            this.src = "https://images.unsplash.com/photo-1551537482-f2075a1d41f2?q=80&w=387&auto=format&fit=crop";
-                        }
-                    };
-                }
+            // 初始化分类滑块
+            initCategorySlider();
+            
+            // 初始化模拟数据
+            initializeWardrobeData();
+            
+            // 添加设置按钮点击处理
+            document.querySelector('#settingsBtn').addEventListener('click', handleSettingsClick);
+            
+            // 添加扫描按钮点击处理
+            document.querySelector('#scanBtn').addEventListener('click', handleScanClick);
+            
+            // 关闭设置菜单按钮
+            document.querySelector('.close-settings').addEventListener('click', closeSettingsMenu);
+            
+            // 关闭相机模态框按钮
+            document.querySelector('.close-camera').addEventListener('click', closeCameraModal);
+            
+            // 开启相机按钮
+            document.querySelector('#startCameraBtn').addEventListener('click', startCamera);
+            
+            // 拍照按钮
+            document.querySelector('#captureBtn').addEventListener('click', capturePhoto);
+            
+            // 初始化设置功能
+            initializeSettingsFeatures();
+            
+            // 初始化添加按钮
+            document.querySelector('.add-item-btn').addEventListener('click', function() {
+                showToast('添加衣物功能尚未实现');
             });
             
-            // 修复筛选功能
-            // 分类选项卡切换
-            const tabItems = document.querySelectorAll('.tab-item');
-            tabItems.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // 更新UI状态
-                    tabItems.forEach(t => t.classList.remove('active'));
+            // 初始化拖放功能
+            initializeOrganizerBar();
+            makeItemsDraggable();
+            
+            // 初始化查看全部功能
+            initViewAllButtons();
+            
+            // 设置导航条颜色
+            const navigationBar = document.querySelector('.navigation-bar');
+            if (navigationBar) {
+                navigationBar.className = 'navigation-bar color-1';
+            }
+        });
+        
+        // 扫描按钮点击处理函数
+        function handleScanClick() {
+            showToast('打开相机扫描');
+            
+            // 显示相机模态框
+            const cameraModal = document.querySelector('.camera-modal');
+            if (cameraModal) {
+                cameraModal.style.display = 'block';
+                // 触发重绘以启用过渡效果
+                void cameraModal.offsetWidth;
+                cameraModal.classList.add('show');
+            }
+            
+            // 添加iOS风格触感反馈
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        }
+        
+        // 关闭相机模态框
+        function closeCameraModal() {
+            const cameraModal = document.querySelector('.camera-modal');
+            if (cameraModal) {
+                cameraModal.classList.remove('show');
+                
+                // 等待过渡效果完成后隐藏元素
+                setTimeout(() => {
+                    cameraModal.style.display = 'none';
+                    
+                    // 停止相机
+                    stopCamera();
+                }, 300);
+            }
+        }
+        
+        // 开启相机
+        function startCamera() {
+            const cameraView = document.getElementById('cameraView');
+            const startBtn = document.getElementById('startCameraBtn');
+            const captureBtn = document.getElementById('captureBtn');
+            const placeholder = document.querySelector('.camera-placeholder');
+            
+            // 检查浏览器是否支持getUserMedia
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                    .then(function(stream) {
+                        // 显示视频流
+                        cameraView.srcObject = stream;
+                        cameraView.style.display = 'block';
+                        
+                        // 隐藏开始按钮，显示拍照按钮
+                        startBtn.style.display = 'none';
+                        captureBtn.style.display = 'block';
+                        
+                        // 隐藏占位符
+                        placeholder.style.display = 'none';
+                        
+                        showToast('相机已开启');
+                    })
+                    .catch(function(error) {
+                        console.error('相机开启失败:', error);
+                        showToast('无法开启相机: ' + error.message);
+                    });
+            } else {
+                showToast('您的浏览器不支持相机功能');
+            }
+        }
+        
+        // 停止相机
+        function stopCamera() {
+            const cameraView = document.getElementById('cameraView');
+            const startBtn = document.getElementById('startCameraBtn');
+            const captureBtn = document.getElementById('captureBtn');
+            const placeholder = document.querySelector('.camera-placeholder');
+            
+            // 停止视频流
+            if (cameraView.srcObject) {
+                const tracks = cameraView.srcObject.getTracks();
+                tracks.forEach(track => track.stop());
+                cameraView.srcObject = null;
+            }
+            
+            // 重置UI
+            cameraView.style.display = 'none';
+            startBtn.style.display = 'block';
+            captureBtn.style.display = 'none';
+            placeholder.style.display = 'block';
+        }
+        
+        // 拍照并识别
+        function capturePhoto() {
+            const cameraView = document.getElementById('cameraView');
+            
+            // 创建画布捕获视频当前帧
+            const canvas = document.createElement('canvas');
+            canvas.width = cameraView.videoWidth;
+            canvas.height = cameraView.videoHeight;
+            
+            const context = canvas.getContext('2d');
+            context.drawImage(cameraView, 0, 0, canvas.width, canvas.height);
+            
+            // 获取图片数据
+            const imageData = canvas.toDataURL('image/jpeg');
+            
+            // 在实际应用中，这里应该发送图片到服务器或本地AI处理
+            // 模拟识别过程
+            showToast('正在识别图片...');
+            
+            // 关闭相机模态框
+            closeCameraModal();
+            
+            // 模拟一个延时，假装在识别
+            setTimeout(() => {
+                // 随机选择一个识别结果
+                const results = [
+                    '牛仔裤',
+                    'T恤',
+                    '连衣裙',
+                    '皮夹克'
+                ];
+                const result = results[Math.floor(Math.random() * results.length)];
+                
+                showToast(`识别结果: ${result}，正在搜索相似衣物...`);
+                
+                // 模拟搜索过程
+                setTimeout(() => {
+                    showToast(`已找到5件相似的${result}`);
+                    
+                    // 这里可以实现搜索结果展示逻辑
+                }, 1000);
+            }, 1500);
+        }
+
+        // 网格大小调整功能变量与设置
+        let gridSizeOptions = [
+            { name: '小', value: 'small', columns: 3 },
+            { name: '中', value: 'medium', columns: 2 },
+            { name: '大', value: 'large', columns: 1 }
+        ];
+        let currentGridSize = localStorage.getItem('wardrobeGridSize') || 'medium';
+        
+        // 全局变量，用于记录当前筛选状态
+        let currentCategory = '全部';
+        let currentSeason = '全部季节';
+        
+        // 初始化设置项
+        function initializeSettingsFeatures() {
+            // 首先初始化原有的设置菜单关闭功能
+            initializeSettingsMenu();
+            
+            // 然后初始化各个设置功能
+            initializeGridSizeSettings();
+        }
+        
+        // 初始化网格大小设置
+        function initializeGridSizeSettings() {
+            // 找到网格大小设置选项
+            const gridSizeOption = document.querySelector('.settings-option');
+            
+            if (gridSizeOption) {
+                gridSizeOption.addEventListener('click', function() {
+                    showGridSizeMenu();
+                });
+                
+                // 应用保存的网格大小设置
+                applyGridSizeSettings(currentGridSize);
+            }
+        }
+        
+        // 显示网格大小设置菜单
+        function showGridSizeMenu() {
+            // 关闭当前的设置菜单
+            const settingsModal = document.querySelector('.settings-modal');
+            const settingsMenu = document.querySelector('.settings-menu');
+            settingsMenu.classList.remove('show');
+            
+            // 创建网格大小设置子菜单
+            const gridSizeSubMenu = document.createElement('div');
+            gridSizeSubMenu.className = 'settings-submenu';
+            gridSizeSubMenu.innerHTML = `
+                <div class="settings-header">
+                    <div class="back-button">
+                        <span>←</span>
+                    </div>
+                    <h3>网格大小</h3>
+                    <div></div>
+                </div>
+                <div class="settings-content">
+                    <div class="settings-item">
+                        <div class="settings-item-options">
+                            ${gridSizeOptions.map(option => `
+                                <div class="settings-option grid-size-option" data-size="${option.value}">
+                                    <div class="option-left">
+                                        <span class="grid-preview grid-${option.value}"></span>
+                                        <span>${option.name}</span>
+                                    </div>
+                                    <span class="option-check ${currentGridSize === option.value ? 'checked' : ''}">✓</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            settingsModal.appendChild(gridSizeSubMenu);
+            
+            // 显示子菜单
+            setTimeout(() => {
+                gridSizeSubMenu.classList.add('show');
+                
+                // 添加返回按钮事件
+                const backButton = gridSizeSubMenu.querySelector('.back-button');
+                backButton.addEventListener('click', function() {
+                    hideSubmenu(gridSizeSubMenu);
+                });
+                
+                // 添加网格大小选项点击事件
+                const gridOptions = gridSizeSubMenu.querySelectorAll('.grid-size-option');
+                gridOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const size = this.getAttribute('data-size');
+                        // 更新选中状态
+                        gridSizeSubMenu.querySelectorAll('.option-check').forEach(check => {
+                            check.classList.remove('checked');
+                        });
+                        this.querySelector('.option-check').classList.add('checked');
+                        
+                        // 保存设置
+                        localStorage.setItem('wardrobeGridSize', size);
+                        currentGridSize = size;
+                        
+                        // 应用设置
+                        applyGridSizeSettings(size);
+                        
+                        // 显示成功提示
+                        showToast('网格大小已更新');
+                        
+                        // 延迟关闭子菜单
+                        setTimeout(() => {
+                            hideSubmenu(gridSizeSubMenu);
+                        }, 500);
+                    });
+                });
+            }, 50);
+        }
+        
+        // 隐藏子菜单
+        function hideSubmenu(submenu) {
+            submenu.classList.remove('show');
+            
+            // 显示主设置菜单
+            const settingsMenu = document.querySelector('.settings-menu');
+            settingsMenu.classList.add('show');
+            
+            // 移除子菜单
+            setTimeout(() => {
+                if (submenu.parentNode) {
+                    submenu.parentNode.removeChild(submenu);
+                }
+            }, 300);
+        }
+        
+        // 应用网格大小设置
+        function applyGridSizeSettings(size) {
+            const clothesContainer = document.querySelector('.clothes-grid');
+            
+            if (clothesContainer) {
+                // 移除现有的网格类
+                clothesContainer.classList.remove('grid-small', 'grid-medium', 'grid-large');
+                
+                // 添加新的网格类
+                clothesContainer.classList.add(`grid-${size}`);
+                
+                // 重新排列衣物布局
+                adjustClothesLayout();
+            }
+        }
+        
+        // 调整衣物布局
+        function adjustClothesLayout() {
+            const clothesItems = document.querySelectorAll('.clothes-item');
+            
+            // 根据当前网格大小设置，调整衣物显示
+            const selectedOption = gridSizeOptions.find(option => option.value === currentGridSize);
+            if (selectedOption) {
+                clothesItems.forEach(item => {
+                    item.style.width = `calc(${100/selectedOption.columns}% - 10px)`;
+                });
+            }
+        }
+        
+        // 设置按钮点击处理函数
+        function handleSettingsClick() {
+            showToast('打开设置菜单');
+            console.log('设置按钮被点击');
+            
+            // 显示设置菜单
+            const settingsModal = document.querySelector('.settings-modal');
+            const settingsMenu = document.querySelector('.settings-menu');
+            
+            if (settingsModal && settingsMenu) {
+                // 首先显示模态背景
+                settingsModal.style.display = 'block';
+                // 触发重绘以启用过渡效果
+                void settingsModal.offsetWidth;
+                settingsModal.classList.add('show');
+                
+                // 然后显示设置菜单（从底部滑入）
+                settingsMenu.style.display = 'block';
+                // 触发重绘以启用过渡效果
+                void settingsMenu.offsetWidth;
+                settingsMenu.classList.add('show');
+            }
+            
+            // 添加iOS风格触感反馈
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        }
+        
+        // 初始化设置菜单关闭按钮
+        function initializeSettingsMenu() {
+            const closeSettingsBtn = document.querySelector('.close-settings');
+            const settingsModal = document.querySelector('.settings-modal');
+            const settingsMenu = document.querySelector('.settings-menu');
+            
+            if (closeSettingsBtn && settingsModal) {
+                closeSettingsBtn.addEventListener('click', closeSettingsMenu);
+                
+                // 点击模态背景关闭设置
+                settingsModal.addEventListener('click', function(e) {
+                    if (e.target === settingsModal) {
+                        closeSettingsMenu();
+                    }
+                });
+                
+                // 添加手势滑动关闭功能
+                if (settingsMenu) {
+                    let startY = 0;
+                    let currentY = 0;
+                    
+                    settingsMenu.addEventListener('touchstart', function(e) {
+                        startY = e.touches[0].clientY;
+                    });
+                    
+                    settingsMenu.addEventListener('touchmove', function(e) {
+                        currentY = e.touches[0].clientY;
+                        const diffY = currentY - startY;
+                        
+                        // 只允许向下滑动关闭
+                        if (diffY > 0) {
+                            this.style.transform = `translateY(${diffY}px)`;
+                            e.preventDefault(); // 防止页面滚动
+                        }
+                    });
+                    
+                    settingsMenu.addEventListener('touchend', function() {
+                        const diffY = currentY - startY;
+                        if (diffY > 70) { // 如果下滑超过70px则关闭
+                            closeSettingsMenu();
+                        } else {
+                            // 否则恢复原位
+                            this.style.transform = '';
+                            this.classList.add('show');
+                        }
+                    });
+                }
+                
+                // 设置选项点击效果
+                const settingsOptions = document.querySelectorAll('.settings-option');
+                settingsOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const optionText = this.textContent.trim();
+                        showToast(`您选择了: ${optionText}`);
+                        
+                        // 添加点击反馈
+                        this.style.backgroundColor = 'rgba(0,0,0,0.05)';
+                        setTimeout(() => {
+                            this.style.backgroundColor = '';
+                        }, 200);
+                        
+                        // 添加iOS风格触感反馈
+                        if (window.navigator && window.navigator.vibrate) {
+                            window.navigator.vibrate(3);
+                        }
+                    });
+                });
+            }
+        }
+        
+        // 关闭设置菜单函数
+        function closeSettingsMenu() {
+            const settingsModal = document.querySelector('.settings-modal');
+            const settingsMenu = document.querySelector('.settings-menu');
+            
+            if (settingsModal && settingsMenu) {
+                // 先移除show类以触发过渡效果
+                settingsModal.classList.remove('show');
+                settingsMenu.classList.remove('show');
+                
+                // 重置可能存在的内联样式
+                settingsMenu.style.transform = 'translateY(100%)';
+                
+                // 等待过渡效果完成后隐藏元素
+                setTimeout(() => {
+                    settingsModal.style.display = 'none';
+                    settingsMenu.style.display = 'none';
+                    // 恢复默认状态
+                    settingsMenu.style.transform = '';
+                }, 400); // 略长于CSS过渡时间
+            }
+        }
+        
+        // 显示提示消息
+        function showToast(message) {
+            // 检查是否已有toast，如果有则移除
+            const existingToast = document.querySelector('.toast-message');
+            if (existingToast) {
+                document.body.removeChild(existingToast);
+            }
+            
+            // 创建新的toast元素
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            toast.textContent = message;
+            
+            // 添加toast样式
+            toast.style.position = 'fixed';
+            toast.style.bottom = '100px';
+            toast.style.left = '50%';
+            toast.style.transform = 'translateX(-50%)';
+            toast.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            toast.style.color = 'white';
+            toast.style.padding = '10px 20px';
+            toast.style.borderRadius = '20px';
+            toast.style.zIndex = '1000';
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.3s ease';
+            
+            // 将toast添加到页面中
+            document.body.appendChild(toast);
+            
+            // 触发重绘以启用过渡效果
+            void toast.offsetWidth;
+            toast.style.opacity = '1';
+            
+            // 设置自动消失的定时器
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        document.body.removeChild(toast);
+                    }
+                }, 300);
+            }, 2000);
+        }
+        
+        // 导航功能
+        function setupNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach((item, index) => {
+                item.addEventListener('click', function() {
+                    // 移除其他项目的active类
+                    navItems.forEach(navItem => navItem.classList.remove('active'));
+                    // 给当前项目添加active类
                     this.classList.add('active');
                     
-                    // 获取分类名称
+                    // 导航到相应页面
+                    switch(index) {
+                        case 0:
+                            // 首页
+                            showToast('导航到首页');
+                            window.location.href = 'index.html';
+                            break;
+                        case 1:
+                            // 衣橱
+                            showToast('导航到衣橱');
+                            window.location.href = 'wardrobe.html';
+                            break;
+                        case 2:
+                            // 穿搭
+                            showToast('导航到穿搭');
+                            window.location.href = 'outfit.html';
+                            break;
+                        case 3:
+                            // 我的
+                            showToast('导航到我的');
+                            window.location.href = 'profile.html';
+                            break;
+                    }
+                });
+            });
+        }
+
+        // 初始化分类滑块
+        function initCategorySlider() {
+            const tabs = document.querySelectorAll('.tab-item');
+            const allSubcategories = document.querySelectorAll('.subcategory');
+            
+            // 为每个衣物添加分类数据属性
+            initClothesItemsAttributes();
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除其他标签的active类
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // 给当前标签添加active类
+                    this.classList.add('active');
+                    
                     const category = this.textContent.trim();
-                    
-                    // 筛选逻辑
-                    const subcategories = document.querySelectorAll('.subcategory');
-                    
-                    if (category === '全部') {
-                        // 显示所有子分类
-                        subcategories.forEach(subcat => {
-                            subcat.style.display = 'block';
-                        });
-                    } else {
-                        // 根据分类名称过滤子分类
-                        subcategories.forEach(subcat => {
-                            const title = subcat.querySelector('.subcategory-title').textContent.trim();
-                            if (title.includes(category) || 
-                               (category === '上装' && (title.includes('上装') || title.includes('衬衫') || title.includes('T恤') || title.includes('卫衣') || title.includes('外套'))) ||
-                               (category === '下装' && (title.includes('下装') || title.includes('裤') || title.includes('裙'))) ||
-                               (category === '连体服饰' && (title.includes('连体') || title.includes('连衣裙') || title.includes('套装'))) ||
-                               (category === '鞋靴' && (title.includes('鞋') || title.includes('靴'))) ||
-                               (category === '配饰' && (title.includes('配饰') || title.includes('帽') || title.includes('包') || title.includes('首饰'))) ||
-                               (category === '功能服饰' && (title.includes('功能') || title.includes('运动') || title.includes('户外'))) ||
-                               (category === '特殊场景' && (title.includes('特殊') || title.includes('礼服') || title.includes('婚礼')))
-                            ) {
-                                subcat.style.display = 'block';
-                            } else {
-                                subcat.style.display = 'none';
-                            }
-                        });
-                    }
-                    
-                    // 添加iOS风格触感反馈
-                    if (window.navigator && window.navigator.vibrate) {
-                        window.navigator.vibrate(3);
-                    }
-                    
                     showToast(`已切换到${category}分类`);
+                    
+                    // 筛选相关衣物和子分类
+                    filterByCategory(category);
                 });
             });
             
-            // 筛选条件切换
+            // 初始化筛选栏
+            initFilterBar();
+        }
+        
+        // 初始化衣物的数据属性
+        function initClothesItemsAttributes() {
+            // 基础款-上装
+            const topsBasicItems = document.querySelectorAll('.subcategory:nth-of-type(1) .clothes-item');
+            topsBasicItems.forEach(item => {
+                item.setAttribute('data-category', '上装');
+                item.setAttribute('data-subcategory', '基础款');
+                
+                // 按衣物名称设置季节属性
+                const name = item.querySelector('.item-name').textContent.trim();
+                if (name.includes('T恤')) {
+                    item.setAttribute('data-season', '春季,夏季');
+                } else if (name.includes('衬衫')) {
+                    item.setAttribute('data-season', '春季,秋季');
+                } else if (name.includes('连衣裙')) {
+                    item.setAttribute('data-season', '春季,夏季');
+                } else {
+                    item.setAttribute('data-season', '全部季节');
+                }
+            });
+            
+            // 外套-上装
+            const topsOuterItems = document.querySelectorAll('.subcategory:nth-of-type(2) .clothes-item');
+            topsOuterItems.forEach(item => {
+                item.setAttribute('data-category', '上装');
+                item.setAttribute('data-subcategory', '外套');
+                
+                // 按衣物名称设置季节属性
+                const name = item.querySelector('.item-name').textContent.trim();
+                if (name.includes('牛仔')) {
+                    item.setAttribute('data-season', '春季,秋季');
+                } else if (name.includes('西装')) {
+                    item.setAttribute('data-season', '春季,秋季,冬季');
+                } else if (name.includes('皮夹克')) {
+                    item.setAttribute('data-season', '秋季,冬季');
+                } else if (name.includes('大衣')) {
+                    item.setAttribute('data-season', '冬季');
+                } else {
+                    item.setAttribute('data-season', '全部季节');
+                }
+            });
+            
+            // 裤装-下装
+            const bottomsItems = document.querySelectorAll('.subcategory:nth-of-type(3) .clothes-item');
+            bottomsItems.forEach(item => {
+                item.setAttribute('data-category', '下装');
+                item.setAttribute('data-subcategory', '裤装');
+                
+                // 按衣物名称设置季节属性
+                const name = item.querySelector('.item-name').textContent.trim();
+                if (name.includes('牛仔')) {
+                    item.setAttribute('data-season', '春季,秋季,冬季');
+                } else if (name.includes('休闲')) {
+                    item.setAttribute('data-season', '春季,秋季');
+                } else if (name.includes('运动')) {
+                    item.setAttribute('data-season', '全部季节');
+                } else if (name.includes('西装')) {
+                    item.setAttribute('data-season', '春季,秋季,冬季');
+                } else {
+                    item.setAttribute('data-season', '全部季节');
+                }
+            });
+        }
+        
+        // 按分类筛选衣物
+        function filterByCategory(category) {
+            // 更新当前选中的分类
+            currentCategory = category;
+            
+            // 调用组合筛选
+            applyFilters();
+        }
+        
+        // 按季节筛选衣物
+        function filterBySeason(season) {
+            // 更新当前选中的季节
+            currentSeason = season;
+            
+            // 调用组合筛选
+            applyFilters();
+        }
+        
+        // 组合筛选（同时考虑分类和季节）
+        function applyFilters() {
+            const clothesItems = document.querySelectorAll('.clothes-item');
+            const subcategories = document.querySelectorAll('.subcategory');
+            
+            // 根据当前选中的分类和季节进行筛选
+            clothesItems.forEach(item => {
+                const itemCategory = item.getAttribute('data-category');
+                const itemSeasons = item.getAttribute('data-season');
+                
+                const matchesCategory = currentCategory === '全部' || itemCategory === currentCategory;
+                const matchesSeason = currentSeason === '全部季节' || (itemSeasons && itemSeasons.includes(currentSeason));
+                
+                if (matchesCategory && matchesSeason) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // 处理子分类的显示/隐藏
+            subcategories.forEach(subcat => {
+                // 获取分类名称，例如"上装 - 基础款"中提取"上装"
+                const title = subcat.querySelector('.subcategory-title').textContent;
+                const subcatCategory = title.split('-')[0].trim();
+                
+                // 检查是否有可见的衣物
+                const hasVisibleItems = Array.from(subcat.querySelectorAll('.clothes-item')).some(
+                    item => item.style.display !== 'none'
+                );
+                
+                // 仅当分类匹配且有可见衣物时显示子分类
+                if ((currentCategory === '全部' || subcatCategory.includes(currentCategory)) && hasVisibleItems) {
+                    subcat.style.display = '';
+                } else {
+                    subcat.style.display = 'none';
+                }
+            });
+            
+            // 处理没有结果的情况
+            const anyVisibleItems = Array.from(clothesItems).some(item => item.style.display !== 'none');
+            if (!anyVisibleItems) {
+                showToast('没有符合条件的衣物');
+            }
+        }
+
+        // 初始化模拟数据
+        function initializeWardrobeData() {
+            // 这里可以添加模拟数据的初始化逻辑
+        }
+
+        // 整理栏相关功能
+        function initializeOrganizerBar() {
+            // 这里可以添加整理栏的初始化逻辑
+        }
+
+        // 拖拽功能
+        function makeItemsDraggable() {
+            // 这里可以添加拖拽功能的初始化逻辑
+        }
+
+        // 初始化筛选栏
+        function initFilterBar() {
             const filterChips = document.querySelectorAll('.filter-chip');
+            
             filterChips.forEach(chip => {
                 chip.addEventListener('click', function() {
-                    if (this.textContent === '全部季节') {
-                        filterChips.forEach((c, index) => {
-                            if (index < 5) c.classList.remove('active');
-                        });
-                        this.classList.add('active');
-                        showToast('显示全部季节衣物');
-                    } else if (this.textContent === '场景筛选') {
-                        showToast('打开场景筛选');
-                    } else if (this.textContent === '清洁状态') {
-                        showToast('打开清洁状态筛选');
-                    } else {
-                        document.querySelector('.filter-chip.active').classList.remove('active');
-                        this.classList.add('active');
-                        showToast(`已筛选"${this.textContent}"衣物`);
-                    }
-                    
-                    // 添加iOS风格触感反馈
-                    if (window.navigator && window.navigator.vibrate) {
-                        window.navigator.vibrate(3);
-                    }
-                });
-            });
-            
-            // 搜索功能
-            const searchInput = document.querySelector('.search-input');
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    showToast(`搜索: ${this.value}`);
-                    // 添加iOS风格触感反馈
-                    if (window.navigator && window.navigator.vibrate) {
-                        window.navigator.vibrate(3);
-                    }
-                }
-            });
-            
-            // 查看全部
-            const viewAllBtns = document.querySelectorAll('.view-all');
-            viewAllBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const categoryTitle = this.parentElement.textContent.trim().split('查看全部')[0].trim();
-                    showToast(`查看全部：${categoryTitle}`);
-                    // 添加iOS风格触感反馈
-                    if (window.navigator && window.navigator.vibrate) {
-                        window.navigator.vibrate(3);
-                    }
-                });
-            });
-            
-            // 衣物点击
-            const clothesItems = document.querySelectorAll('.clothes-item');
-            clothesItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const itemName = this.querySelector('.item-name').textContent;
-                    showToast(`查看衣物详情：${itemName}`);
-                    // 添加iOS风格触感反馈
-                    if (window.navigator && window.navigator.vibrate) {
-                        window.navigator.vibrate(5);
-                    }
-                });
-            });
-            
-            // 添加按钮点击
-            document.querySelector('.add-item-btn').addEventListener('click', function() {
-                showToast('添加新衣物');
-                // 添加iOS风格触感反馈
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(5);
-                }
-            });
-            
-            // 扫描按钮点击
-            document.querySelector('.scan-btn').addEventListener('click', function() {
-                showToast('正在启动智能扫描识别...');
-                // 添加iOS风格触感反馈
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(5);
-                }
-            });
-            
-            // 设置按钮点击
-            document.querySelector('.action-btn:first-child').addEventListener('click', function() {
-                showToast('打开设置菜单');
-                // 添加iOS风格触感反馈
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(5);
-                }
-            });
-            
-            // 底部导航栏
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    navItems.forEach(i => i.classList.remove('active'));
+                    // 移除其他筛选项的active类
+                    filterChips.forEach(c => c.classList.remove('active'));
+                    // 给当前筛选项添加active类
                     this.classList.add('active');
                     
-                    const navText = this.querySelector('.nav-text').textContent;
-                    showToast(`导航到：${navText}`);
+                    const filter = this.textContent.trim();
+                    showToast(`筛选: ${filter}`);
                     
-                    // 添加iOS风格触感反馈
-                    if (window.navigator && window.navigator.vibrate) {
-                        window.navigator.vibrate(5);
-                    }
+                    // 筛选衣物
+                    filterBySeason(filter);
                 });
             });
-        });
+        }
     </script>
 </body>
 </html> 

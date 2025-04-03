@@ -18,7 +18,7 @@ LITATA是一款基于iPhone 16 Pro Max设计的视觉仿真稿，展示了一个
 
 1. **启动页** (splash.html)：品牌动画展示
 2. **首页（社区）** (home.html)：社区内容和搜索功能
-3. **灵感（穿搭）** (inspiration.html)：穿搭推荐和创作中心
+3. **穿搭** (outfit.html)：穿搭推荐和创作中心
 4. **衣橱** (wardrobe.html)：个人衣物管理系统
 5. **我的空间** (profile.html)：个人信息和会员中心
 
@@ -40,7 +40,7 @@ LITATA是一款基于iPhone 16 Pro Max设计的视觉仿真稿，展示了一个
 litata/
 ├── splash.html          # 启动页
 ├── home.html            # 首页（社区）
-├── inspiration.html     # 灵感（穿搭）
+├── outfit.html          # 穿搭
 ├── wardrobe.html        # 衣橱
 ├── profile.html         # 我的空间
 ├── assets/              # 资源文件

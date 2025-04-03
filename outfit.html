@@ -649,10 +649,29 @@
             width: 100%;
             height: 20px;
             background-color: #fff;
-            z-index: 10;
+            z-index: 40;
         }
 
-        /* 遮罩层 */
+        /* 通用样式 */
+        .toast-message {
+            position: fixed;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .toast-message.show {
+            opacity: 1;
+        }
+        
         .overlay {
             position: fixed;
             top: 0;
@@ -660,12 +679,15 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 55;
-            display: none;
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
         }
-
+        
         .overlay.show {
-            display: block;
+            opacity: 1;
+            visibility: visible;
         }
     </style>
 </head>
@@ -676,76 +698,43 @@
         
         <!-- 状态栏 -->
         <div class="status-bar">
-            <div class="time">10:30</div>
+            <div class="time">18:30</div>
             <div class="right">
-                <div class="icon">📶</div>
-                <div class="icon">📡</div>
-                <div class="icon">🔋</div>
+                <div class="signal icon">📶</div>
+                <div class="wifi icon">📡</div>
+                <div class="battery icon">🔋</div>
             </div>
         </div>
-
-        <!-- 应用主内容 -->
+        
         <div class="app-container">
             <!-- 天气卡片 -->
             <div class="weather-card">
                 <div class="weather-header">
                     <div class="location-info">
                         <div class="location-icon">📍</div>
-                        <div class="location-name">北京</div>
+                        <div class="location-name">上海</div>
                     </div>
-                    <div class="weather-more">
-                        天气日历 <span>〉</span>
-                    </div>
+                    <div class="weather-more">更多气象信息 ›</div>
                 </div>
                 
                 <div class="weather-main">
                     <div class="current-weather">
-                        <div class="weather-icon-large">☀️</div>
-                        <div class="temperature">25°</div>
+                        <div class="weather-icon-large">⛅</div>
+                        <div class="temperature">21°</div>
                     </div>
                     <div class="weather-details">
-                        <div class="weather-description">晴朗</div>
+                        <div class="weather-description">多云转晴</div>
                         <div class="weather-stats">
-                            <div>湿度: 45%</div>
-                            <div>空气: 良好</div>
+                            <div class="wind">风力: 3级</div>
+                            <div class="humidity">湿度: 65%</div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="forecast-container">
                     <div class="forecast-day">
-                        <div class="day-name">昨天</div>
-                        <div class="forecast-icon">⛅</div>
-                        <div class="forecast-temp">23°</div>
-                    </div>
-                    <div class="forecast-day">
                         <div class="day-name">今天</div>
-                        <div class="forecast-icon">☀️</div>
-                        <div class="forecast-temp">25°</div>
-                    </div>
-                    <div class="forecast-day">
-                        <div class="day-name">周四</div>
-                        <div class="forecast-icon">☀️</div>
-                        <div class="forecast-temp">26°</div>
-                    </div>
-                    <div class="forecast-day">
-                        <div class="day-name">周五</div>
-                        <div class="forecast-icon">🌤️</div>
-                        <div class="forecast-temp">24°</div>
-                    </div>
-                    <div class="forecast-day">
-                        <div class="day-name">周六</div>
-                        <div class="forecast-icon">🌦️</div>
-                        <div class="forecast-temp">22°</div>
-                    </div>
-                    <div class="forecast-day">
-                        <div class="day-name">周日</div>
-                        <div class="forecast-icon">🌧️</div>
-                        <div class="forecast-temp">20°</div>
-                    </div>
-                    <div class="forecast-day">
-                        <div class="day-name">周一</div>
-                        <div class="forecast-icon">🌤️</div>
+                        <div class="forecast-icon">⛅</div>
                         <div class="forecast-temp">21°</div>
                     </div>
                     <div class="forecast-day">
@@ -753,34 +742,64 @@
                         <div class="forecast-icon">☀️</div>
                         <div class="forecast-temp">23°</div>
                     </div>
+                    <div class="forecast-day">
+                        <div class="day-name">周三</div>
+                        <div class="forecast-icon">☀️</div>
+                        <div class="forecast-temp">24°</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="day-name">周四</div>
+                        <div class="forecast-icon">🌤️</div>
+                        <div class="forecast-temp">22°</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="day-name">周五</div>
+                        <div class="forecast-icon">🌧️</div>
+                        <div class="forecast-temp">19°</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="day-name">周六</div>
+                        <div class="forecast-icon">🌧️</div>
+                        <div class="forecast-temp">18°</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="day-name">周日</div>
+                        <div class="forecast-icon">🌤️</div>
+                        <div class="forecast-temp">20°</div>
+                    </div>
                 </div>
             </div>
             
-            <!-- 滚动内容 -->
             <div class="scroll-content">
-                <!-- 今日OOTD推荐 -->
+                <!-- 今日穿搭推荐 -->
                 <div class="ootd-card">
                     <div class="ootd-header">
                         <div class="ootd-title">今日穿搭推荐</div>
-                        <div class="ai-badge" id="refresh-outfit">AI推荐</div>
+                        <div class="ai-badge">AI 生成</div>
                     </div>
-                    <div class="ootd-image-container" id="outfit-image-container">
-                        <img src="https://images.unsplash.com/photo-1551042156-e15c8acd3413?q=80&w=387&auto=format&fit=crop" class="ootd-image" id="outfit-image" alt="今日穿搭">
+                    
+                    <div class="ootd-image-container">
+                        <img src="https://images.unsplash.com/photo-1618554754947-e01d5ce3c549?q=80&w=1974&auto=format&fit=crop" class="ootd-image" alt="今日穿搭">
                         <div class="outfit-items">
-                            <div class="outfit-item">👚</div>
+                            <div class="outfit-item">👕</div>
                             <div class="outfit-item">👖</div>
-                            <div class="outfit-item">👞</div>
+                            <div class="outfit-item">👟</div>
                         </div>
                     </div>
+                    
                     <div class="ootd-detail">
-                        <div class="ootd-description" id="outfit-description">清爽舒适的秋日穿搭，适合今日温暖晴朗的天气。简约高级感衬衫搭配修身牛仔裤，打造知性通勤风格。</div>
-                        <div class="ootd-tags">
-                            <div class="tag">办公室</div>
-                            <div class="tag">通勤</div>
-                            <div class="tag">秋季</div>
-                            <div class="tag">简约</div>
+                        <div class="ootd-description">
+                            适合今日天气的舒适亚麻套装，内搭浅色T恤，搭配简约休闲鞋，既适合办公室环境也适合户外活动。
                         </div>
-                        <button class="upload-own-btn" id="find-similar-btn">👕 查找类似穿搭</button>
+                        <div class="ootd-tags">
+                            <div class="tag">轻松休闲</div>
+                            <div class="tag">办公室穿搭</div>
+                            <div class="tag">春季</div>
+                            <div class="tag">多云天气</div>
+                        </div>
+                        <button class="upload-own-btn">
+                            上传我的OOTD 📸
+                        </button>
                     </div>
                 </div>
                 
@@ -800,8 +819,8 @@
                             <div class="item-overlay">
                                 <div class="item-title">周末约会棉麻Look</div>
                                 <div class="item-stats">
-                                    <div class="stat">❤️ 128</div>
-                                    <div class="stat">💬 16</div>
+                                    <div class="stat">👍 24</div>
+                                    <div class="stat">💬 5</div>
                                 </div>
                             </div>
                         </div>
@@ -812,8 +831,8 @@
                             <div class="item-overlay">
                                 <div class="item-title">温暖针织开衫搭配</div>
                                 <div class="item-stats">
-                                    <div class="stat">❤️ 87</div>
-                                    <div class="stat">💬 9</div>
+                                    <div class="stat">👍 18</div>
+                                    <div class="stat">💬 3</div>
                                 </div>
                             </div>
                         </div>
@@ -824,8 +843,8 @@
                             <div class="item-overlay">
                                 <div class="item-title">早秋风衣穿搭指南</div>
                                 <div class="item-stats">
-                                    <div class="stat">❤️ 215</div>
-                                    <div class="stat">💬 32</div>
+                                    <div class="stat">👍 32</div>
+                                    <div class="stat">💬 7</div>
                                 </div>
                             </div>
                         </div>
@@ -836,8 +855,8 @@
                             <div class="item-overlay">
                                 <div class="item-title">极简主义职场穿搭</div>
                                 <div class="item-stats">
-                                    <div class="stat">❤️ 176</div>
-                                    <div class="stat">💬 24</div>
+                                    <div class="stat">👍 41</div>
+                                    <div class="stat">💬 12</div>
                                 </div>
                             </div>
                         </div>
@@ -854,41 +873,48 @@
                     <div class="menu-title">创建穿搭</div>
                     <div class="close-btn">×</div>
                 </div>
+                
                 <div class="creation-options">
-                    <!-- 上传图片选项 -->
-                    <div class="option">
-                        <div class="option-header">
-                            <div class="option-icon">📷</div>
-                            <div class="option-title">上传图片</div>
-                        </div>
-                        <div class="option-description">上传你的穿搭照片或从相册中选择图片</div>
-                        <button class="use-option-btn">选择图片 ›</button>
-                    </div>
-                    
-                    <!-- 上传视频选项 -->
-                    <div class="option">
-                        <div class="option-header">
-                            <div class="option-icon">🎬</div>
-                            <div class="option-title">上传视频</div>
-                        </div>
-                        <div class="option-description">分享穿搭视频教程，展示更多细节</div>
-                        <button class="use-option-btn">选择视频 ›</button>
-                    </div>
-                    
-                    <!-- AI生成选项 -->
                     <div class="option ai-option">
                         <div class="option-header">
-                            <div class="option-icon">✨</div>
-                            <div class="option-title">AI智能搭配</div>
+                            <div class="option-icon">🤖</div>
+                            <div class="option-title">AI穿搭生成</div>
                         </div>
-                        <div class="option-description">基于你的衣橱和场景需求，AI自动生成穿搭方案</div>
-                        <button class="use-option-btn">开始生成 ›</button>
+                        <div class="option-description">
+                            描述你的需求和风格，AI将为你生成合适的穿搭方案。
+                        </div>
+                        <button class="use-option-btn">
+                            使用 AI 生成 ›
+                        </button>
+                    </div>
+                    
+                    <div class="option">
+                        <div class="option-header">
+                            <div class="option-icon">📸</div>
+                            <div class="option-title">拍照上传</div>
+                        </div>
+                        <div class="option-description">
+                            拍摄你的穿搭照片，添加到你的个人穿搭库中。
+                        </div>
+                        <button class="use-option-btn">
+                            拍照上传 ›
+                        </button>
+                    </div>
+                    
+                    <div class="option">
+                        <div class="option-header">
+                            <div class="option-icon">🖼️</div>
+                            <div class="option-title">从相册选择</div>
+                        </div>
+                        <div class="option-description">
+                            从你的相册中选择已有的穿搭照片上传。
+                        </div>
+                        <button class="use-option-btn">
+                            选择照片 ›
+                        </button>
                     </div>
                 </div>
             </div>
-            
-            <!-- 遮罩层 -->
-            <div class="overlay"></div>
             
             <!-- 底部导航栏 -->
             <div class="bottom-nav">
@@ -901,7 +927,7 @@
                     <div class="nav-text">穿搭</div>
                 </div>
                 <div class="nav-item" id="nav-wardrobe">
-                    <div class="nav-icon">👚</div>
+                    <div class="nav-icon">👕</div>
                     <div class="nav-text">衣橱</div>
                 </div>
                 <div class="nav-item" id="nav-profile">
@@ -914,195 +940,83 @@
             <div class="bottom-safe-area"></div>
         </div>
     </div>
+    
+    <div class="overlay"></div>
+    <div class="toast-message"></div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 添加轻提示函数
-            function showToast(message) {
-                const toast = document.createElement('div');
-                toast.style.position = 'fixed';
-                toast.style.bottom = '100px';
-                toast.style.left = '50%';
-                toast.style.transform = 'translateX(-50%)';
-                toast.style.background = 'rgba(0, 0, 0, 0.7)';
-                toast.style.color = 'white';
-                toast.style.padding = '8px 16px';
-                toast.style.borderRadius = '20px';
-                toast.style.zIndex = '3000';
-                toast.style.fontSize = '14px';
-                toast.textContent = message;
+        document.addEventListener('DOMContentLoaded', () => {
+            // 设置状态栏时间
+            const timeElement = document.querySelector('.status-bar .time');
+            const updateTime = () => {
+                const now = new Date();
+                let hours = now.getHours();
+                let minutes = now.getMinutes();
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                timeElement.textContent = `${hours}:${minutes}`;
+            };
+            updateTime();
+            setInterval(updateTime, 60000);
+            
+            // 创建穿搭按钮点击事件
+            const createBtn = document.querySelector('.create-btn');
+            const createMenu = document.querySelector('.create-menu');
+            const overlay = document.querySelector('.overlay');
+            const closeBtn = document.querySelector('.close-btn');
+            
+            createBtn.addEventListener('click', () => {
+                createMenu.classList.add('show');
+                overlay.classList.add('show');
+            });
+            
+            closeBtn.addEventListener('click', () => {
+                createMenu.classList.remove('show');
+                overlay.classList.remove('show');
+            });
+            
+            overlay.addEventListener('click', () => {
+                createMenu.classList.remove('show');
+                overlay.classList.remove('show');
+            });
+            
+            // Toast消息显示函数
+            const toastMessage = document.querySelector('.toast-message');
+            const showToast = (message, duration = 2000) => {
+                toastMessage.textContent = message;
+                toastMessage.classList.add('show');
                 
-                document.body.appendChild(toast);
-                
-                // 2秒后自动消失
                 setTimeout(() => {
-                    toast.style.opacity = '0';
-                    toast.style.transition = 'opacity 0.5s';
-                    setTimeout(() => {
-                        document.body.removeChild(toast);
-                    }, 500);
-                }, 2000);
-            }
-
-            // 今日穿搭推荐功能
-            const outfitImage = document.getElementById('outfit-image');
-            const outfitDescription = document.getElementById('outfit-description');
-            const refreshOutfitBtn = document.getElementById('refresh-outfit');
-            const findSimilarBtn = document.getElementById('find-similar-btn');
-            const outfitImageContainer = document.getElementById('outfit-image-container');
-            
-            // 设置不同的穿搭图片和描述
-            const outfits = [
-                {
-                    image: 'https://images.unsplash.com/photo-1551042156-e15c8acd3413?q=80&w=387&auto=format&fit=crop',
-                    description: '清爽舒适的秋日穿搭，适合今日温暖晴朗的天气。简约高级感衬衫搭配修身牛仔裤，打造知性通勤风格。'
-                },
-                {
-                    image: 'https://images.unsplash.com/photo-1612215327100-60fc5c4e7938?q=80&w=387&auto=format&fit=crop',
-                    description: '周末休闲风，宽松棉麻上衣搭配高腰牛仔裤，轻松打造慵懒文艺风，适合咖啡馆、图书馆等场景。'
-                },
-                {
-                    image: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?q=80&w=387&auto=format&fit=crop',
-                    description: '简约都市通勤风，适合办公室环境。干练的西装外套搭配修身长裤，展现专业干练形象，提升气场。'
-                },
-                {
-                    image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=387&auto=format&fit=crop',
-                    description: '优雅知性风穿搭，温暖针织开衫搭配过膝长裙，营造温柔浪漫氛围，适合约会、下午茶等场合。'
-                }
-            ];
-            
-            // 添加图片加载错误处理
-            outfitImage.onerror = function() {
-                this.src = 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=387&auto=format&fit=crop';
-                showToast('图片加载失败，已替换为备用图片');
+                    toastMessage.classList.remove('show');
+                }, duration);
             };
             
-            // 添加CSS过渡效果
-            outfitImage.style.transition = 'opacity 0.3s';
-            outfitDescription.style.transition = 'opacity 0.3s';
-            
-            // 刷新穿搭推荐的功能
-            refreshOutfitBtn.addEventListener('click', function() {
-                // 随机选择一套穿搭
-                const randomIndex = Math.floor(Math.random() * outfits.length);
-                const newOutfit = outfits[randomIndex];
-                
-                // 添加过渡效果
-                outfitImage.style.opacity = '0';
-                outfitDescription.style.opacity = '0';
-                
-                setTimeout(() => {
-                    outfitImage.src = newOutfit.image;
-                    outfitDescription.textContent = newOutfit.description;
-                    
-                    outfitImage.style.opacity = '1';
-                    outfitDescription.style.opacity = '1';
-                }, 300);
-                
-                // 显示提示
-                showToast('已为您推荐新穿搭');
-                
-                // 添加iOS风格的触感反馈
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(5);
-                }
-            });
-            
-            // 为穿搭图片添加点击交互
-            outfitImageContainer.addEventListener('click', function() {
-                // 添加点击效果
-                outfitImage.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    outfitImage.style.transform = 'scale(1)';
-                }, 150);
-                
-                showToast('查看穿搭细节');
-                
-                // 添加iOS风格的触感反馈
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(5);
-                }
-            });
-            
-            // 查找类似穿搭功能
-            findSimilarBtn.addEventListener('click', function() {
-                showToast('正在为您查找类似穿搭...');
-                
-                // 添加iOS风格的触感反馈
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(5);
-                }
-                
-                // 模拟查找过程
-                setTimeout(() => {
-                    window.location.href = 'ai_outfit.html';
-                }, 1000);
-            });
-            
-            // 添加穿搭组件查看交互
-            document.querySelectorAll('.outfit-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    e.stopPropagation(); // 防止触发父元素的点击事件
-                    
-                    // 添加点击效果
-                    this.style.transform = 'scale(0.9)';
-                    setTimeout(() => {
-                        this.style.transform = 'scale(1)';
-                    }, 150);
-                    
-                    showToast(`查看${this.textContent}细节`);
-                    
-                    // 添加iOS风格的触感反馈
-                    if (window.navigator && window.navigator.vibrate) {
-                        window.navigator.vibrate(5);
-                    }
-                });
-            });
-
-            // 增强导航栏交互
+            // 底部导航切换
             const navItems = document.querySelectorAll('.nav-item');
-            const navHome = document.getElementById('nav-home');
-            const navInspiration = document.getElementById('nav-inspiration');
-            const navWardrobe = document.getElementById('nav-wardrobe');
-            const navProfile = document.getElementById('nav-profile');
-            
-            // 为导航按钮添加点击事件
             navItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    // 移除所有active类
-                    navItems.forEach(i => i.classList.remove('active'));
-                    // 为当前点击项添加active类
-                    this.classList.add('active');
+                item.addEventListener('click', () => {
+                    // 获取当前点击的导航项ID
+                    const navId = item.id;
                     
-                    // 获取导航项的文本
-                    const navText = this.querySelector('.nav-text').textContent;
-                    console.log(`导航到：${navText}`);
-                    
-                    // 添加iOS触感反馈
-                    if (window.navigator && window.navigator.vibrate) {
-                        window.navigator.vibrate(5);
-                    }
-                    
-                    // 导航跳转逻辑
-                    switch(navText) {
-                        case '首页':
+                    // 根据ID执行相应操作
+                    switch(navId) {
+                        case 'nav-home':
                             showToast('正在跳转到首页...');
                             setTimeout(() => {
                                 window.location.href = 'home.html';
                             }, 300);
                             break;
-                        case '穿搭':
+                        case 'nav-inspiration':
                             // 当前页面，不跳转
                             showToast('当前已在穿搭页面');
                             break;
-                        case '衣橱':
-                            showToast('正在跳转到衣橱...');
+                        case 'nav-wardrobe':
+                            showToast('正在跳转到衣橱页面...');
                             setTimeout(() => {
                                 window.location.href = 'wardrobe.html';
                             }, 300);
                             break;
-                        case '我的':
-                            showToast('正在跳转到个人页面...');
+                        case 'nav-profile':
+                            showToast('正在跳转到个人中心...');
                             setTimeout(() => {
                                 window.location.href = 'profile.html';
                             }, 300);
@@ -1111,192 +1025,73 @@
                 });
             });
             
-            // 为特定导航按钮添加直接点击事件
-            navHome.addEventListener('click', function() {
-                // 添加iOS触感反馈
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(5);
-                }
-                
-                showToast('正在跳转到首页...');
-                setTimeout(() => {
-                    window.location.href = 'home.html';
-                }, 300);
-            });
-            
-            navWardrobe.addEventListener('click', function() {
-                // 添加iOS触感反馈
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(5);
-                }
-                
-                showToast('正在跳转到衣橱...');
-                setTimeout(() => {
-                    window.location.href = 'wardrobe.html';
-                }, 300);
-            });
-            
-            navProfile.addEventListener('click', function() {
-                // 添加iOS触感反馈
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(5);
-                }
-                
-                showToast('正在跳转到个人页面...');
-                setTimeout(() => {
-                    window.location.href = 'profile.html';
-                }, 300);
-            });
-            
-            // 标记当前页面导航按钮
-            function updateActiveNav() {
-                const currentPath = window.location.pathname;
-                navItems.forEach(item => item.classList.remove('active'));
-                
-                if (currentPath.includes('home.html')) {
-                    navHome.classList.add('active');
-                } else if (currentPath.includes('inspiration.html') || currentPath === '/') {
-                    navInspiration.classList.add('active');
-                } else if (currentPath.includes('wardrobe.html')) {
-                    navWardrobe.classList.add('active');
-                } else if (currentPath.includes('profile.html')) {
-                    navProfile.classList.add('active');
-                }
-            }
-            
-            // 页面加载时更新导航状态
-            updateActiveNav();
-            
-            // 处理排序按钮点击
-            document.querySelector('.sort-button').addEventListener('click', function() {
-                alert('排序选项：\n1. 最近更新\n2. 未读留言\n3. 修改时间\n4. 点赞量\n5. 收藏量\n6. 评论量\n7. 转发量');
-            });
-            
-            // 处理创建按钮点击
-            const createBtn = document.querySelector('.create-btn');
-            const createMenu = document.querySelector('.create-menu');
-            const overlay = document.querySelector('.overlay');
-            const closeBtn = document.querySelector('.close-btn');
-            
-            createBtn.addEventListener('click', function() {
-                createMenu.classList.add('show');
-                overlay.classList.add('show');
-            });
-            
-            closeBtn.addEventListener('click', function() {
-                createMenu.classList.remove('show');
-                overlay.classList.remove('show');
-            });
-            
-            overlay.addEventListener('click', function() {
-                createMenu.classList.remove('show');
-                overlay.classList.remove('show');
-            });
-            
-            // 处理上传我的穿搭按钮点击
-            document.querySelector('.upload-own-btn').addEventListener('click', function() {
-                createMenu.classList.add('show');
-                overlay.classList.add('show');
-            });
-            
-            // 处理创建选项按钮点击
-            const optionBtns = document.querySelectorAll('.use-option-btn');
-            optionBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const optionTitle = this.closest('.option').querySelector('.option-title').textContent;
-                    alert(`你选择了：${optionTitle}\n此功能正在开发中...`);
-                    createMenu.classList.remove('show');
-                    overlay.classList.remove('show');
-                });
-            });
-            
-            // 处理天气日历点击
-            document.querySelector('.weather-more').addEventListener('click', function() {
-                alert('天气日历功能正在开发中...');
-            });
-            
-            // 模拟天气卡片滑动
-            const forecastContainer = document.querySelector('.forecast-container');
-            forecastContainer.addEventListener('wheel', function(e) {
-                e.preventDefault();
-                this.scrollLeft += e.deltaY;
-            });
-            
             // 穿搭图片加载错误处理
             const inspirationImages = document.querySelectorAll('.inspiration-img');
             inspirationImages.forEach(img => {
-                // 设置图片加载状态
-                img.style.opacity = '0';
-                
-                // 图片加载成功处理
-                img.onload = function() {
-                    this.style.opacity = '1';
+                img.addEventListener('error', function() {
+                    this.style.display = 'none';
                     
-                    // 移除占位符（如果存在）
-                    const placeholder = this.parentElement.querySelector('.inspiration-item-placeholder');
-                    if (placeholder) {
-                        placeholder.style.opacity = '0';
-                        setTimeout(() => {
-                            placeholder.remove();
-                        }, 300);
-                    }
-                };
-                
-                // 图片加载错误处理
-                img.onerror = function() {
-                    // 设置备用图片
-                    this.src = 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=387&auto=format&fit=crop';
-                    this.style.opacity = '1';
+                    // 为每个穿搭项添加占位符
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'inspiration-item-placeholder';
+                    placeholder.innerHTML = `
+                        <div class="placeholder-icon">🖼️</div>
+                        <div>图片加载失败</div>
+                    `;
                     
-                    // 移除占位符（如果存在）
-                    const placeholder = this.parentElement.querySelector('.inspiration-item-placeholder');
-                    if (placeholder) {
-                        placeholder.style.opacity = '0';
-                        setTimeout(() => {
-                            placeholder.remove();
-                        }, 300);
-                    }
-                };
-                
-                // 为每个穿搭项添加占位符
-                const placeholder = document.createElement('div');
-                placeholder.className = 'inspiration-item-placeholder';
-                placeholder.style.transition = 'opacity 0.3s';
-                
-                const placeholderIcon = document.createElement('div');
-                placeholderIcon.className = 'placeholder-icon';
-                placeholderIcon.textContent = '🖼️';
-                
-                const placeholderText = document.createElement('div');
-                placeholderText.textContent = '加载中...';
-                
-                placeholder.appendChild(placeholderIcon);
-                placeholder.appendChild(placeholderText);
-                
-                img.parentElement.appendChild(placeholder);
+                    this.parentElement.appendChild(placeholder);
+                });
             });
             
             // 处理穿搭项点击
             const inspirationItems = document.querySelectorAll('.inspiration-item');
             inspirationItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    const title = this.querySelector('.item-title')?.textContent || "穿搭详情";
-                    showToast(`查看穿搭详情：${title}`);
-                    
-                    // 添加iOS风格的触感反馈
-                    if (window.navigator && window.navigator.vibrate) {
-                        window.navigator.vibrate(5);
-                    }
+                item.addEventListener('click', () => {
+                    const title = item.querySelector('.item-title').textContent;
+                    showToast(`查看穿搭：${title}`);
                 });
             });
             
-            // 处理OOTD卡片中的衣物项点击
-            const outfitItems = document.querySelectorAll('.outfit-item');
-            outfitItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    alert('查看此单品详情');
+            // AI 穿搭生成按钮
+            const aiGenerateBtn = document.querySelector('.ai-option .use-option-btn');
+            aiGenerateBtn.addEventListener('click', () => {
+                showToast('正在跳转到AI穿搭生成页面...');
+                setTimeout(() => {
+                    window.location.href = 'ai_outfit.html';
+                }, 300);
+                createMenu.classList.remove('show');
+                overlay.classList.remove('show');
+            });
+            
+            // 上传按钮
+            const uploadButtons = document.querySelectorAll('.use-option-btn:not(.ai-option .use-option-btn)');
+            uploadButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showToast('正在跳转到上传页面...');
+                    setTimeout(() => {
+                        window.location.href = 'upload.html';
+                    }, 300);
+                    createMenu.classList.remove('show');
+                    overlay.classList.remove('show');
                 });
             });
+            
+            // 今日穿搭上传按钮
+            const ootdUploadBtn = document.querySelector('.upload-own-btn');
+            ootdUploadBtn.addEventListener('click', () => {
+                showToast('正在跳转到上传页面...');
+                setTimeout(() => {
+                    window.location.href = 'upload.html';
+                }, 300);
+            });
+            
+            // 模拟加载内容动画
+            const scrollContent = document.querySelector('.scroll-content');
+            scrollContent.style.opacity = '0';
+            setTimeout(() => {
+                scrollContent.style.transition = 'opacity 0.5s ease';
+                scrollContent.style.opacity = '1';
+            }, 300);
         });
     </script>
 </body>
