@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LITATA - 穿搭</title>
+    <title>LITATA - 穿搭灵感</title>
     <style>
         * {
             margin: 0;
@@ -13,12 +13,28 @@
 
         body {
             font-family: "SF Pro Text", -apple, "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            background-color: #f8f8f8;
+            background-color: #f5f5f5;
             color: #333;
-            height: 100vh;
+            min-height: 100vh;
             width: 100vw;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 0;
+        }
+
+        /* 响应式容器 */
+        .responsive-container {
+            position: relative;
+            width: 100%;
+            max-width: 100vw;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            height: auto;
         }
 
         /* iPhone 16 Pro Max 视觉仿真容器 */
@@ -26,11 +42,64 @@
             position: relative;
             width: 430px;
             height: 932px;
-            margin: 0 auto;
             background-color: #fff;
             border-radius: 55px;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        /* 针对小屏幕的媒体查询 */
+        @media screen and (max-height: 960px) {
+            .responsive-container {
+                height: calc(100vh - 40px);
+                overflow-y: scroll;
+                padding-right: 5px;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+            }
+            
+            .responsive-container::-webkit-scrollbar {
+                width: 6px;
+            }
+            
+            .responsive-container::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            
+            .responsive-container::-webkit-scrollbar-thumb {
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 6px;
+            }
+            
+            body {
+                padding: 10px 0;
+                align-items: flex-start;
+            }
+        }
+
+        /* 额外的辅助工具 - 在页面底部添加返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 9999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
         }
 
         /* 动态岛 */
@@ -692,255 +761,260 @@
     </style>
 </head>
 <body>
-    <div class="iphone-container">
-        <!-- 动态岛 -->
-        <div class="dynamic-island"></div>
-        
-        <!-- 状态栏 -->
-        <div class="status-bar">
-            <div class="time">18:30</div>
-            <div class="right">
-                <div class="signal icon">📶</div>
-                <div class="wifi icon">📡</div>
-                <div class="battery icon">🔋</div>
-            </div>
-        </div>
-        
-        <div class="app-container">
-            <!-- 天气卡片 -->
-            <div class="weather-card">
-                <div class="weather-header">
-                    <div class="location-info">
-                        <div class="location-icon">📍</div>
-                        <div class="location-name">上海</div>
-                    </div>
-                    <div class="weather-more">更多气象信息 ›</div>
-                </div>
-                
-                <div class="weather-main">
-                    <div class="current-weather">
-                        <div class="weather-icon-large">⛅</div>
-                        <div class="temperature">21°</div>
-                    </div>
-                    <div class="weather-details">
-                        <div class="weather-description">多云转晴</div>
-                        <div class="weather-stats">
-                            <div class="wind">风力: 3级</div>
-                            <div class="humidity">湿度: 65%</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="forecast-container">
-                    <div class="forecast-day">
-                        <div class="day-name">今天</div>
-                        <div class="forecast-icon">⛅</div>
-                        <div class="forecast-temp">21°</div>
-                    </div>
-                    <div class="forecast-day">
-                        <div class="day-name">周二</div>
-                        <div class="forecast-icon">☀️</div>
-                        <div class="forecast-temp">23°</div>
-                    </div>
-                    <div class="forecast-day">
-                        <div class="day-name">周三</div>
-                        <div class="forecast-icon">☀️</div>
-                        <div class="forecast-temp">24°</div>
-                    </div>
-                    <div class="forecast-day">
-                        <div class="day-name">周四</div>
-                        <div class="forecast-icon">🌤️</div>
-                        <div class="forecast-temp">22°</div>
-                    </div>
-                    <div class="forecast-day">
-                        <div class="day-name">周五</div>
-                        <div class="forecast-icon">🌧️</div>
-                        <div class="forecast-temp">19°</div>
-                    </div>
-                    <div class="forecast-day">
-                        <div class="day-name">周六</div>
-                        <div class="forecast-icon">🌧️</div>
-                        <div class="forecast-temp">18°</div>
-                    </div>
-                    <div class="forecast-day">
-                        <div class="day-name">周日</div>
-                        <div class="forecast-icon">🌤️</div>
-                        <div class="forecast-temp">20°</div>
-                    </div>
+    <div class="responsive-container">
+        <div class="iphone-container">
+            <!-- 动态岛 -->
+            <div class="dynamic-island"></div>
+            
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="time">18:30</div>
+                <div class="right">
+                    <div class="signal icon">📶</div>
+                    <div class="wifi icon">📡</div>
+                    <div class="battery icon">🔋</div>
                 </div>
             </div>
             
-            <div class="scroll-content">
-                <!-- 今日穿搭推荐 -->
-                <div class="ootd-card">
-                    <div class="ootd-header">
-                        <div class="ootd-title">今日穿搭推荐</div>
-                        <div class="ai-badge">AI 生成</div>
+            <div class="app-container">
+                <!-- 天气卡片 -->
+                <div class="weather-card">
+                    <div class="weather-header">
+                        <div class="location-info">
+                            <div class="location-icon">📍</div>
+                            <div class="location-name">上海</div>
+                        </div>
+                        <div class="weather-more">更多气象信息 ›</div>
                     </div>
                     
-                    <div class="ootd-image-container">
-                        <img src="https://images.unsplash.com/photo-1618554754947-e01d5ce3c549?q=80&w=1974&auto=format&fit=crop" class="ootd-image" alt="今日穿搭">
-                        <div class="outfit-items">
-                            <div class="outfit-item">👕</div>
-                            <div class="outfit-item">👖</div>
-                            <div class="outfit-item">👟</div>
+                    <div class="weather-main">
+                        <div class="current-weather">
+                            <div class="weather-icon-large">⛅</div>
+                            <div class="temperature">21°</div>
+                        </div>
+                        <div class="weather-details">
+                            <div class="weather-description">多云转晴</div>
+                            <div class="weather-stats">
+                                <div class="wind">风力: 3级</div>
+                                <div class="humidity">湿度: 65%</div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="ootd-detail">
-                        <div class="ootd-description">
-                            适合今日天气的舒适亚麻套装，内搭浅色T恤，搭配简约休闲鞋，既适合办公室环境也适合户外活动。
+                    <div class="forecast-container">
+                        <div class="forecast-day">
+                            <div class="day-name">今天</div>
+                            <div class="forecast-icon">⛅</div>
+                            <div class="forecast-temp">21°</div>
                         </div>
-                        <div class="ootd-tags">
-                            <div class="tag">轻松休闲</div>
-                            <div class="tag">办公室穿搭</div>
-                            <div class="tag">春季</div>
-                            <div class="tag">多云天气</div>
+                        <div class="forecast-day">
+                            <div class="day-name">周二</div>
+                            <div class="forecast-icon">☀️</div>
+                            <div class="forecast-temp">23°</div>
                         </div>
-                        <button class="upload-own-btn">
-                            上传我的OOTD 📸
-                        </button>
+                        <div class="forecast-day">
+                            <div class="day-name">周三</div>
+                            <div class="forecast-icon">☀️</div>
+                            <div class="forecast-temp">24°</div>
+                        </div>
+                        <div class="forecast-day">
+                            <div class="day-name">周四</div>
+                            <div class="forecast-icon">🌤️</div>
+                            <div class="forecast-temp">22°</div>
+                        </div>
+                        <div class="forecast-day">
+                            <div class="day-name">周五</div>
+                            <div class="forecast-icon">🌧️</div>
+                            <div class="forecast-temp">19°</div>
+                        </div>
+                        <div class="forecast-day">
+                            <div class="day-name">周六</div>
+                            <div class="forecast-icon">🌧️</div>
+                            <div class="forecast-temp">18°</div>
+                        </div>
+                        <div class="forecast-day">
+                            <div class="day-name">周日</div>
+                            <div class="forecast-icon">🌤️</div>
+                            <div class="forecast-temp">20°</div>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- 我的穿搭库 -->
-                <div class="my-inspiration">
-                    <div class="section-header">
-                        <div class="section-title">我的穿搭</div>
-                        <div class="sort-button">
-                            最近更新 <span>▼</span>
+                <div class="scroll-content">
+                    <!-- 今日穿搭推荐 -->
+                    <div class="ootd-card">
+                        <div class="ootd-header">
+                            <div class="ootd-title">今日穿搭推荐</div>
+                            <div class="ai-badge">AI 生成</div>
                         </div>
-                    </div>
-                    
-                    <div class="inspiration-list">
-                        <!-- 穿搭项1 -->
-                        <div class="inspiration-item">
-                            <img src="https://images.unsplash.com/photo-1612215327100-60fc5c4e7938?q=80&w=387&auto=format&fit=crop" class="inspiration-img" alt="穿搭">
-                            <div class="item-overlay">
-                                <div class="item-title">周末约会棉麻Look</div>
-                                <div class="item-stats">
-                                    <div class="stat">👍 24</div>
-                                    <div class="stat">💬 5</div>
-                                </div>
+                        
+                        <div class="ootd-image-container">
+                            <img src="https://images.unsplash.com/photo-1618554754947-e01d5ce3c549?q=80&w=1974&auto=format&fit=crop" class="ootd-image" alt="今日穿搭">
+                            <div class="outfit-items">
+                                <div class="outfit-item">👕</div>
+                                <div class="outfit-item">👖</div>
+                                <div class="outfit-item">👟</div>
                             </div>
                         </div>
                         
-                        <!-- 穿搭项2 -->
-                        <div class="inspiration-item">
-                            <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?q=80&w=387&auto=format&fit=crop" class="inspiration-img" alt="穿搭">
-                            <div class="item-overlay">
-                                <div class="item-title">温暖针织开衫搭配</div>
-                                <div class="item-stats">
-                                    <div class="stat">👍 18</div>
-                                    <div class="stat">💬 3</div>
-                                </div>
+                        <div class="ootd-detail">
+                            <div class="ootd-description">
+                                适合今日天气的舒适亚麻套装，内搭浅色T恤，搭配简约休闲鞋，既适合办公室环境也适合户外活动。
+                            </div>
+                            <div class="ootd-tags">
+                                <div class="tag">轻松休闲</div>
+                                <div class="tag">办公室穿搭</div>
+                                <div class="tag">春季</div>
+                                <div class="tag">多云天气</div>
+                            </div>
+                            <button class="upload-own-btn">
+                                上传我的OOTD 📸
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 我的穿搭库 -->
+                    <div class="my-inspiration">
+                        <div class="section-header">
+                            <div class="section-title">我的穿搭</div>
+                            <div class="sort-button">
+                                最近更新 <span>▼</span>
                             </div>
                         </div>
                         
-                        <!-- 穿搭项3 -->
-                        <div class="inspiration-item">
-                            <img src="https://images.unsplash.com/photo-1600950207944-0d63e8edbc3f?q=80&w=464&auto=format&fit=crop" class="inspiration-img" alt="早秋风衣穿搭指南">
-                            <div class="item-overlay">
-                                <div class="item-title">早秋风衣穿搭指南</div>
-                                <div class="item-stats">
-                                    <div class="stat">👍 32</div>
-                                    <div class="stat">💬 7</div>
+                        <div class="inspiration-list">
+                            <!-- 穿搭项1 -->
+                            <div class="inspiration-item">
+                                <img src="https://images.unsplash.com/photo-1612215327100-60fc5c4e7938?q=80&w=387&auto=format&fit=crop" class="inspiration-img" alt="穿搭">
+                                <div class="item-overlay">
+                                    <div class="item-title">周末约会棉麻Look</div>
+                                    <div class="item-stats">
+                                        <div class="stat">👍 24</div>
+                                        <div class="stat">💬 5</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <!-- 穿搭项4 -->
-                        <div class="inspiration-item">
-                            <img src="https://images.unsplash.com/photo-1568252542512-9fe8fe6c5fc9?q=80&w=419&auto=format&fit=crop" class="inspiration-img" alt="极简主义职场穿搭">
-                            <div class="item-overlay">
-                                <div class="item-title">极简主义职场穿搭</div>
-                                <div class="item-stats">
-                                    <div class="stat">👍 41</div>
-                                    <div class="stat">💬 12</div>
+                            
+                            <!-- 穿搭项2 -->
+                            <div class="inspiration-item">
+                                <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?q=80&w=387&auto=format&fit=crop" class="inspiration-img" alt="穿搭">
+                                <div class="item-overlay">
+                                    <div class="item-title">温暖针织开衫搭配</div>
+                                    <div class="item-stats">
+                                        <div class="stat">👍 18</div>
+                                        <div class="stat">💬 3</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 穿搭项3 -->
+                            <div class="inspiration-item">
+                                <img src="https://images.unsplash.com/photo-1600950207944-0d63e8edbc3f?q=80&w=464&auto=format&fit=crop" class="inspiration-img" alt="早秋风衣穿搭指南">
+                                <div class="item-overlay">
+                                    <div class="item-title">早秋风衣穿搭指南</div>
+                                    <div class="item-stats">
+                                        <div class="stat">👍 32</div>
+                                        <div class="stat">💬 7</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 穿搭项4 -->
+                            <div class="inspiration-item">
+                                <img src="https://images.unsplash.com/photo-1568252542512-9fe8fe6c5fc9?q=80&w=419&auto=format&fit=crop" class="inspiration-img" alt="极简主义职场穿搭">
+                                <div class="item-overlay">
+                                    <div class="item-title">极简主义职场穿搭</div>
+                                    <div class="item-stats">
+                                        <div class="stat">👍 41</div>
+                                        <div class="stat">💬 12</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- 创建穿搭按钮 -->
-            <div class="create-btn">+</div>
-            
-            <!-- 创建方式菜单 -->
-            <div class="create-menu">
-                <div class="menu-header">
-                    <div class="menu-title">创建穿搭</div>
-                    <div class="close-btn">×</div>
                 </div>
                 
-                <div class="creation-options">
-                    <div class="option ai-option">
-                        <div class="option-header">
-                            <div class="option-icon">🤖</div>
-                            <div class="option-title">AI穿搭生成</div>
-                        </div>
-                        <div class="option-description">
-                            描述你的需求和风格，AI将为你生成合适的穿搭方案。
-                        </div>
-                        <button class="use-option-btn">
-                            使用 AI 生成 ›
-                        </button>
+                <!-- 创建穿搭按钮 -->
+                <div class="create-btn">+</div>
+                
+                <!-- 创建方式菜单 -->
+                <div class="create-menu">
+                    <div class="menu-header">
+                        <div class="menu-title">创建穿搭</div>
+                        <div class="close-btn">×</div>
                     </div>
                     
-                    <div class="option">
-                        <div class="option-header">
-                            <div class="option-icon">📸</div>
-                            <div class="option-title">拍照上传</div>
+                    <div class="creation-options">
+                        <div class="option ai-option">
+                            <div class="option-header">
+                                <div class="option-icon">🤖</div>
+                                <div class="option-title">AI穿搭生成</div>
+                            </div>
+                            <div class="option-description">
+                                描述你的需求和风格，AI将为你生成合适的穿搭方案。
+                            </div>
+                            <button class="use-option-btn">
+                                使用 AI 生成 ›
+                            </button>
                         </div>
-                        <div class="option-description">
-                            拍摄你的穿搭照片，添加到你的个人穿搭库中。
+                        
+                        <div class="option">
+                            <div class="option-header">
+                                <div class="option-icon">📸</div>
+                                <div class="option-title">拍照上传</div>
+                            </div>
+                            <div class="option-description">
+                                拍摄你的穿搭照片，添加到你的个人穿搭库中。
+                            </div>
+                            <button class="use-option-btn">
+                                拍照上传 ›
+                            </button>
                         </div>
-                        <button class="use-option-btn">
-                            拍照上传 ›
-                        </button>
+                        
+                        <div class="option">
+                            <div class="option-header">
+                                <div class="option-icon">🖼️</div>
+                                <div class="option-title">从相册选择</div>
+                            </div>
+                            <div class="option-description">
+                                从你的相册中选择已有的穿搭照片上传。
+                            </div>
+                            <button class="use-option-btn">
+                                选择照片 ›
+                            </button>
+                        </div>
                     </div>
-                    
-                    <div class="option">
-                        <div class="option-header">
-                            <div class="option-icon">🖼️</div>
-                            <div class="option-title">从相册选择</div>
-                        </div>
-                        <div class="option-description">
-                            从你的相册中选择已有的穿搭照片上传。
-                        </div>
-                        <button class="use-option-btn">
-                            选择照片 ›
-                        </button>
+                </div>
+                
+                <!-- 底部导航栏 -->
+                <div class="bottom-nav">
+                    <div class="nav-item" id="nav-home">
+                        <div class="nav-icon">🏠</div>
+                        <div class="nav-text">首页</div>
+                    </div>
+                    <div class="nav-item active" id="nav-inspiration">
+                        <div class="nav-icon">✨</div>
+                        <div class="nav-text">穿搭</div>
+                    </div>
+                    <div class="nav-item" id="nav-wardrobe">
+                        <div class="nav-icon">👕</div>
+                        <div class="nav-text">衣橱</div>
+                    </div>
+                    <div class="nav-item" id="nav-profile">
+                        <div class="nav-icon">👤</div>
+                        <div class="nav-text">我的</div>
                     </div>
                 </div>
+                
+                <!-- 底部安全区域 -->
+                <div class="bottom-safe-area"></div>
             </div>
-            
-            <!-- 底部导航栏 -->
-            <div class="bottom-nav">
-                <div class="nav-item" id="nav-home">
-                    <div class="nav-icon">🏠</div>
-                    <div class="nav-text">首页</div>
-                </div>
-                <div class="nav-item active" id="nav-inspiration">
-                    <div class="nav-icon">✨</div>
-                    <div class="nav-text">穿搭</div>
-                </div>
-                <div class="nav-item" id="nav-wardrobe">
-                    <div class="nav-icon">👕</div>
-                    <div class="nav-text">衣橱</div>
-                </div>
-                <div class="nav-item" id="nav-profile">
-                    <div class="nav-icon">👤</div>
-                    <div class="nav-text">我的</div>
-                </div>
-            </div>
-            
-            <!-- 底部安全区域 -->
-            <div class="bottom-safe-area"></div>
         </div>
     </div>
-    
+
+    <!-- 返回顶部按钮 -->
+    <div class="back-to-top" id="back-to-top">↑</div>
+
     <div class="overlay"></div>
     <div class="toast-message"></div>
 
@@ -1092,6 +1166,27 @@
                 scrollContent.style.transition = 'opacity 0.5s ease';
                 scrollContent.style.opacity = '1';
             }, 300);
+
+            // 返回顶部功能
+            const backToTopBtn = document.getElementById('back-to-top');
+            const container = document.querySelector('.responsive-container');
+            
+            // 监听滚动事件
+            container.addEventListener('scroll', function() {
+                if (container.scrollTop > 300) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            });
+            
+            // 点击返回顶部
+            backToTopBtn.addEventListener('click', function() {
+                container.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>
 </body>

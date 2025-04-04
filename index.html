@@ -13,12 +13,28 @@
 
         body {
             font-family: "SF Pro Text", -apple, "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            background-color: #fff;
+            background-color: #f5f5f5;
             color: #333;
-            height: 100vh;
+            min-height: 100vh;
             width: 100vw;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 0;
+        }
+
+        /* 响应式容器 */
+        .responsive-container {
+            position: relative;
+            width: 100%;
+            max-width: 100vw;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            height: auto;
         }
 
         /* iPhone 16 Pro Max 视觉仿真容器 */
@@ -26,11 +42,40 @@
             position: relative;
             width: 430px;
             height: 932px;
-            margin: 0 auto;
             background: linear-gradient(135deg, #3a7bd5, #00d2ff);
             border-radius: 55px;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        /* 针对小屏幕的媒体查询 */
+        @media screen and (max-height: 960px) {
+            .responsive-container {
+                height: calc(100vh - 40px);
+                overflow-y: scroll;
+                padding-right: 5px;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+            }
+            
+            .responsive-container::-webkit-scrollbar {
+                width: 6px;
+            }
+            
+            .responsive-container::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            
+            .responsive-container::-webkit-scrollbar-thumb {
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 6px;
+            }
+            
+            body {
+                padding: 10px 0;
+                align-items: flex-start;
+            }
         }
 
         /* 动态岛 */
@@ -259,50 +304,52 @@
     </style>
 </head>
 <body>
-    <div class="iphone-container">
-        <!-- 动态岛 -->
-        <div class="dynamic-island"></div>
-        
-        <!-- 状态栏 -->
-        <div class="status-bar">
-            <div class="time">10:30</div>
-            <div class="right">
-                <div class="icon">📶</div>
-                <div class="icon">📡</div>
-                <div class="icon">🔋</div>
-            </div>
-        </div>
-
-        <!-- 背景装饰图形 -->
-        <div class="bg-shape shape1"></div>
-        <div class="bg-shape shape2"></div>
-        <div class="bg-shape shape3"></div>
-        <div class="bg-shape shape4"></div>
-
-        <!-- 启动页主内容 -->
-        <div class="splash-container">
-            <div class="logo-container">
-                <div class="logo">
-                    <div class="logo-text">Li</div>
+    <div class="responsive-container">
+        <div class="iphone-container">
+            <!-- 动态岛 -->
+            <div class="dynamic-island"></div>
+            
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="time">10:30</div>
+                <div class="right">
+                    <div class="icon">📶</div>
+                    <div class="icon">📡</div>
+                    <div class="icon">🔋</div>
                 </div>
-                <div class="app-name">LITATA</div>
-                <div class="app-slogan">基于天气的穿搭社区，发现你的风格</div>
+            </div>
+
+            <!-- 背景装饰图形 -->
+            <div class="bg-shape shape1"></div>
+            <div class="bg-shape shape2"></div>
+            <div class="bg-shape shape3"></div>
+            <div class="bg-shape shape4"></div>
+
+            <!-- 启动页主内容 -->
+            <div class="splash-container">
+                <div class="logo-container">
+                    <div class="logo">
+                        <div class="logo-text">Li</div>
+                    </div>
+                    <div class="app-name">LITATA</div>
+                    <div class="app-slogan">基于天气的穿搭社区，发现你的风格</div>
+                </div>
+                
+                <div class="loading">
+                    <div class="loading-bar" id="loading-bar"></div>
+                </div>
+                
+                <div class="countdown">
+                    <span>正在准备应用</span> 
+                    <span class="count-number" id="count-down">3</span>
+                </div>
             </div>
             
-            <div class="loading">
-                <div class="loading-bar" id="loading-bar"></div>
-            </div>
+            <div class="skip-btn" id="skip-btn">点击跳过</div>
             
-            <div class="countdown">
-                <span>正在准备应用</span> 
-                <span class="count-number" id="count-down">3</span>
-            </div>
+            <!-- 底部安全区域 -->
+            <div class="bottom-safe-area"></div>
         </div>
-        
-        <div class="skip-btn" id="skip-btn">点击跳过</div>
-        
-        <!-- 底部安全区域 -->
-        <div class="bottom-safe-area"></div>
     </div>
 
     <script>

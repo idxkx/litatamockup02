@@ -13,12 +13,28 @@
 
         body {
             font-family: "SF Pro Text", -apple, "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            background-color: #f8f8f8;
+            background-color: #f5f5f5;
             color: #333;
-            height: 100vh;
+            min-height: 100vh;
             width: 100vw;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 0;
+        }
+
+        /* 响应式容器 */
+        .responsive-container {
+            position: relative;
+            width: 100%;
+            max-width: 100vw;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            height: auto;
         }
 
         /* iPhone 16 Pro Max 视觉仿真容器 */
@@ -26,11 +42,64 @@
             position: relative;
             width: 430px;
             height: 932px;
-            margin: 0 auto;
             background-color: #fff;
             border-radius: 55px;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        /* 针对小屏幕的媒体查询 */
+        @media screen and (max-height: 960px) {
+            .responsive-container {
+                height: calc(100vh - 40px);
+                overflow-y: scroll;
+                padding-right: 5px;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+            }
+            
+            .responsive-container::-webkit-scrollbar {
+                width: 6px;
+            }
+            
+            .responsive-container::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            
+            .responsive-container::-webkit-scrollbar-thumb {
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 6px;
+            }
+            
+            body {
+                padding: 10px 0;
+                align-items: flex-start;
+            }
+        }
+
+        /* 额外的辅助工具 - 在页面底部添加返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 9999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
         }
 
         /* 动态岛 */
@@ -733,190 +802,195 @@
     </style>
 </head>
 <body>
-    <div class="iphone-container">
-        <!-- 动态岛 -->
-        <div class="dynamic-island"></div>
-        
-        <!-- 状态栏 -->
-        <div class="status-bar">
-            <div class="time">10:30</div>
-            <div class="right">
-                <div class="icon">📶</div>
-                <div class="icon">📡</div>
-                <div class="icon">🔋</div>
+    <div class="responsive-container">
+        <div class="iphone-container">
+            <!-- 动态岛 -->
+            <div class="dynamic-island"></div>
+            
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="time">10:30</div>
+                <div class="right">
+                    <div class="icon">📶</div>
+                    <div class="icon">📡</div>
+                    <div class="icon">🔋</div>
+                </div>
             </div>
-        </div>
 
-        <!-- 应用主内容 -->
-        <div class="app-container">
-            <!-- 顶部导航 -->
-            <div class="wardrobe-header">
-                <div class="header-row">
-                    <h1 class="page-title">衣橱</h1>
-                    <div class="action-buttons">
-                        <button class="action-btn scan-btn" id="scanBtn">
-                            📷
-                        </button>
-                        <button class="action-btn settings-icon" id="settingsBtn">
-                            ⚙️
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- 分类选项卡 -->
-                <div class="category-tabs">
-                    <div class="tab-item active">全部</div>
-                    <div class="tab-item">上装</div>
-                    <div class="tab-item">下装</div>
-                    <div class="tab-item">连体服饰</div>
-                    <div class="tab-item">鞋靴</div>
-                    <div class="tab-item">配饰</div>
-                    <div class="tab-item">功能服饰</div>
-                    <div class="tab-item">特殊场景</div>
-                </div>
-            </div>
-            
-            <!-- 内容区域 -->
-            <div class="wardrobe-content">
-                <!-- 快捷筛选栏 -->
-                <div class="filter-bar">
-                    <div class="filter-chip active">全部季节</div>
-                    <div class="filter-chip">春季</div>
-                    <div class="filter-chip">夏季</div>
-                    <div class="filter-chip">秋季</div>
-                    <div class="filter-chip">冬季</div>
-                    <div class="filter-chip">场景筛选</div>
-                    <div class="filter-chip">清洁状态</div>
-                </div>
-                
-                <!-- 搜索栏 -->
-                <div class="search-bar">
-                    <div class="search-icon">🔍</div>
-                    <input type="text" placeholder="搜索衣物" class="search-input">
-                </div>
-                
-                <!-- 上装-基础款 -->
-                <div class="subcategory">
-                    <div class="subcategory-title">
-                        上装 - 基础款
-                        <span class="view-all">查看全部 ></span>
+            <!-- 应用主内容 -->
+            <div class="app-container">
+                <!-- 顶部导航 -->
+                <div class="wardrobe-header">
+                    <div class="header-row">
+                        <h1 class="page-title">衣橱</h1>
+                        <div class="action-buttons">
+                            <button class="action-btn scan-btn" id="scanBtn">
+                                📷
+                            </button>
+                            <button class="action-btn settings-icon" id="settingsBtn">
+                                ⚙️
+                            </button>
+                        </div>
                     </div>
                     
-                    <div class="clothes-grid clothes-container">
-                        <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=380&auto=format&fit=crop" alt="T恤衫" class="clothes-img">
-                            <div class="item-badge unworn">未穿着</div>
-                            <div class="item-name">T恤衫</div>
+                    <!-- 分类选项卡 -->
+                    <div class="category-tabs">
+                        <div class="tab-item active">全部</div>
+                        <div class="tab-item">上装</div>
+                        <div class="tab-item">下装</div>
+                        <div class="tab-item">连体服饰</div>
+                        <div class="tab-item">鞋靴</div>
+                        <div class="tab-item">配饰</div>
+                        <div class="tab-item">功能服饰</div>
+                        <div class="tab-item">特殊场景</div>
+                    </div>
+                </div>
+                
+                <!-- 内容区域 -->
+                <div class="wardrobe-content">
+                    <!-- 快捷筛选栏 -->
+                    <div class="filter-bar">
+                        <div class="filter-chip active">全部季节</div>
+                        <div class="filter-chip">春季</div>
+                        <div class="filter-chip">夏季</div>
+                        <div class="filter-chip">秋季</div>
+                        <div class="filter-chip">冬季</div>
+                        <div class="filter-chip">场景筛选</div>
+                        <div class="filter-chip">清洁状态</div>
+                    </div>
+                    
+                    <!-- 搜索栏 -->
+                    <div class="search-bar">
+                        <div class="search-icon">🔍</div>
+                        <input type="text" placeholder="搜索衣物" class="search-input">
+                    </div>
+                    
+                    <!-- 上装-基础款 -->
+                    <div class="subcategory">
+                        <div class="subcategory-title">
+                            上装 - 基础款
+                            <span class="view-all">查看全部 ></span>
                         </div>
-                        <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=387&auto=format&fit=crop" alt="牛仔裤" class="clothes-img">
-                            <div class="item-badge">已穿着</div>
-                            <div class="item-name">牛仔裤</div>
+                        
+                        <div class="clothes-grid clothes-container">
+                            <div class="clothes-item">
+                                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=380&auto=format&fit=crop" alt="T恤衫" class="clothes-img">
+                                <div class="item-badge unworn">未穿着</div>
+                                <div class="item-name">T恤衫</div>
+                            </div>
+                            <div class="clothes-item">
+                                <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=387&auto=format&fit=crop" alt="牛仔裤" class="clothes-img">
+                                <div class="item-badge">已穿着</div>
+                                <div class="item-name">牛仔裤</div>
+                            </div>
+                            <div class="clothes-item">
+                                <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=388&auto=format&fit=crop" alt="衬衫" class="clothes-img">
+                                <div class="item-badge">已穿着</div>
+                                <div class="item-name">衬衫</div>
+                            </div>
+                            <div class="clothes-item">
+                                <img src="https://images.unsplash.com/photo-1550639525-c97d455acf70?q=80&w=387&auto=format&fit=crop" alt="连衣裙" class="clothes-img">
+                                <div class="item-badge">已穿着</div>
+                                <div class="item-name">连衣裙</div>
+                            </div>
                         </div>
-                        <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=388&auto=format&fit=crop" alt="衬衫" class="clothes-img">
-                            <div class="item-badge">已穿着</div>
-                            <div class="item-name">衬衫</div>
+                    </div>
+                    
+                    <!-- 上装-外套 -->
+                    <div class="subcategory">
+                        <div class="subcategory-title">
+                            上装 - 外套
+                            <span class="view-all">查看全部 ></span>
                         </div>
-                        <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1550639525-c97d455acf70?q=80&w=387&auto=format&fit=crop" alt="连衣裙" class="clothes-img">
-                            <div class="item-badge">已穿着</div>
-                            <div class="item-name">连衣裙</div>
+                        
+                        <div class="clothes-grid">
+                            <div class="clothes-item">
+                                <img src="https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?q=80&w=369&auto=format&fit=crop" class="clothes-img" alt="牛仔外套">
+                                <div class="item-name">深蓝色牛仔外套</div>
+                            </div>
+                            
+                            <div class="clothes-item">
+                                <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=436&auto=format&fit=crop" class="clothes-img" alt="西装外套">
+                                <div class="item-badge">已穿着</div>
+                                <div class="item-name">灰色西装外套</div>
+                            </div>
+                            
+                            <div class="clothes-item">
+                                <img src="https://images.unsplash.com/photo-1543076447-215ad9ba6923?q=80&w=1374&auto=format&fit=crop" class="clothes-img" alt="黑色皮夹克">
+                                <div class="item-name">黑色皮夹克</div>
+                            </div>
+                            
+                            <div class="clothes-item">
+                                <img src="https://images.unsplash.com/photo-1584865288642-42078afe6942?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="格子大衣">
+                                <div class="item-badge idle">闲置</div>
+                                <div class="item-name">驼色格子大衣</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 下装-裤装 -->
+                    <div class="subcategory">
+                        <div class="subcategory-title">
+                            下装 - 裤装
+                            <span class="view-all">查看全部 ></span>
+                        </div>
+                        
+                        <div class="clothes-grid">
+                            <div class="clothes-item">
+                                <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="牛仔裤">
+                                <div class="item-badge">已穿着</div>
+                                <div class="item-name">蓝色直筒牛仔裤</div>
+                            </div>
+                            
+                            <div class="clothes-item">
+                                <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="休闲裤">
+                                <div class="item-name">米色休闲裤</div>
+                            </div>
+                            
+                            <div class="clothes-item">
+                                <img src="https://images.unsplash.com/photo-1473966968600-fa801b869a1a?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="运动裤">
+                                <div class="item-name">黑色运动裤</div>
+                            </div>
+                            
+                            <div class="clothes-item">
+                                <img src="https://images.unsplash.com/photo-1584865288642-42078afe6942?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="西装裤">
+                                <div class="item-name">灰色西装裤</div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 上装-外套 -->
-                <div class="subcategory">
-                    <div class="subcategory-title">
-                        上装 - 外套
-                        <span class="view-all">查看全部 ></span>
+                <!-- 添加衣物按钮 -->
+                <div class="add-item-btn">+</div>
+                
+                <!-- 底部导航栏 -->
+                <div class="bottom-nav">
+                    <div class="nav-item">
+                        <div class="nav-icon">🏠</div>
+                        <div class="nav-text">首页</div>
                     </div>
-                    
-                    <div class="clothes-grid">
-                        <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?q=80&w=369&auto=format&fit=crop" class="clothes-img" alt="牛仔外套">
-                            <div class="item-name">深蓝色牛仔外套</div>
-                        </div>
-                        
-                        <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=436&auto=format&fit=crop" class="clothes-img" alt="西装外套">
-                            <div class="item-badge">已穿着</div>
-                            <div class="item-name">灰色西装外套</div>
-                        </div>
-                        
-                        <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1543076447-215ad9ba6923?q=80&w=1374&auto=format&fit=crop" class="clothes-img" alt="黑色皮夹克">
-                            <div class="item-name">黑色皮夹克</div>
-                        </div>
-                        
-                        <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1584865288642-42078afe6942?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="格子大衣">
-                            <div class="item-badge idle">闲置</div>
-                            <div class="item-name">驼色格子大衣</div>
-                        </div>
+                    <div class="nav-item">
+                        <div class="nav-icon">✨</div>
+                        <div class="nav-text">穿搭</div>
+                    </div>
+                    <div class="nav-item active">
+                        <div class="nav-icon">👚</div>
+                        <div class="nav-text">衣橱</div>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-icon">👤</div>
+                        <div class="nav-text">我的</div>
                     </div>
                 </div>
                 
-                <!-- 下装-裤装 -->
-                <div class="subcategory">
-                    <div class="subcategory-title">
-                        下装 - 裤装
-                        <span class="view-all">查看全部 ></span>
-                    </div>
-                    
-                    <div class="clothes-grid">
-                        <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="牛仔裤">
-                            <div class="item-badge">已穿着</div>
-                            <div class="item-name">蓝色直筒牛仔裤</div>
-                        </div>
-                        
-                        <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="休闲裤">
-                            <div class="item-name">米色休闲裤</div>
-                        </div>
-                        
-                        <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1473966968600-fa801b869a1a?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="运动裤">
-                            <div class="item-name">黑色运动裤</div>
-                        </div>
-                        
-                        <div class="clothes-item">
-                            <img src="https://images.unsplash.com/photo-1584865288642-42078afe6942?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="西装裤">
-                            <div class="item-name">灰色西装裤</div>
-                        </div>
-                    </div>
-                </div>
+                <!-- 底部安全区域 -->
+                <div class="bottom-safe-area"></div>
             </div>
-            
-            <!-- 添加衣物按钮 -->
-            <div class="add-item-btn">+</div>
-            
-            <!-- 底部导航栏 -->
-            <div class="bottom-nav">
-                <div class="nav-item">
-                    <div class="nav-icon">🏠</div>
-                    <div class="nav-text">首页</div>
-                </div>
-                <div class="nav-item">
-                    <div class="nav-icon">✨</div>
-                    <div class="nav-text">穿搭</div>
-                </div>
-                <div class="nav-item active">
-                    <div class="nav-icon">👚</div>
-                    <div class="nav-text">衣橱</div>
-                </div>
-                <div class="nav-item">
-                    <div class="nav-icon">👤</div>
-                    <div class="nav-text">我的</div>
-                </div>
-            </div>
-            
-            <!-- 底部安全区域 -->
-            <div class="bottom-safe-area"></div>
         </div>
     </div>
+
+    <!-- 返回顶部按钮 -->
+    <div class="back-to-top" id="back-to-top">↑</div>
 
     <!-- 设置模态框和菜单 -->
     <div class="settings-modal">
@@ -2045,6 +2119,29 @@
                 });
             });
         }
+
+        // 返回顶部功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const backToTopBtn = document.getElementById('back-to-top');
+            const container = document.querySelector('.responsive-container');
+            
+            // 监听滚动事件
+            container.addEventListener('scroll', function() {
+                if (container.scrollTop > 300) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            });
+            
+            // 点击返回顶部
+            backToTopBtn.addEventListener('click', function() {
+                container.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
 </body>
 </html> 

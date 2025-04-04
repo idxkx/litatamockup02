@@ -15,10 +15,26 @@
             font-family: "SF Pro Text", -apple, "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
             background-color: #f8f8f8;
             color: #333;
-            height: 100vh;
+            min-height: 100vh;
             width: 100vw;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 0;
+        }
+
+        /* 响应式容器 */
+        .responsive-container {
+            position: relative;
+            width: 100%;
+            max-width: 100vw;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            height: auto;
         }
 
         /* iPhone 16 Pro Max 视觉仿真容器 */
@@ -26,11 +42,40 @@
             position: relative;
             width: 430px;
             height: 932px;
-            margin: 0 auto;
             background-color: #fff;
             border-radius: 55px;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        /* 针对小屏幕的媒体查询 */
+        @media screen and (max-height: 960px) {
+            .responsive-container {
+                height: calc(100vh - 40px);
+                overflow-y: scroll;
+                padding-right: 5px;
+                scrollbar-width: thin;
+                scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+            }
+            
+            .responsive-container::-webkit-scrollbar {
+                width: 6px;
+            }
+            
+            .responsive-container::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            
+            .responsive-container::-webkit-scrollbar-thumb {
+                background-color: rgba(0, 0, 0, 0.3);
+                border-radius: 6px;
+            }
+            
+            body {
+                padding: 10px 0;
+                align-items: flex-start;
+            }
         }
 
         /* 动态岛 */
@@ -1111,439 +1156,441 @@
     </style>
 </head>
 <body>
-    <div class="iphone-container">
-        <!-- 动态岛 -->
-        <div class="dynamic-island"></div>
-        
-        <!-- 状态栏 -->
-        <div class="status-bar">
-            <div class="time">10:30</div>
-            <div class="right">
-                <div class="icon">📶</div>
-                <div class="icon">📡</div>
-                <div class="icon">🔋</div>
+    <div class="responsive-container">
+        <div class="iphone-container">
+            <!-- 动态岛 -->
+            <div class="dynamic-island"></div>
+            
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="time">10:30</div>
+                <div class="right">
+                    <div class="icon">📶</div>
+                    <div class="icon">📡</div>
+                    <div class="icon">🔋</div>
+                </div>
             </div>
-        </div>
 
-        <!-- 应用主内容 -->
-        <div class="app-container">
-            <!-- 顶部栏 -->
-            <div class="top-bar">
-                <div class="location" id="location-btn">
-                    <div class="location-icon">📍</div>
-                    <div class="city-name">北京</div>
-                    <div class="weather-info">
-                        <div class="weather-icon">☀️</div>
-                        <div>25°</div>
+            <!-- 应用主内容 -->
+            <div class="app-container">
+                <!-- 顶部栏 -->
+                <div class="top-bar">
+                    <div class="location" id="location-btn">
+                        <div class="location-icon">📍</div>
+                        <div class="city-name">北京</div>
+                        <div class="weather-info">
+                            <div class="weather-icon">☀️</div>
+                            <div>25°</div>
+                        </div>
+                    </div>
+                    
+                    <div class="search-bar">
+                        <div class="search-icon">🔍</div>
+                        <input type="text" class="search-input" placeholder="搜索穿搭">
+                        <div class="camera-icon">📷</div>
+                    </div>
+                    
+                    <div class="message-box" id="message-btn">
+                        <div class="message-icon">💬</div>
+                        <div class="message-badge">3</div>
                     </div>
                 </div>
                 
-                <div class="search-bar">
-                    <div class="search-icon">🔍</div>
-                    <input type="text" class="search-input" placeholder="搜索穿搭">
-                    <div class="camera-icon">📷</div>
+                <!-- 内容区域 -->
+                <div class="content-area">
+                    <!-- 下拉刷新提示 -->
+                    <div class="pull-refresh">
+                        <div class="refresh-icon">🔄</div>
+                        <div>下拉刷新</div>
+                    </div>
+                    
+                    <!-- 瀑布流 -->
+                    <div class="waterfall">
+                        <!-- 公告卡片 -->
+                        <div class="announcement-card">
+                            <div class="announcement-icon">📢</div>
+                            <div class="announcement-content">
+                                <div class="announcement-title">气候穿搭大赛开始啦！</div>
+                                <div class="announcement-text">分享你的秋季穿搭，赢取LITATA Plus会员年卡</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 今日穿搭推荐 - 移除整个模块 -->
+                        
+                        <!-- 卡片1 -->
+                        <div class="card">
+                            <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?q=80&w=486&auto=format&fit=crop" alt="穿搭" class="card-image">
+                            <div class="card-content">
+                                <div class="card-title">今日上身|温暖又时髦的oversized毛衣穿搭，暖暖的秋日感</div>
+                                <div class="card-user">
+                                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=387&auto=format&fit=crop" alt="用户头像" class="user-avatar">
+                                    <div class="user-name">时尚达人Mia</div>
+                                </div>
+                                <div class="card-actions">
+                                    <div class="action-button">
+                                        <div class="action-icon">❤️</div>
+                                        <div>1.2k</div>
+                                    </div>
+                                    <div class="action-button">
+                                        <div class="action-icon">💬</div>
+                                        <div>86</div>
+                                    </div>
+                                    <div class="action-button">
+                                        <div class="action-icon">⭐</div>
+                                        <div>收藏</div>
+                                    </div>
+                                </div>
+                                <div class="find-clothes-button">👕 同款寻衣</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 卡片2 -->
+                        <div class="card">
+                            <div class="card-video-container">
+                                <img src="https://images.unsplash.com/photo-1525450824786-227cbef70703?q=80&w=387&auto=format&fit=crop" alt="视频缩略图" class="card-video-thumbnail">
+                            </div>
+                            <div class="card-content">
+                                <div class="card-title">秋日南方湿润天气|防潮穿搭技巧大放送</div>
+                                <div class="card-user">
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=387&auto=format&fit=crop" alt="用户头像" class="user-avatar">
+                                    <div class="user-name">潮流博主Noah</div>
+                                </div>
+                                <div class="card-actions">
+                                    <div class="action-button">
+                                        <div class="action-icon">❤️</div>
+                                        <div>874</div>
+                                    </div>
+                                    <div class="action-button">
+                                        <div class="action-icon">💬</div>
+                                        <div>124</div>
+                                    </div>
+                                    <div class="action-button">
+                                        <div class="action-icon">⭐</div>
+                                        <div>收藏</div>
+                                    </div>
+                                </div>
+                                <div class="find-clothes-button">👕 同款寻衣</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 卡片3 -->
+                        <div class="card">
+                            <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=387&auto=format&fit=crop" alt="穿搭" class="card-image">
+                            <div class="card-content">
+                                <div class="card-title">轻松准备一周穿搭|早秋上班族实用搭配指南</div>
+                                <div class="card-user">
+                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=388&auto=format&fit=crop" alt="用户头像" class="user-avatar">
+                                    <div class="user-name">职场风尚家</div>
+                                </div>
+                                <div class="card-actions">
+                                    <div class="action-button">
+                                        <div class="action-icon">❤️</div>
+                                        <div>2.5k</div>
+                                    </div>
+                                    <div class="action-button">
+                                        <div class="action-icon">💬</div>
+                                        <div>230</div>
+                                    </div>
+                                    <div class="action-button">
+                                        <div class="action-icon">⭐</div>
+                                        <div>收藏</div>
+                                    </div>
+                                </div>
+                                <div class="find-clothes-button">👕 同款寻衣</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 广告卡片 -->
+                        <div class="card ad-card">
+                            <div class="ad-badge">广告</div>
+                            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1470&auto=format&fit=crop" alt="商品广告" class="card-image">
+                            <div class="card-content">
+                                <div class="card-title">限时优惠|ZARA秋季新款上市，会员尊享8折</div>
+                                <div class="card-user">
+                                    <img src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=1746&auto=format&fit=crop" alt="品牌logo" class="user-avatar">
+                                    <div class="user-name">ZARA官方旗舰店</div>
+                                </div>
+                                <div class="find-clothes-button">🛒 查看活动</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 卡片5 -->
+                        <div class="card">
+                            <img src="https://images.unsplash.com/photo-1550614000-4895a10e1bfd?q=80&w=387&auto=format&fit=crop" alt="穿搭" class="card-image">
+                            <div class="card-content">
+                                <div class="card-title">秋日降温必备|高级感毛呢大衣选购指南</div>
+                                <div class="card-user">
+                                    <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?q=80&w=387&auto=format&fit=crop" alt="用户头像" class="user-avatar">
+                                    <div class="user-name">品质生活家</div>
+                                </div>
+                                <div class="card-actions">
+                                    <div class="action-button">
+                                        <div class="action-icon">❤️</div>
+                                        <div>1.7k</div>
+                                    </div>
+                                    <div class="action-button">
+                                        <div class="action-icon">💬</div>
+                                        <div>156</div>
+                                    </div>
+                                    <div class="action-button">
+                                        <div class="action-icon">⭐</div>
+                                        <div>收藏</div>
+                                    </div>
+                                </div>
+                                <div class="find-clothes-button">👕 同款寻衣</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 卡片6 -->
+                        <div class="card">
+                            <div class="card-video-container">
+                                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=420&auto=format&fit=crop" alt="视频缩略图" class="card-video-thumbnail">
+                            </div>
+                            <div class="card-content">
+                                <div class="card-title">如何打造百搭衣橱|10件单品解决搭配难题</div>
+                                <div class="card-user">
+                                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=387&auto=format&fit=crop" alt="用户头像" class="user-avatar">
+                                    <div class="user-name">简约搭配师</div>
+                                </div>
+                                <div class="card-actions">
+                                    <div class="action-button">
+                                        <div class="action-icon">❤️</div>
+                                        <div>3.1k</div>
+                                    </div>
+                                    <div class="action-button">
+                                        <div class="action-icon">💬</div>
+                                        <div>342</div>
+                                    </div>
+                                    <div class="action-button">
+                                        <div class="action-icon">⭐</div>
+                                        <div>收藏</div>
+                                    </div>
+                                </div>
+                                <div class="find-clothes-button">👕 同款寻衣</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="message-box" id="message-btn">
-                    <div class="message-icon">💬</div>
-                    <div class="message-badge">3</div>
+                <!-- 底部导航栏 -->
+                <div class="bottom-nav">
+                    <div class="nav-item active" id="nav-home">
+                        <div class="nav-icon">🏠</div>
+                        <div class="nav-text">首页</div>
+                    </div>
+                    <div class="nav-item" id="nav-inspiration">
+                        <div class="nav-icon">✨</div>
+                        <div class="nav-text">穿搭</div>
+                    </div>
+                    <div class="nav-item" id="nav-wardrobe">
+                        <div class="nav-icon">👚</div>
+                        <div class="nav-text">衣橱</div>
+                    </div>
+                    <div class="nav-item" id="nav-profile">
+                        <div class="nav-icon">👤</div>
+                        <div class="nav-text">我的</div>
+                    </div>
                 </div>
+                
+                <!-- 底部安全区域 -->
+                <div class="bottom-safe-area"></div>
             </div>
             
-            <!-- 内容区域 -->
-            <div class="content-area">
-                <!-- 下拉刷新提示 -->
-                <div class="pull-refresh">
-                    <div class="refresh-icon">🔄</div>
-                    <div>下拉刷新</div>
+            <!-- 城市选择弹窗 - 移到iPhone容器内部 -->
+            <div class="city-selector" id="city-selector">
+                <div class="city-selector-content">
+                    <div class="pull-down-indicator"></div>
+                    <div class="city-selector-header">
+                        <div class="city-selector-title">选择城市</div>
+                        <div class="city-selector-close" id="city-selector-close">×</div>
+                    </div>
+                    
+                    <div class="city-search-container">
+                        <input type="text" class="city-search-box" placeholder="搜索城市">
+                        <div class="city-search-icon">🔍</div>
+                    </div>
+                    
+                    <div class="city-location-btn" id="use-current-location">
+                        <div class="city-location-icon">📍</div>
+                        <div class="city-location-text">使用当前位置</div>
+                    </div>
+                    
+                    <div class="city-list-container">
+                        <div class="city-category">热门城市</div>
+                        <div class="city-list">
+                            <div class="city-item" data-city="北京">北京</div>
+                            <div class="city-item" data-city="上海">上海</div>
+                            <div class="city-item" data-city="广州">广州</div>
+                            <div class="city-item" data-city="深圳">深圳</div>
+                            <div class="city-item" data-city="杭州">杭州</div>
+                            <div class="city-item" data-city="成都">成都</div>
+                            <div class="city-item" data-city="重庆">重庆</div>
+                            <div class="city-item" data-city="西安">西安</div>
+                        </div>
+                        
+                        <div class="city-category">A</div>
+                        <div class="city-list">
+                            <div class="city-item" data-city="鞍山">鞍山</div>
+                            <div class="city-item" data-city="安康">安康</div>
+                            <div class="city-item" data-city="安庆">安庆</div>
+                        </div>
+                        
+                        <div class="city-category">B</div>
+                        <div class="city-list">
+                            <div class="city-item" data-city="北京">北京</div>
+                            <div class="city-item" data-city="保定">保定</div>
+                            <div class="city-item" data-city="包头">包头</div>
+                            <div class="city-item" data-city="北海">北海</div>
+                        </div>
+                        
+                        <div class="city-category">C</div>
+                        <div class="city-list">
+                            <div class="city-item" data-city="重庆">重庆</div>
+                            <div class="city-item" data-city="成都">成都</div>
+                            <div class="city-item" data-city="长沙">长沙</div>
+                            <div class="city-item" data-city="长春">长春</div>
+                            <div class="city-item" data-city="常州">常州</div>
+                        </div>
+                    </div>
                 </div>
                 
-                <!-- 瀑布流 -->
-                <div class="waterfall">
-                    <!-- 公告卡片 -->
-                    <div class="announcement-card">
-                        <div class="announcement-icon">📢</div>
-                        <div class="announcement-content">
-                            <div class="announcement-title">气候穿搭大赛开始啦！</div>
-                            <div class="announcement-text">分享你的秋季穿搭，赢取LITATA Plus会员年卡</div>
-                        </div>
-                    </div>
-                    
-                    <!-- 今日穿搭推荐 - 移除整个模块 -->
-                    
-                    <!-- 卡片1 -->
-                    <div class="card">
-                        <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?q=80&w=486&auto=format&fit=crop" alt="穿搭" class="card-image">
-                        <div class="card-content">
-                            <div class="card-title">今日上身|温暖又时髦的oversized毛衣穿搭，暖暖的秋日感</div>
-                            <div class="card-user">
-                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=387&auto=format&fit=crop" alt="用户头像" class="user-avatar">
-                                <div class="user-name">时尚达人Mia</div>
-                            </div>
-                            <div class="card-actions">
-                                <div class="action-button">
-                                    <div class="action-icon">❤️</div>
-                                    <div>1.2k</div>
-                                </div>
-                                <div class="action-button">
-                                    <div class="action-icon">💬</div>
-                                    <div>86</div>
-                                </div>
-                                <div class="action-button">
-                                    <div class="action-icon">⭐</div>
-                                    <div>收藏</div>
-                                </div>
-                            </div>
-                            <div class="find-clothes-button">👕 同款寻衣</div>
-                        </div>
-                    </div>
-                    
-                    <!-- 卡片2 -->
-                    <div class="card">
-                        <div class="card-video-container">
-                            <img src="https://images.unsplash.com/photo-1525450824786-227cbef70703?q=80&w=387&auto=format&fit=crop" alt="视频缩略图" class="card-video-thumbnail">
-                        </div>
-                        <div class="card-content">
-                            <div class="card-title">秋日南方湿润天气|防潮穿搭技巧大放送</div>
-                            <div class="card-user">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=387&auto=format&fit=crop" alt="用户头像" class="user-avatar">
-                                <div class="user-name">潮流博主Noah</div>
-                            </div>
-                            <div class="card-actions">
-                                <div class="action-button">
-                                    <div class="action-icon">❤️</div>
-                                    <div>874</div>
-                                </div>
-                                <div class="action-button">
-                                    <div class="action-icon">💬</div>
-                                    <div>124</div>
-                                </div>
-                                <div class="action-button">
-                                    <div class="action-icon">⭐</div>
-                                    <div>收藏</div>
-                                </div>
-                            </div>
-                            <div class="find-clothes-button">👕 同款寻衣</div>
-                        </div>
-                    </div>
-                    
-                    <!-- 卡片3 -->
-                    <div class="card">
-                        <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=387&auto=format&fit=crop" alt="穿搭" class="card-image">
-                        <div class="card-content">
-                            <div class="card-title">轻松准备一周穿搭|早秋上班族实用搭配指南</div>
-                            <div class="card-user">
-                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=388&auto=format&fit=crop" alt="用户头像" class="user-avatar">
-                                <div class="user-name">职场风尚家</div>
-                            </div>
-                            <div class="card-actions">
-                                <div class="action-button">
-                                    <div class="action-icon">❤️</div>
-                                    <div>2.5k</div>
-                                </div>
-                                <div class="action-button">
-                                    <div class="action-icon">💬</div>
-                                    <div>230</div>
-                                </div>
-                                <div class="action-button">
-                                    <div class="action-icon">⭐</div>
-                                    <div>收藏</div>
-                                </div>
-                            </div>
-                            <div class="find-clothes-button">👕 同款寻衣</div>
-                        </div>
-                    </div>
-                    
-                    <!-- 广告卡片 -->
-                    <div class="card ad-card">
-                        <div class="ad-badge">广告</div>
-                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1470&auto=format&fit=crop" alt="商品广告" class="card-image">
-                        <div class="card-content">
-                            <div class="card-title">限时优惠|ZARA秋季新款上市，会员尊享8折</div>
-                            <div class="card-user">
-                                <img src="https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=1746&auto=format&fit=crop" alt="品牌logo" class="user-avatar">
-                                <div class="user-name">ZARA官方旗舰店</div>
-                            </div>
-                            <div class="find-clothes-button">🛒 查看活动</div>
-                        </div>
-                    </div>
-                    
-                    <!-- 卡片5 -->
-                    <div class="card">
-                        <img src="https://images.unsplash.com/photo-1550614000-4895a10e1bfd?q=80&w=387&auto=format&fit=crop" alt="穿搭" class="card-image">
-                        <div class="card-content">
-                            <div class="card-title">秋日降温必备|高级感毛呢大衣选购指南</div>
-                            <div class="card-user">
-                                <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?q=80&w=387&auto=format&fit=crop" alt="用户头像" class="user-avatar">
-                                <div class="user-name">品质生活家</div>
-                            </div>
-                            <div class="card-actions">
-                                <div class="action-button">
-                                    <div class="action-icon">❤️</div>
-                                    <div>1.7k</div>
-                                </div>
-                                <div class="action-button">
-                                    <div class="action-icon">💬</div>
-                                    <div>156</div>
-                                </div>
-                                <div class="action-button">
-                                    <div class="action-icon">⭐</div>
-                                    <div>收藏</div>
-                                </div>
-                            </div>
-                            <div class="find-clothes-button">👕 同款寻衣</div>
-                        </div>
-                    </div>
-                    
-                    <!-- 卡片6 -->
-                    <div class="card">
-                        <div class="card-video-container">
-                            <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=420&auto=format&fit=crop" alt="视频缩略图" class="card-video-thumbnail">
-                        </div>
-                        <div class="card-content">
-                            <div class="card-title">如何打造百搭衣橱|10件单品解决搭配难题</div>
-                            <div class="card-user">
-                                <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=387&auto=format&fit=crop" alt="用户头像" class="user-avatar">
-                                <div class="user-name">简约搭配师</div>
-                            </div>
-                            <div class="card-actions">
-                                <div class="action-button">
-                                    <div class="action-icon">❤️</div>
-                                    <div>3.1k</div>
-                                </div>
-                                <div class="action-button">
-                                    <div class="action-icon">💬</div>
-                                    <div>342</div>
-                                </div>
-                                <div class="action-button">
-                                    <div class="action-icon">⭐</div>
-                                    <div>收藏</div>
-                                </div>
-                            </div>
-                            <div class="find-clothes-button">👕 同款寻衣</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 底部导航栏 -->
-            <div class="bottom-nav">
-                <div class="nav-item active" id="nav-home">
-                    <div class="nav-icon">🏠</div>
-                    <div class="nav-text">首页</div>
-                </div>
-                <div class="nav-item" id="nav-inspiration">
-                    <div class="nav-icon">✨</div>
-                    <div class="nav-text">穿搭</div>
-                </div>
-                <div class="nav-item" id="nav-wardrobe">
-                    <div class="nav-icon">👚</div>
-                    <div class="nav-text">衣橱</div>
-                </div>
-                <div class="nav-item" id="nav-profile">
-                    <div class="nav-icon">👤</div>
-                    <div class="nav-text">我的</div>
-                </div>
-            </div>
-            
-            <!-- 底部安全区域 -->
-            <div class="bottom-safe-area"></div>
-        </div>
-        
-        <!-- 城市选择弹窗 - 移到iPhone容器内部 -->
-        <div class="city-selector" id="city-selector">
-            <div class="city-selector-content">
-                <div class="pull-down-indicator"></div>
-                <div class="city-selector-header">
-                    <div class="city-selector-title">选择城市</div>
-                    <div class="city-selector-close" id="city-selector-close">×</div>
+                <div class="city-index">
+                    <div class="index-item">A</div>
+                    <div class="index-item">B</div>
+                    <div class="index-item">C</div>
+                    <div class="index-item">D</div>
+                    <div class="index-item">E</div>
+                    <div class="index-item">F</div>
+                    <div class="index-item">G</div>
+                    <div class="index-item">H</div>
+                    <div class="index-item">J</div>
+                    <div class="index-item">K</div>
+                    <div class="index-item">L</div>
+                    <div class="index-item">M</div>
+                    <div class="index-item">N</div>
+                    <div class="index-item">P</div>
+                    <div class="index-item">Q</div>
+                    <div class="index-item">R</div>
+                    <div class="index-item">S</div>
+                    <div class="index-item">T</div>
+                    <div class="index-item">W</div>
+                    <div class="index-item">X</div>
+                    <div class="index-item">Y</div>
+                    <div class="index-item">Z</div>
                 </div>
                 
-                <div class="city-search-container">
-                    <input type="text" class="city-search-box" placeholder="搜索城市">
-                    <div class="city-search-icon">🔍</div>
-                </div>
-                
-                <div class="city-location-btn" id="use-current-location">
-                    <div class="city-location-icon">📍</div>
-                    <div class="city-location-text">使用当前位置</div>
-                </div>
-                
-                <div class="city-list-container">
-                    <div class="city-category">热门城市</div>
-                    <div class="city-list">
-                        <div class="city-item" data-city="北京">北京</div>
-                        <div class="city-item" data-city="上海">上海</div>
-                        <div class="city-item" data-city="广州">广州</div>
-                        <div class="city-item" data-city="深圳">深圳</div>
-                        <div class="city-item" data-city="杭州">杭州</div>
-                        <div class="city-item" data-city="成都">成都</div>
-                        <div class="city-item" data-city="重庆">重庆</div>
-                        <div class="city-item" data-city="西安">西安</div>
-                    </div>
-                    
-                    <div class="city-category">A</div>
-                    <div class="city-list">
-                        <div class="city-item" data-city="鞍山">鞍山</div>
-                        <div class="city-item" data-city="安康">安康</div>
-                        <div class="city-item" data-city="安庆">安庆</div>
-                    </div>
-                    
-                    <div class="city-category">B</div>
-                    <div class="city-list">
-                        <div class="city-item" data-city="北京">北京</div>
-                        <div class="city-item" data-city="保定">保定</div>
-                        <div class="city-item" data-city="包头">包头</div>
-                        <div class="city-item" data-city="北海">北海</div>
-                    </div>
-                    
-                    <div class="city-category">C</div>
-                    <div class="city-list">
-                        <div class="city-item" data-city="重庆">重庆</div>
-                        <div class="city-item" data-city="成都">成都</div>
-                        <div class="city-item" data-city="长沙">长沙</div>
-                        <div class="city-item" data-city="长春">长春</div>
-                        <div class="city-item" data-city="常州">常州</div>
-                    </div>
-                </div>
+                <div class="index-indicator" id="index-indicator">A</div>
             </div>
-            
-            <div class="city-index">
-                <div class="index-item">A</div>
-                <div class="index-item">B</div>
-                <div class="index-item">C</div>
-                <div class="index-item">D</div>
-                <div class="index-item">E</div>
-                <div class="index-item">F</div>
-                <div class="index-item">G</div>
-                <div class="index-item">H</div>
-                <div class="index-item">J</div>
-                <div class="index-item">K</div>
-                <div class="index-item">L</div>
-                <div class="index-item">M</div>
-                <div class="index-item">N</div>
-                <div class="index-item">P</div>
-                <div class="index-item">Q</div>
-                <div class="index-item">R</div>
-                <div class="index-item">S</div>
-                <div class="index-item">T</div>
-                <div class="index-item">W</div>
-                <div class="index-item">X</div>
-                <div class="index-item">Y</div>
-                <div class="index-item">Z</div>
-            </div>
-            
-            <div class="index-indicator" id="index-indicator">A</div>
-        </div>
 
-        <!-- 消息弹窗 - 移到iPhone容器内部 -->
-        <div class="message-popup" id="message-popup">
-            <div class="message-popup-header">
-                <div class="message-popup-close" id="message-popup-close">×</div>
-                <div class="message-popup-title">消息</div>
-                <div class="mark-all-read" id="mark-all-read">全部已读</div>
-            </div>
-            
-            <div class="message-tabs">
-                <div class="message-tab active" data-category="all">全部</div>
-                <div class="message-tab" data-category="system">系统<span class="message-tab-badge">2</span></div>
-                <div class="message-tab" data-category="user">用户<span class="message-tab-badge">2</span></div>
-            </div>
-            
-            <div class="message-list">
-                <!-- 全部消息分类 -->
-                <div class="message-category active" id="category-all">
-                    <div class="message-item system-message">
-                        <div class="message-avatar">📢</div>
-                        <div class="message-content">
-                            <div class="message-sender">系统消息</div>
-                            <div class="message-text">气候穿搭大赛开始啦！分享你的秋季穿搭，赢取LITATA Plus会员年卡</div>
-                            <div class="message-time">10分钟前</div>
-                        </div>
-                        <div class="message-indicator"></div>
-                    </div>
-                    
-                    <div class="message-item user-message">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=387&auto=format&fit=crop" class="message-avatar" alt="用户头像">
-                        <div class="message-content">
-                            <div class="message-sender">时尚达人Mia</div>
-                            <div class="message-text">谢谢你喜欢我的穿搭分享！有任何问题都可以随时问我~</div>
-                            <div class="message-time">10分钟前</div>
-                        </div>
-                        <div class="message-indicator"></div>
-                    </div>
-                    
-                    <div class="message-item system-message">
-                        <div class="message-avatar">🏆</div>
-                        <div class="message-content">
-                            <div class="message-sender">系统消息</div>
-                            <div class="message-text">恭喜你！你的穿搭已被推荐到首页，快去看看吧~</div>
-                            <div class="message-time">2小时前</div>
-                        </div>
-                        <div class="message-indicator"></div>
-                    </div>
-                    
-                    <div class="message-item user-message">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=387&auto=format&fit=crop" class="message-avatar" alt="用户头像">
-                        <div class="message-content">
-                            <div class="message-sender">潮流博主Noah</div>
-                            <div class="message-text">我已经回复了你的评论，可以看看我的最新视频，里面有详细的防潮穿搭建议。</div>
-                            <div class="message-time">30分钟前</div>
-                        </div>
-                        <div class="message-indicator"></div>
-                    </div>
+            <!-- 消息弹窗 - 移到iPhone容器内部 -->
+            <div class="message-popup" id="message-popup">
+                <div class="message-popup-header">
+                    <div class="message-popup-close" id="message-popup-close">×</div>
+                    <div class="message-popup-title">消息</div>
+                    <div class="mark-all-read" id="mark-all-read">全部已读</div>
                 </div>
                 
-                <!-- 系统消息分类 -->
-                <div class="message-category" id="category-system">
-                    <div class="message-item system-message">
-                        <div class="message-avatar">📢</div>
-                        <div class="message-content">
-                            <div class="message-sender">系统消息</div>
-                            <div class="message-text">气候穿搭大赛开始啦！分享你的秋季穿搭，赢取LITATA Plus会员年卡</div>
-                            <div class="message-time">10分钟前</div>
-                        </div>
-                        <div class="message-indicator"></div>
-                    </div>
-                    
-                    <div class="message-item system-message">
-                        <div class="message-avatar">🏆</div>
-                        <div class="message-content">
-                            <div class="message-sender">系统消息</div>
-                            <div class="message-text">恭喜你！你的穿搭已被推荐到首页，快去看看吧~</div>
-                            <div class="message-time">2小时前</div>
-                        </div>
-                        <div class="message-indicator"></div>
-                    </div>
+                <div class="message-tabs">
+                    <div class="message-tab active" data-category="all">全部</div>
+                    <div class="message-tab" data-category="system">系统<span class="message-tab-badge">2</span></div>
+                    <div class="message-tab" data-category="user">用户<span class="message-tab-badge">2</span></div>
                 </div>
                 
-                <!-- 用户消息分类 -->
-                <div class="message-category" id="category-user">
-                    <div class="message-item user-message">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=387&auto=format&fit=crop" class="message-avatar" alt="用户头像">
-                        <div class="message-content">
-                            <div class="message-sender">时尚达人Mia</div>
-                            <div class="message-text">谢谢你喜欢我的穿搭分享！有任何问题都可以随时问我~</div>
-                            <div class="message-time">10分钟前</div>
+                <div class="message-list">
+                    <!-- 全部消息分类 -->
+                    <div class="message-category active" id="category-all">
+                        <div class="message-item system-message">
+                            <div class="message-avatar">📢</div>
+                            <div class="message-content">
+                                <div class="message-sender">系统消息</div>
+                                <div class="message-text">气候穿搭大赛开始啦！分享你的秋季穿搭，赢取LITATA Plus会员年卡</div>
+                                <div class="message-time">10分钟前</div>
+                            </div>
+                            <div class="message-indicator"></div>
                         </div>
-                        <div class="message-indicator"></div>
+                        
+                        <div class="message-item user-message">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=387&auto=format&fit=crop" class="message-avatar" alt="用户头像">
+                            <div class="message-content">
+                                <div class="message-sender">时尚达人Mia</div>
+                                <div class="message-text">谢谢你喜欢我的穿搭分享！有任何问题都可以随时问我~</div>
+                                <div class="message-time">10分钟前</div>
+                            </div>
+                            <div class="message-indicator"></div>
+                        </div>
+                        
+                        <div class="message-item system-message">
+                            <div class="message-avatar">🏆</div>
+                            <div class="message-content">
+                                <div class="message-sender">系统消息</div>
+                                <div class="message-text">恭喜你！你的穿搭已被推荐到首页，快去看看吧~</div>
+                                <div class="message-time">2小时前</div>
+                            </div>
+                            <div class="message-indicator"></div>
+                        </div>
+                        
+                        <div class="message-item user-message">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=387&auto=format&fit=crop" class="message-avatar" alt="用户头像">
+                            <div class="message-content">
+                                <div class="message-sender">潮流博主Noah</div>
+                                <div class="message-text">我已经回复了你的评论，可以看看我的最新视频，里面有详细的防潮穿搭建议。</div>
+                                <div class="message-time">30分钟前</div>
+                            </div>
+                            <div class="message-indicator"></div>
+                        </div>
                     </div>
                     
-                    <div class="message-item user-message">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=387&auto=format&fit=crop" class="message-avatar" alt="用户头像">
-                        <div class="message-content">
-                            <div class="message-sender">潮流博主Noah</div>
-                            <div class="message-text">我已经回复了你的评论，可以看看我的最新视频，里面有详细的防潮穿搭建议。</div>
-                            <div class="message-time">30分钟前</div>
+                    <!-- 系统消息分类 -->
+                    <div class="message-category" id="category-system">
+                        <div class="message-item system-message">
+                            <div class="message-avatar">📢</div>
+                            <div class="message-content">
+                                <div class="message-sender">系统消息</div>
+                                <div class="message-text">气候穿搭大赛开始啦！分享你的秋季穿搭，赢取LITATA Plus会员年卡</div>
+                                <div class="message-time">10分钟前</div>
+                            </div>
+                            <div class="message-indicator"></div>
                         </div>
-                        <div class="message-indicator"></div>
+                        
+                        <div class="message-item system-message">
+                            <div class="message-avatar">🏆</div>
+                            <div class="message-content">
+                                <div class="message-sender">系统消息</div>
+                                <div class="message-text">恭喜你！你的穿搭已被推荐到首页，快去看看吧~</div>
+                                <div class="message-time">2小时前</div>
+                            </div>
+                            <div class="message-indicator"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 用户消息分类 -->
+                    <div class="message-category" id="category-user">
+                        <div class="message-item user-message">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=387&auto=format&fit=crop" class="message-avatar" alt="用户头像">
+                            <div class="message-content">
+                                <div class="message-sender">时尚达人Mia</div>
+                                <div class="message-text">谢谢你喜欢我的穿搭分享！有任何问题都可以随时问我~</div>
+                                <div class="message-time">10分钟前</div>
+                            </div>
+                            <div class="message-indicator"></div>
+                        </div>
+                        
+                        <div class="message-item user-message">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=387&auto=format&fit=crop" class="message-avatar" alt="用户头像">
+                            <div class="message-content">
+                                <div class="message-sender">潮流博主Noah</div>
+                                <div class="message-text">我已经回复了你的评论，可以看看我的最新视频，里面有详细的防潮穿搭建议。</div>
+                                <div class="message-time">30分钟前</div>
+                            </div>
+                            <div class="message-indicator"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 模态窗口遮罩 - 移到iPhone容器内部 -->
-        <div class="modal-overlay" id="modal-overlay"></div>
+            <!-- 模态窗口遮罩 - 移到iPhone容器内部 -->
+            <div class="modal-overlay" id="modal-overlay"></div>
+        </div>
     </div>
 
     <script>
