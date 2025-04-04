@@ -799,6 +799,545 @@
             background-color: #fff;
             border-radius: 50%;
         }
+
+        /* 整理栏样式 */
+        .organizer-bar-container {
+            position: fixed;
+            right: 0;
+            top: 60px;
+            height: calc(100% - 145px);
+            width: 280px;
+            z-index: 100;
+            transition: transform 0.3s ease;
+            transform: translateX(100%);
+        }
+
+        .organizer-bar-container.show {
+            transform: translateX(0);
+        }
+
+        /* 整理栏容器特定样式 */
+        .iphone-container .organizer-bar-container {
+            position: absolute;
+            right: 0;
+            top: 60px;
+            height: calc(100% - 145px);
+            width: 280px;
+            z-index: 50;
+        }
+
+        .organizer-bar-handle {
+            width: 20px;
+            height: 100%;
+            background-color: #fff;
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            left: -20px;
+        }
+
+        .organizer-bar-handle:before {
+            content: '';
+            height: 40px;
+            width: 4px;
+            background-color: #ccc;
+            border-radius: 2px;
+        }
+
+        .organizer-bar {
+            background-color: #fff;
+            padding: 15px;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .organizer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .organizer-title {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .organizer-count {
+            background-color: #3a7bd5;
+            color: #fff;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .organizer-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .organizer-clear {
+            font-size: 13px;
+            color: #ff6b6b;
+            background: none;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .organizer-clear:hover {
+            background-color: rgba(255, 107, 107, 0.1);
+        }
+
+        .organizer-minimize {
+            font-size: 13px;
+            color: #666;
+            background: none;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 15px;
+        }
+
+        .organizer-minimize:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .organizer-items {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 5px 0;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+        }
+
+        .organizer-items::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .organizer-items::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .organizer-items::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .organizer-item {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            flex-shrink: 0;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .guide-button {
+            background-color: #3a7bd5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .organizer-item-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .organizer-item-remove {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 18px;
+            height: 18px;
+            background-color: rgba(255, 0, 0, 0.7);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .organizer-placeholder {
+            width: 100%;
+            height: 100%;
+            min-height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #999;
+            font-size: 12px;
+            text-align: center;
+            padding: 10px;
+            grid-column: span 3;
+        }
+
+        .organizer-placeholder-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .organizer-batch-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 10px 0;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .batch-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .batch-action:hover {
+            background-color: #f0f0f0;
+        }
+
+        .batch-action-icon {
+            font-size: 20px;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .batch-action-text {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* 整理栏指示器 */
+        .organizer-indicator {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background-color: #3a7bd5;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 99;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .organizer-indicator.show {
+            opacity: 1;
+        }
+
+        /* 拖动相关样式 */
+        .clothes-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .drag-preview {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .drag-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .clothes-item.draggable {
+            cursor: grab;
+        }
+
+        .clothes-item.draggable:active {
+            cursor: grabbing;
+        }
+
+        /* 拖拽提示 */
+        .drop-zone-hint {
+            position: absolute;
+            right: 290px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            pointer-events: none;
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .drop-zone-hint.show {
+            opacity: 1;
+            transform: translateY(-50%) translateX(-10px);
+        }
+
+        /* 确认对话框 */
+        .confirm-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            z-index: 1000;
+            width: 85%;
+            max-width: 350px;
+            display: none;
+        }
+
+        .confirm-dialog.show {
+            display: block;
+            animation: dialog-show 0.3s ease forwards;
+        }
+
+        @keyframes dialog-show {
+            from { opacity: 0; transform: translate(-50%, -40%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        .confirm-dialog-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .confirm-dialog-message {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .confirm-dialog-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .confirm-dialog-button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .confirm-button-cancel {
+            background-color: #f2f2f2;
+            color: #666;
+        }
+
+        .confirm-button-confirm {
+            background-color: #3a7bd5;
+            color: white;
+        }
+
+        .confirm-dialog-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            backdrop-filter: blur(3px);
+            display: none;
+        }
+
+        .confirm-dialog-backdrop.show {
+            display: block;
+        }
+
+        /* 衣物项选择状态 */
+        .clothes-item.selected {
+            position: relative;
+            border: 2px solid #3a7bd5;
+        }
+
+        .clothes-item.selected:after {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 20px;
+            height: 20px;
+            background-color: #3a7bd5;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        /* 选择模式提示 */
+        .selection-mode-indicator {
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            z-index: 200;
+            display: none;
+        }
+
+        .selection-mode-indicator.show {
+            display: block;
+            animation: selection-indicator-show 0.3s ease forwards;
+        }
+
+        @keyframes selection-indicator-show {
+            from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* 菜单覆盖层 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 990;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* 首次使用引导 */
+        .guide-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .guide-overlay.show {
+            display: flex;
+        }
+
+        .guide-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            max-width: 85%;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .guide-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .guide-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .guide-image {
+            margin: 15px 0;
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .guide-button {
+            background-color: #3a7bd5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -983,11 +1522,79 @@
                     </div>
                 </div>
                 
+                <!-- 整理栏 -->
+                <div class="organizer-bar-container" id="organizerContainer">
+                    <div class="organizer-bar-handle" id="organizerHandle"></div>
+                    <div class="organizer-bar">
+                        <div class="organizer-header">
+                            <div class="organizer-title">
+                                整理栏 <span class="organizer-count" id="organizerCount">0</span>
+                            </div>
+                            <div class="organizer-actions">
+                                <button class="organizer-clear" id="organizerClear">清空</button>
+                                <button class="organizer-minimize" id="organizerMinimize">收起</button>
+                            </div>
+                        </div>
+                        <div class="organizer-items" id="organizerItems">
+                            <div class="organizer-placeholder" id="organizerPlaceholder">
+                                <div class="organizer-placeholder-icon">📥</div>
+                                <div>将衣物拖拽至此进行批量操作</div>
+                            </div>
+                        </div>
+                        <div class="organizer-batch-actions">
+                            <div class="batch-action" id="batchOutfit">
+                                <div class="batch-action-icon">👔</div>
+                                <div class="batch-action-text">创建穿搭</div>
+                            </div>
+                            <div class="batch-action" id="batchMove">
+                                <div class="batch-action-icon">📂</div>
+                                <div class="batch-action-text">移动分类</div>
+                            </div>
+                            <div class="batch-action" id="batchHide">
+                                <div class="batch-action-icon">👁️</div>
+                                <div class="batch-action-text">隐藏推荐</div>
+                            </div>
+                            <div class="batch-action" id="batchDelete">
+                                <div class="batch-action-icon">🗑️</div>
+                                <div class="batch-action-text">删除</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 整理栏提示器 -->
+                <div class="organizer-indicator" id="organizerIndicator">
+                    <span>打开整理栏</span>
+                    <span class="organizer-count" id="indicatorCount">0</span>
+                </div>
+
+                <!-- 拖拽提示 -->
+                <div class="drop-zone-hint" id="dropZoneHint">将衣物拖拽到整理栏</div>
+                
                 <!-- 底部安全区域 -->
                 <div class="bottom-safe-area"></div>
             </div>
         </div>
     </div>
+
+    <!-- 选择模式提示 -->
+    <div class="selection-mode-indicator" id="selectionModeIndicator">
+        <span>多选模式已开启，点击衣物选择</span>
+    </div>
+
+    <!-- 确认对话框 -->
+    <div class="confirm-dialog" id="confirmDialog">
+        <div class="confirm-dialog-title" id="confirmTitle">确认操作</div>
+        <div class="confirm-dialog-message" id="confirmMessage">您确定要执行此操作吗？</div>
+        <div class="confirm-dialog-buttons">
+            <button class="confirm-dialog-button confirm-button-cancel" id="confirmCancel">取消</button>
+            <button class="confirm-dialog-button confirm-button-confirm" id="confirmOk">确定</button>
+        </div>
+    </div>
+    <div class="confirm-dialog-backdrop" id="confirmBackdrop"></div>
+
+    <!-- 菜单覆盖层 -->
+    <div class="overlay" id="overlay"></div>
 
     <!-- 返回顶部按钮 -->
     <div class="back-to-top" id="back-to-top">↑</div>
@@ -1060,6 +1667,30 @@
         </div>
     </div>
 
+    <!-- 首次使用引导 -->
+    <div class="guide-overlay" id="organizerGuide">
+        <div class="guide-content">
+            <div class="guide-title">整理栏新功能</div>
+            <div class="guide-description">
+                整理栏现在位于右侧，可以帮助您批量管理衣物，有两种方式添加衣物到整理栏：
+            </div>
+            <div style="display: flex; margin: 15px 0; gap: 10px; justify-content: center;">
+                <div style="text-align: center; flex: 1;">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; margin: 0 auto; font-size: 24px;">👆</div>
+                    <div style="font-size: 13px; margin-top: 5px; color: #666;">长按衣物进入多选模式</div>
+                </div>
+                <div style="text-align: center; flex: 1;">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; margin: 0 auto; font-size: 24px;">✋</div>
+                    <div style="font-size: 13px; margin-top: 5px; color: #666;">拖拽衣物到右侧整理栏</div>
+                </div>
+            </div>
+            <div class="guide-description">
+                整理栏中的衣物可以进行批量操作，如创建穿搭、移动分类、隐藏推荐和删除。
+            </div>
+            <button class="guide-button" id="guideCloseButton">了解了</button>
+        </div>
+    </div>
+
     <script>
         // 执行页面初始化
         document.addEventListener('DOMContentLoaded', function() {
@@ -1073,9 +1704,6 @@
             
             // 初始化分类滑块
             initCategorySlider();
-            
-            // 添加购物车功能
-            setupShoppingCart();
             
             // 设置筛选栏
             initFilterBar();
@@ -1116,8 +1744,22 @@
             });
             
             // 初始化拖放功能
-            initializeOrganizerBar();
-            makeItemsDraggable();
+            initDragAndDrop();
+            
+            // 初始化整理栏
+            initOrganizerBar();
+            
+            // 初始化批量操作功能
+            initBatchActions();
+            
+            // 初始化确认对话框
+            initConfirmDialog();
+            
+            // 初始化引导
+            initGuide();
+            
+            // 初始化返回顶部功能
+            initBackToTop();
         });
         
         // 扫描按钮点击处理函数
@@ -1874,12 +2516,12 @@
 
         // 整理栏相关功能
         function initializeOrganizerBar() {
-            // 这里可以添加整理栏的初始化逻辑
+            // 这个是旧的空函数，保持为空即可
         }
 
         // 拖拽功能
         function makeItemsDraggable() {
-            // 这里可以添加拖拽功能的初始化逻辑
+            // 这个是旧的空函数，保持为空即可
         }
 
         // 初始化筛选栏
@@ -2121,7 +2763,7 @@
         }
 
         // 返回顶部功能
-        document.addEventListener('DOMContentLoaded', function() {
+        function initBackToTop() {
             const backToTopBtn = document.getElementById('back-to-top');
             const container = document.querySelector('.responsive-container');
             
@@ -2141,7 +2783,864 @@
                     behavior: 'smooth'
                 });
             });
-        });
+        }
+
+        // 初始化衣物点击事件
+        function initClothesItemClick() {
+            const items = document.querySelectorAll('.clothes-item');
+            
+            items.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // 检查是否在多选模式
+                    if (isMultiSelectMode) {
+                        // 如果是多选模式，切换选中状态
+                        toggleItemSelection(this);
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return;
+                    }
+                    
+                    // 如果是长按模式或点击操作，显示详细信息
+                    const name = this.querySelector('.item-name')?.textContent || '未命名衣物';
+                    showToast(`查看衣物: ${name}`);
+                    
+                    // 模拟衣物详情页
+                    /*
+                    window.location.href = `item-detail.html?id=${this.getAttribute('data-id')}`;
+                    */
+                });
+                
+                // 添加长按识别
+                let longPressTimer;
+                item.addEventListener('touchstart', function(e) {
+                    longPressTimer = setTimeout(() => {
+                        // 长按开启多选模式
+                        enterMultiSelectMode();
+                        toggleItemSelection(this);
+                        // 添加触感反馈
+                        if (window.navigator && window.navigator.vibrate) {
+                            window.navigator.vibrate(50);
+                        }
+                    }, 500); // 500ms长按
+                });
+                
+                item.addEventListener('touchend', function() {
+                    clearTimeout(longPressTimer);
+                });
+                
+                item.addEventListener('touchmove', function() {
+                    clearTimeout(longPressTimer);
+                });
+            });
+        }
+        
+        // 拖放相关变量
+        let draggedItem = null;
+        let dragPreview = null;
+        let isMultiSelectMode = false;
+        let selectedItems = new Set();
+        let dragStartX = 0;
+        let dragStartY = 0;
+        
+        // 初始化整理栏功能
+        function initOrganizerBar() {
+            const organizerContainer = document.getElementById('organizerContainer');
+            const organizerHandle = document.getElementById('organizerHandle');
+            const organizerMinimizeBtn = document.getElementById('organizerMinimize');
+            const organizerClearBtn = document.getElementById('organizerClear');
+            const organizerIndicator = document.getElementById('organizerIndicator');
+            
+            // 设置整理栏展开/收起功能
+            organizerHandle.addEventListener('click', function() {
+                toggleOrganizerBar();
+            });
+            
+            organizerMinimizeBtn.addEventListener('click', function() {
+                hideOrganizerBar();
+            });
+            
+            // 设置整理栏指示器点击功能
+            organizerIndicator.addEventListener('click', function() {
+                showOrganizerBar();
+            });
+            
+            // 设置清空按钮功能
+            organizerClearBtn.addEventListener('click', function() {
+                if (getOrganizerItemsCount() > 0) {
+                    showConfirmDialog(
+                        '清空整理栏', 
+                        '确定要清空整理栏中的所有衣物吗？', 
+                        clearOrganizerItems
+                    );
+                } else {
+                    showToast('整理栏已经是空的');
+                }
+            });
+            
+            // 从本地存储中恢复整理栏状态
+            restoreOrganizerState();
+        }
+        
+        // 初始化拖放功能
+        function initDragAndDrop() {
+            // 创建拖拽预览元素
+            createDragPreview();
+            
+            // 为所有衣物添加拖拽功能
+            makeItemsDraggable();
+            
+            // 设置整理栏为接收区域
+            setupDropZone();
+        }
+        
+        // 创建拖拽预览元素
+        function createDragPreview() {
+            if (!document.getElementById('dragPreview')) {
+                dragPreview = document.createElement('div');
+                dragPreview.id = 'dragPreview';
+                dragPreview.className = 'drag-preview';
+                dragPreview.style.display = 'none';
+                document.body.appendChild(dragPreview);
+            } else {
+                dragPreview = document.getElementById('dragPreview');
+            }
+        }
+        
+        // 为所有衣物添加拖拽功能
+        function makeItemsDraggable() {
+            const items = document.querySelectorAll('.clothes-item');
+            
+            items.forEach(item => {
+                item.classList.add('draggable');
+                
+                // 添加拖拽事件监听器 (触摸设备)
+                item.addEventListener('touchstart', handleDragStart);
+                
+                // 添加拖拽事件监听器 (鼠标)
+                item.addEventListener('mousedown', handleDragStart);
+            });
+            
+            // 为文档添加移动和结束拖拽事件
+            document.addEventListener('mousemove', handleDragMove);
+            document.addEventListener('touchmove', handleDragMove, { passive: false });
+            document.addEventListener('mouseup', handleDragEnd);
+            document.addEventListener('touchend', handleDragEnd);
+        }
+        
+        // 处理拖拽开始
+        function handleDragStart(e) {
+            // 检查是否是多选模式，如果是则不启动拖拽
+            if (isMultiSelectMode) return;
+            
+            // 获取初始拖拽位置
+            if (e.type === 'mousedown') {
+                dragStartX = e.clientX;
+                dragStartY = e.clientY;
+            } else if (e.type === 'touchstart') {
+                dragStartX = e.touches[0].clientX;
+                dragStartY = e.touches[0].clientY;
+            }
+            
+            // 设置延时，防止意外拖拽
+            setTimeout(() => {
+                if (!isMultiSelectMode) {
+                    draggedItem = this;
+                    this.classList.add('dragging');
+                    
+                    // 更新拖拽预览
+                    const img = this.querySelector('img');
+                    if (img) {
+                        dragPreview.innerHTML = `<img src="${img.src}" alt="预览">`;
+                        
+                        // 设置预览位置
+                        if (e.type === 'mousedown') {
+                            dragPreview.style.left = `${e.clientX}px`;
+                            dragPreview.style.top = `${e.clientY}px`;
+                        } else if (e.type === 'touchstart') {
+                            dragPreview.style.left = `${e.touches[0].clientX}px`;
+                            dragPreview.style.top = `${e.touches[0].clientY}px`;
+                        }
+                        
+                        dragPreview.style.display = 'block';
+                    }
+                    
+                    // 显示拖拽提示
+                    showDropZoneHint();
+                }
+            }, 100);
+            
+            // 防止默认行为（例如文本选择）
+            e.preventDefault();
+        }
+        
+        // 处理拖拽移动
+        function handleDragMove(e) {
+            if (!draggedItem) return;
+            
+            // 获取当前位置
+            let clientX, clientY;
+            if (e.type === 'mousemove') {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            } else if (e.type === 'touchmove') {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+                
+                // 防止页面滚动
+                e.preventDefault();
+            }
+            
+            // 移动预览元素
+            dragPreview.style.left = `${clientX}px`;
+            dragPreview.style.top = `${clientY}px`;
+            
+            // 检查是否在整理栏上方
+            checkIfOverDropZone(clientX, clientY);
+        }
+        
+        // 检查是否在放置区域上方
+        function checkIfOverDropZone(x, y) {
+            const dropZone = document.getElementById('organizerContainer');
+            const rect = dropZone.getBoundingClientRect();
+            
+            if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+                if (!dropZone.classList.contains('hover')) {
+                    dropZone.classList.add('hover');
+                    // 如果整理栏是隐藏的，显示它
+                    if (!dropZone.classList.contains('show')) {
+                        showOrganizerBar(true); // 传入true表示临时显示
+                    }
+                }
+            } else {
+                dropZone.classList.remove('hover');
+            }
+        }
+        
+        // 处理拖拽结束
+        function handleDragEnd(e) {
+            if (!draggedItem) return;
+            
+            // 获取最终位置
+            let clientX, clientY;
+            if (e.type === 'mouseup') {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            } else if (e.type === 'touchend') {
+                // touchend事件不包含坐标，使用最后已知位置
+                clientX = parseInt(dragPreview.style.left);
+                clientY = parseInt(dragPreview.style.top);
+            }
+            
+            // 检查是否在整理栏上方
+            const dropZone = document.getElementById('organizerContainer');
+            const rect = dropZone.getBoundingClientRect();
+            
+            if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
+                // 添加到整理栏
+                addToOrganizerBar(draggedItem);
+                showToast('已添加到整理栏');
+            }
+            
+            // 恢复样式
+            draggedItem.classList.remove('dragging');
+            draggedItem = null;
+            dragPreview.style.display = 'none';
+            dropZone.classList.remove('hover');
+            
+            // 隐藏拖拽提示
+            hideDropZoneHint();
+        }
+        
+        // 设置放置区域
+        function setupDropZone() {
+            const dropZone = document.getElementById('organizerItems');
+            
+            // 添加放置事件监听器
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            });
+            
+            dropZone.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+            });
+            
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                
+                if (draggedItem) {
+                    addToOrganizerBar(draggedItem);
+                }
+            });
+        }
+        
+        // 添加到整理栏
+        function addToOrganizerBar(item) {
+            // 获取整理栏容器
+            const organizerItems = document.getElementById('organizerItems');
+            const placeholder = document.getElementById('organizerPlaceholder');
+            
+            // 移除占位符
+            if (placeholder && getOrganizerItemsCount() === 0) {
+                placeholder.style.display = 'none';
+            }
+            
+            // 检查是否已经在整理栏中
+            const itemId = item.getAttribute('data-id') || generateItemId(item);
+            if (document.querySelector(`.organizer-item[data-item-id="${itemId}"]`)) {
+                showToast('该衣物已在整理栏中');
+                return;
+            }
+            
+            // 创建整理栏项
+            const organizerItem = document.createElement('div');
+            organizerItem.className = 'organizer-item';
+            organizerItem.setAttribute('data-item-id', itemId);
+            
+            // 复制图片
+            const img = item.querySelector('img');
+            if (img) {
+                organizerItem.innerHTML = `
+                    <img src="${img.src}" alt="整理栏衣物" class="organizer-item-img">
+                    <div class="organizer-item-remove">×</div>
+                `;
+            } else {
+                organizerItem.innerHTML = `
+                    <div class="organizer-item-img" style="background-color: #ddd;"></div>
+                    <div class="organizer-item-remove">×</div>
+                `;
+            }
+            
+            // 添加移除按钮功能
+            const removeBtn = organizerItem.querySelector('.organizer-item-remove');
+            removeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                removeFromOrganizerBar(organizerItem);
+            });
+            
+            // 将项添加到整理栏
+            organizerItems.appendChild(organizerItem);
+            
+            // 更新计数
+            updateOrganizerCount();
+            
+            // 保存整理栏状态
+            saveOrganizerState();
+            
+            // 显示整理栏（如果它是隐藏的）
+            showOrganizerBar();
+        }
+        
+        // 从整理栏移除
+        function removeFromOrganizerBar(item) {
+            item.remove();
+            
+            // 更新计数
+            updateOrganizerCount();
+            
+            // 如果整理栏为空，恢复占位符
+            if (getOrganizerItemsCount() === 0) {
+                const placeholder = document.getElementById('organizerPlaceholder');
+                if (placeholder) {
+                    placeholder.style.display = 'flex';
+                }
+            }
+            
+            // 保存整理栏状态
+            saveOrganizerState();
+        }
+        
+        // 清空整理栏
+        function clearOrganizerItems() {
+            const organizerItems = document.getElementById('organizerItems');
+            const placeholder = document.getElementById('organizerPlaceholder');
+            
+            // 删除所有整理栏项（除了占位符）
+            const items = organizerItems.querySelectorAll('.organizer-item');
+            items.forEach(item => item.remove());
+            
+            // 恢复占位符
+            if (placeholder) {
+                placeholder.style.display = 'flex';
+            }
+            
+            // 更新计数
+            updateOrganizerCount();
+            
+            // 清除选中状态
+            clearSelections();
+            
+            // 保存整理栏状态
+            saveOrganizerState();
+            
+            showToast('整理栏已清空');
+        }
+        
+        // 更新整理栏计数
+        function updateOrganizerCount() {
+            const count = getOrganizerItemsCount();
+            const countEl = document.getElementById('organizerCount');
+            const indicatorCountEl = document.getElementById('indicatorCount');
+            const indicator = document.getElementById('organizerIndicator');
+            
+            if (countEl) countEl.textContent = count;
+            if (indicatorCountEl) indicatorCountEl.textContent = count;
+            
+            // 更新指示器可见性
+            if (indicator) {
+                if (count > 0) {
+                    indicator.classList.add('show');
+                } else {
+                    indicator.classList.remove('show');
+                }
+            }
+        }
+        
+        // 获取整理栏中的项目数量
+        function getOrganizerItemsCount() {
+            return document.querySelectorAll('.organizer-item').length;
+        }
+        
+        // 显示整理栏
+        function showOrganizerBar(temporary = false) {
+            const organizerContainer = document.getElementById('organizerContainer');
+            organizerContainer.classList.add('show');
+            
+            if (!temporary) {
+                // 存储整理栏状态
+                localStorage.setItem('organizerBarVisible', 'true');
+            }
+        }
+        
+        // 隐藏整理栏
+        function hideOrganizerBar() {
+            const organizerContainer = document.getElementById('organizerContainer');
+            organizerContainer.classList.remove('show');
+            
+            // 存储整理栏状态
+            localStorage.setItem('organizerBarVisible', 'false');
+            
+            // 显示指示器
+            updateOrganizerCount();
+        }
+        
+        // 切换整理栏可见性
+        function toggleOrganizerBar() {
+            const organizerContainer = document.getElementById('organizerContainer');
+            if (organizerContainer.classList.contains('show')) {
+                hideOrganizerBar();
+            } else {
+                showOrganizerBar();
+            }
+        }
+        
+        // 保存整理栏状态
+        function saveOrganizerState() {
+            const organizerItems = document.querySelectorAll('.organizer-item');
+            const itemsData = [];
+            
+            organizerItems.forEach(item => {
+                const imgSrc = item.querySelector('img')?.src || '';
+                const itemId = item.getAttribute('data-item-id') || '';
+                
+                itemsData.push({
+                    id: itemId,
+                    imgSrc: imgSrc
+                });
+            });
+            
+            localStorage.setItem('organizerItems', JSON.stringify(itemsData));
+        }
+        
+        // 恢复整理栏状态
+        function restoreOrganizerState() {
+            // 恢复整理栏可见性
+            const isVisible = localStorage.getItem('organizerBarVisible') === 'true';
+            if (isVisible) {
+                showOrganizerBar();
+            }
+            
+            // 恢复整理栏中的项目
+            const savedItems = localStorage.getItem('organizerItems');
+            if (savedItems) {
+                try {
+                    const itemsData = JSON.parse(savedItems);
+                    const organizerItems = document.getElementById('organizerItems');
+                    const placeholder = document.getElementById('organizerPlaceholder');
+                    
+                    if (itemsData.length > 0 && placeholder) {
+                        placeholder.style.display = 'none';
+                    }
+                    
+                    itemsData.forEach(itemData => {
+                        if (itemData.imgSrc) {
+                            const organizerItem = document.createElement('div');
+                            organizerItem.className = 'organizer-item';
+                            organizerItem.setAttribute('data-item-id', itemData.id);
+                            
+                            organizerItem.innerHTML = `
+                                <img src="${itemData.imgSrc}" alt="整理栏衣物" class="organizer-item-img">
+                                <div class="organizer-item-remove">×</div>
+                            `;
+                            
+                            // 添加移除按钮功能
+                            const removeBtn = organizerItem.querySelector('.organizer-item-remove');
+                            removeBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                removeFromOrganizerBar(organizerItem);
+                            });
+                            
+                            // 将项添加到整理栏
+                            organizerItems.appendChild(organizerItem);
+                        }
+                    });
+                    
+                    // 更新计数
+                    updateOrganizerCount();
+                } catch (error) {
+                    console.error('恢复整理栏状态失败:', error);
+                }
+            }
+        }
+        
+        // 生成唯一的项目ID
+        function generateItemId(item) {
+            const id = 'item_' + Math.random().toString(36).substr(2, 9);
+            item.setAttribute('data-id', id);
+            return id;
+        }
+        
+        // 显示拖拽提示
+        function showDropZoneHint() {
+            const hint = document.getElementById('dropZoneHint');
+            if (hint) {
+                hint.classList.add('show');
+            }
+        }
+        
+        // 隐藏拖拽提示
+        function hideDropZoneHint() {
+            const hint = document.getElementById('dropZoneHint');
+            if (hint) {
+                hint.classList.remove('show');
+            }
+        }
+        
+        // 初始化批量操作功能
+        function initBatchActions() {
+            // 创建穿搭
+            document.getElementById('batchOutfit').addEventListener('click', function() {
+                if (getOrganizerItemsCount() < 2) {
+                    showToast('至少需要2件衣物才能创建穿搭');
+                    return;
+                }
+                
+                showToast('创建穿搭功能尚未实现');
+                // 实际实现中应导航到创建穿搭页面，并传入选择的衣物
+            });
+            
+            // 移动分类
+            document.getElementById('batchMove').addEventListener('click', function() {
+                if (getOrganizerItemsCount() === 0) {
+                    showToast('请先选择需要移动的衣物');
+                    return;
+                }
+                
+                showToast('移动分类功能尚未实现');
+                // 实际实现中应显示分类选择对话框
+            });
+            
+            // 隐藏推荐
+            document.getElementById('batchHide').addEventListener('click', function() {
+                if (getOrganizerItemsCount() === 0) {
+                    showToast('请先选择需要隐藏的衣物');
+                    return;
+                }
+                
+                showConfirmDialog(
+                    '隐藏衣物', 
+                    `确定要将选中的${getOrganizerItemsCount()}件衣物从AI推荐中隐藏吗？`, 
+                    function() {
+                        showToast(`已将${getOrganizerItemsCount()}件衣物从推荐中隐藏`);
+                        clearOrganizerItems();
+                    }
+                );
+            });
+            
+            // 删除
+            document.getElementById('batchDelete').addEventListener('click', function() {
+                if (getOrganizerItemsCount() === 0) {
+                    showToast('请先选择需要删除的衣物');
+                    return;
+                }
+                
+                showConfirmDialog(
+                    '删除衣物', 
+                    `确定要删除选中的${getOrganizerItemsCount()}件衣物吗？此操作不可恢复。`, 
+                    function() {
+                        showToast(`已删除${getOrganizerItemsCount()}件衣物`);
+                        clearOrganizerItems();
+                    }
+                );
+            });
+        }
+        
+        // 初始化确认对话框
+        function initConfirmDialog() {
+            const dialog = document.getElementById('confirmDialog');
+            const backdrop = document.getElementById('confirmBackdrop');
+            const cancelBtn = document.getElementById('confirmCancel');
+            const okBtn = document.getElementById('confirmOk');
+            
+            // 设置取消按钮
+            cancelBtn.addEventListener('click', function() {
+                hideConfirmDialog();
+            });
+            
+            // 设置背景点击关闭
+            backdrop.addEventListener('click', function() {
+                hideConfirmDialog();
+            });
+        }
+        
+        // 显示确认对话框
+        function showConfirmDialog(title, message, confirmCallback) {
+            const dialog = document.getElementById('confirmDialog');
+            const backdrop = document.getElementById('confirmBackdrop');
+            const titleEl = document.getElementById('confirmTitle');
+            const messageEl = document.getElementById('confirmMessage');
+            const okBtn = document.getElementById('confirmOk');
+            
+            // 设置对话框内容
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            
+            // 设置确认按钮
+            okBtn.onclick = function() {
+                hideConfirmDialog();
+                if (typeof confirmCallback === 'function') {
+                    confirmCallback();
+                }
+            };
+            
+            // 显示对话框
+            dialog.classList.add('show');
+            backdrop.classList.add('show');
+        }
+        
+        // 隐藏确认对话框
+        function hideConfirmDialog() {
+            const dialog = document.getElementById('confirmDialog');
+            const backdrop = document.getElementById('confirmBackdrop');
+            
+            dialog.classList.remove('show');
+            backdrop.classList.remove('show');
+        }
+        
+        // 进入多选模式
+        function enterMultiSelectMode() {
+            isMultiSelectMode = true;
+            
+            // 显示多选模式提示
+            const indicator = document.getElementById('selectionModeIndicator');
+            indicator.classList.add('show');
+            
+            // 添加退出多选模式的按钮
+            if (!document.getElementById('exitSelectionMode')) {
+                const exitButton = document.createElement('button');
+                exitButton.id = 'exitSelectionMode';
+                exitButton.className = 'exit-selection-mode';
+                exitButton.textContent = '完成';
+                exitButton.style.position = 'fixed';
+                exitButton.style.top = '60px';
+                exitButton.style.right = '20px';
+                exitButton.style.padding = '5px 15px';
+                exitButton.style.backgroundColor = '#3a7bd5';
+                exitButton.style.color = 'white';
+                exitButton.style.border = 'none';
+                exitButton.style.borderRadius = '20px';
+                exitButton.style.fontSize = '14px';
+                exitButton.style.zIndex = '200';
+                
+                exitButton.addEventListener('click', function() {
+                    exitMultiSelectMode();
+                });
+                
+                document.body.appendChild(exitButton);
+            }
+            
+            // 添加iOS风格触感反馈
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(10);
+            }
+        }
+        
+        // 退出多选模式
+        function exitMultiSelectMode() {
+            isMultiSelectMode = false;
+            
+            // 隐藏多选模式提示
+            const indicator = document.getElementById('selectionModeIndicator');
+            indicator.classList.remove('show');
+            
+            // 移除退出按钮
+            const exitButton = document.getElementById('exitSelectionMode');
+            if (exitButton) {
+                exitButton.remove();
+            }
+            
+            // 如果有选中的项目，添加到整理栏
+            if (selectedItems.size > 0) {
+                addSelectedItemsToOrganizer();
+            }
+            
+            // 清除选中状态
+            clearSelections();
+        }
+        
+        // 切换选中状态
+        function toggleItemSelection(item) {
+            const itemId = item.getAttribute('data-id') || generateItemId(item);
+            
+            if (item.classList.contains('selected')) {
+                // 取消选中
+                item.classList.remove('selected');
+                selectedItems.delete(itemId);
+            } else {
+                // 选中
+                item.classList.add('selected');
+                selectedItems.add(itemId);
+                
+                // 添加触感反馈
+                if (window.navigator && window.navigator.vibrate) {
+                    window.navigator.vibrate(5);
+                }
+            }
+            
+            // 更新选中计数
+            updateSelectedCount();
+        }
+        
+        // 更新选中计数
+        function updateSelectedCount() {
+            const indicator = document.getElementById('selectionModeIndicator');
+            if (indicator) {
+                indicator.querySelector('span').textContent = 
+                    `多选模式已开启，已选择 ${selectedItems.size} 件衣物`;
+            }
+        }
+        
+        // 清除所有选中
+        function clearSelections() {
+            document.querySelectorAll('.clothes-item.selected').forEach(item => {
+                item.classList.remove('selected');
+            });
+            selectedItems.clear();
+            updateSelectedCount();
+        }
+        
+        // 添加选中的项目到整理栏
+        function addSelectedItemsToOrganizer() {
+            let addedCount = 0;
+            
+            document.querySelectorAll('.clothes-item.selected').forEach(item => {
+                // 获取整理栏容器
+                const organizerItems = document.getElementById('organizerItems');
+                const placeholder = document.getElementById('organizerPlaceholder');
+                
+                // 移除占位符
+                if (placeholder && getOrganizerItemsCount() === 0) {
+                    placeholder.style.display = 'none';
+                }
+                
+                // 检查是否已经在整理栏中
+                const itemId = item.getAttribute('data-id');
+                if (document.querySelector(`.organizer-item[data-item-id="${itemId}"]`)) {
+                    return; // 跳过已在整理栏的项目
+                }
+                
+                // 创建整理栏项
+                const organizerItem = document.createElement('div');
+                organizerItem.className = 'organizer-item';
+                organizerItem.setAttribute('data-item-id', itemId);
+                
+                // 复制图片
+                const img = item.querySelector('img');
+                if (img) {
+                    organizerItem.innerHTML = `
+                        <img src="${img.src}" alt="整理栏衣物" class="organizer-item-img">
+                        <div class="organizer-item-remove">×</div>
+                    `;
+                } else {
+                    organizerItem.innerHTML = `
+                        <div class="organizer-item-img" style="background-color: #ddd;"></div>
+                        <div class="organizer-item-remove">×</div>
+                    `;
+                }
+                
+                // 添加移除按钮功能
+                const removeBtn = organizerItem.querySelector('.organizer-item-remove');
+                removeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    removeFromOrganizerBar(organizerItem);
+                });
+                
+                // 将项添加到整理栏
+                organizerItems.appendChild(organizerItem);
+                addedCount++;
+            });
+            
+            if (addedCount > 0) {
+                // 更新计数
+                updateOrganizerCount();
+                
+                // 保存整理栏状态
+                saveOrganizerState();
+                
+                // 显示整理栏
+                showOrganizerBar();
+                
+                // 显示提示
+                showToast(`已添加${addedCount}件衣物到整理栏`);
+            }
+        }
+
+        // 初始化引导
+        function initGuide() {
+            const hasSeenGuide = localStorage.getItem('hasSeenOrganizerGuide') === 'true';
+            
+            if (!hasSeenGuide) {
+                // 显示引导
+                showGuide();
+                
+                // 标记为已经看过引导
+                localStorage.setItem('hasSeenOrganizerGuide', 'true');
+            }
+            
+            // 引导关闭按钮
+            document.getElementById('guideCloseButton').addEventListener('click', function() {
+                hideGuide();
+                // 引导关闭后显示整理栏
+                showOrganizerBar();
+            });
+        }
+        
+        // 显示引导
+        function showGuide() {
+            const guide = document.getElementById('organizerGuide');
+            if (guide) {
+                guide.classList.add('show');
+            }
+        }
+        
+        // 隐藏引导
+        function hideGuide() {
+            const guide = document.getElementById('organizerGuide');
+            if (guide) {
+                guide.classList.remove('show');
+            }
+        }
     </script>
 </body>
 </html> 
