@@ -700,65 +700,47 @@
         }
 
         /* 添加衣物模态框样式 */
-        .add-cloth-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-        
-        .add-cloth-modal.active {
-            display: flex;
-        }
-        
-        .add-cloth-container {
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            background-color: white;
-            border-radius: 15px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        
         .add-cloth-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
+            padding: 12px 15px;
             border-bottom: 1px solid #eee;
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            background-color: white;
+            z-index: 10;
         }
         
         .add-cloth-header h2 {
             margin: 0;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
         }
         
         .close-modal {
-            font-size: 24px;
+            font-size: 22px;
             cursor: pointer;
             color: #999;
+            padding: 5px;
         }
         
         .add-cloth-tabs {
             display: flex;
             border-bottom: 1px solid #eee;
+            flex-shrink: 0;
+            position: sticky;
+            top: 43px;
+            background-color: white;
+            z-index: 9;
         }
         
         .add-cloth-tab {
             flex: 1;
             text-align: center;
-            padding: 12px 0;
-            font-size: 14px;
+            padding: 10px 0;
+            font-size: 13px;
             cursor: pointer;
             position: relative;
         }
@@ -788,21 +770,112 @@
             margin-left: 5px;
         }
         
-        .add-cloth-content {
-            flex: 1;
-            overflow-y: auto;
-        }
-        
         .add-cloth-panel {
             display: none;
-            padding: 20px;
+            padding: 15px;
         }
         
         .add-cloth-panel.active {
             display: block;
         }
+
+        /* 响应式优化 */
+        @media screen and (max-width: 500px), screen and (max-height: 750px) {
+            .add-cloth-container {
+                height: 70%;
+            }
+            
+            .upload-preview {
+                height: 120px;
+            }
+            
+            .add-cloth-content {
+                max-height: calc(100% - 90px);
+            }
+        }
+
+        /* 添加衣物模态框样式 */
+        .add-cloth-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            border-radius: 55px; /* 与iPhone容器相同的圆角 */
+            overflow: hidden;
+        }
         
-        /* 表单样式 */
+        .add-cloth-modal.active {
+            display: flex;
+        }
+        
+        .add-cloth-container {
+            width: 90%;
+            height: 85vh;
+            max-height: 85vh;
+            background-color: white;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin: auto;
+            overflow: hidden;
+        }
+        
+        .add-cloth-content {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 0 15px 15px;
+            scrollbar-width: none;
+        }
+        
+        .add-cloth-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 针对小屏幕的样式优化 */
+        @media screen and (max-width: 500px), screen and (max-height: 750px) {
+            .add-cloth-container {
+                width: 95%;
+                height: 80vh;
+            }
+            
+            .upload-preview {
+                height: 150px;
+            }
+            
+            .form-group {
+                margin-bottom: 12px;
+            }
+            
+            .form-group label {
+                margin-bottom: 3px;
+                font-size: 13px;
+            }
+        }
+        
+        /* 超小屏幕的极限优化 */
+        @media screen and (max-height: 600px) {
+            .add-cloth-container {
+                height: 90vh;
+            }
+            
+            .upload-preview {
+                height: 120px;
+            }
+            
+            .form-group {
+                margin-bottom: 8px;
+            }
+        }
+        
+        /* 表单元素样式 */
         .form-group {
             margin-bottom: 15px;
         }
@@ -811,7 +884,8 @@
             display: block;
             margin-bottom: 5px;
             font-size: 14px;
-            color: #666;
+            color: #333;
+            font-weight: 500;
         }
         
         .form-group input[type="text"],
@@ -824,31 +898,43 @@
             background-color: #f9f9f9;
         }
         
+        /* 上传区域样式 */
         .upload-area {
             margin-bottom: 20px;
         }
         
         .upload-preview {
             width: 100%;
-            height: 200px;
-            border: 2px dashed #ddd;
+            height: 180px;
+            border: 2px dashed #3a7bd5;
             border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             overflow: hidden;
-            background-color: #f9f9f9;
+            background-color: #f5f8ff;
+            transition: all 0.2s ease;
+        }
+        
+        .upload-preview:hover {
+            background-color: #eaf1ff;
         }
         
         .upload-placeholder {
             text-align: center;
-            color: #999;
+            color: #3a7bd5;
         }
         
         .upload-icon {
-            font-size: 32px;
+            font-size: 42px;
             margin-bottom: 10px;
+            color: #3a7bd5;
+        }
+        
+        .upload-placeholder p {
+            font-size: 14px;
+            font-weight: 500;
         }
         
         #preview-image {
@@ -870,6 +956,12 @@
             height: 30px;
             border-radius: 50%;
             cursor: pointer;
+            border: 1px solid #ddd;
+            transition: transform 0.2s;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
         }
         
         .color-option.selected {
@@ -890,11 +982,48 @@
             border-radius: 15px;
             font-size: 12px;
             cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .tag-option:hover {
+            background-color: #e5e5e5;
         }
         
         .tag-option.selected {
             background-color: #3a7bd5;
             color: white;
+        }
+        
+        /* 自定义标签输入样式 */
+        .custom-tag-input-group {
+            display: flex;
+            margin-bottom: 10px;
+            gap: 5px;
+        }
+        
+        #custom-tag-input {
+            flex: 1;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        #add-custom-tag {
+            background-color: #3a7bd5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        #custom-tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 8px;
         }
         
         /* 提交按钮样式 */
@@ -907,14 +1036,15 @@
             border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
+            transition: background-color 0.2s;
         }
         
         .submit-button:hover {
             background-color: #2a5b9d;
         }
         
-        /* PLUS专属内容样式 */
+        /* PLUS专属功能面板样式 */
         .scan-placeholder {
             height: 400px;
             display: flex;
@@ -953,156 +1083,60 @@
             cursor: pointer;
         }
 
-        /* 移动端优化样式 */
-        @media screen and (max-width: 500px) {
-            .add-cloth-container {
-                width: 95%;
-                height: 85vh;
-                max-height: 85vh;
-                position: relative;
-                margin: auto;
+        /* 自定义标签样式增强 */
+        .custom-tag {
+            background-color: #3a7bd5;
+            color: white;
+            border-radius: 15px;
+            padding: 6px 25px 6px 12px;
+            position: relative;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+        
+        .custom-tag .remove-tag {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            cursor: pointer;
+        }
+        
+        /* 按钮动效 */
+        #add-custom-tag, .submit-button {
+            transition: all 0.2s ease;
+        }
+        
+        #add-custom-tag:active, .submit-button:active {
+            transform: scale(0.98);
+            background-color: #2a5b9d;
+        }
+        
+        /* 添加到按钮的动画效果 */
+        @keyframes buttonPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(58, 123, 213, 0.4);
             }
-            
-            .add-cloth-header {
-                padding: 12px 15px;
+            70% {
+                box-shadow: 0 0 0 10px rgba(58, 123, 213, 0);
             }
-            
-            .add-cloth-header h2 {
-                font-size: 16px;
-            }
-            
-            .add-cloth-tab {
-                padding: 10px 0;
-                font-size: 13px;
-            }
-            
-            .add-cloth-panel {
-                padding: 15px;
-            }
-            
-            .add-cloth-content {
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            .form-group {
-                margin-bottom: 12px;
-            }
-            
-            .form-group label {
-                margin-bottom: 4px;
-                font-size: 13px;
-            }
-            
-            .form-group input[type="text"],
-            .form-group select {
-                padding: 8px 10px;
-                font-size: 13px;
-                -webkit-appearance: none;
-            }
-            
-            .upload-area {
-                margin-bottom: 15px;
-            }
-            
-            .upload-preview {
-                height: 160px;
-            }
-            
-            .upload-icon {
-                font-size: 28px;
-                margin-bottom: 8px;
-            }
-            
-            .color-selector {
-                gap: 8px;
-            }
-            
-            .color-option {
-                width: 28px;
-                height: 28px;
-            }
-            
-            .tag-selector {
-                gap: 6px;
-                margin-top: 4px;
-            }
-            
-            .tag-option {
-                padding: 5px 10px;
-                font-size: 11px;
-                margin-bottom: 4px;
-            }
-            
-            .custom-tag-input-group {
-                margin-bottom: 8px;
-            }
-            
-            .custom-tag-input-group input {
-                padding: 6px 8px;
-                font-size: 12px;
-            }
-            
-            .custom-tag-input-group button {
-                padding: 0 10px;
-                font-size: 12px;
-                min-width: 40px;
-            }
-            
-            .submit-button {
-                padding: 10px 0;
-                font-size: 14px;
-                margin-bottom: 10px;
-            }
-            
-            .scan-placeholder {
-                height: 300px;
-            }
-            
-            .plus-icon {
-                font-size: 40px;
-                margin-bottom: 15px;
-            }
-            
-            .plus-feature p {
-                font-size: 13px;
-                margin-bottom: 15px;
-            }
-            
-            .upgrade-button {
-                padding: 8px 16px;
-                font-size: 13px;
+            100% {
+                box-shadow: 0 0 0 0 rgba(58, 123, 213, 0);
             }
         }
         
-        /* 超小屏幕（如iPhone SE）优化 */
-        @media screen and (max-width: 375px) and (max-height: 667px) {
-            .add-cloth-container {
-                width: 98%;
-                height: 90vh;
-                max-height: 90vh;
-                border-radius: 10px;
-            }
-            
-            .add-cloth-header {
-                padding: 10px 12px;
-            }
-            
-            .add-cloth-panel {
-                padding: 12px;
-            }
-            
-            .upload-preview {
-                height: 140px;
-            }
-            
-            .form-group {
-                margin-bottom: 10px;
-            }
-            
-            .tag-option {
-                padding: 4px 8px;
-                font-size: 10px;
-            }
+        .add-animation {
+            animation: buttonPulse 1.5s ease infinite;
         }
     </style>
 </head>
@@ -1339,6 +1373,134 @@
                     <div class="confirm-btn confirm" id="confirm-action">确定</div>
                 </div>
             </div>
+
+            <!-- 添加衣物模态框 -->
+            <div class="add-cloth-modal" id="add-cloth-modal">
+                <div class="add-cloth-container">
+                    <div class="add-cloth-header">
+                        <h2>添加衣物</h2>
+                        <span class="close-modal" id="close-add-modal">×</span>
+                    </div>
+                    
+                    <div class="add-cloth-tabs">
+                        <div class="add-cloth-tab active" data-tab="manual">手动录入</div>
+                        <div class="add-cloth-tab" data-tab="scan">智能扫描<span class="plus-tag">PLUS</span></div>
+                    </div>
+                    
+                    <div class="add-cloth-content">
+                        <!-- 手动录入面板 -->
+                        <div class="add-cloth-panel active" id="manual-panel">
+                            <div class="upload-area">
+                                <div class="upload-preview" id="upload-preview">
+                                    <div class="upload-placeholder">
+                                        <div class="upload-icon">📸</div>
+                                        <p>点击上传衣物照片</p>
+                                    </div>
+                                    <img id="preview-image" style="display: none;">
+                                </div>
+                                <input type="file" id="cloth-image" accept="image/*" style="display: none;">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cloth-name">衣物名称</label>
+                                <input type="text" id="cloth-name" placeholder="例如：白色基础T恤">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cloth-category">衣物分类</label>
+                                <select id="cloth-category">
+                                    <option value="">请选择分类</option>
+                                    <option value="上装-基础款">上装-基础款</option>
+                                    <option value="上装-外套">上装-外套</option>
+                                    <option value="下装-裤装">下装-裤装</option>
+                                    <option value="下装-裙装">下装-裙装</option>
+                                    <option value="连体服饰">连体服饰</option>
+                                    <option value="鞋靴">鞋靴</option>
+                                    <option value="配饰">配饰</option>
+                                    <option value="功能服饰">功能服饰</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>颜色</label>
+                                <div class="color-selector" id="color-selector">
+                                    <div class="color-option" style="background-color: #FFFFFF;" data-color="白色"></div>
+                                    <div class="color-option" style="background-color: #000000;" data-color="黑色"></div>
+                                    <div class="color-option" style="background-color: #808080;" data-color="灰色"></div>
+                                    <div class="color-option" style="background-color: #A52A2A;" data-color="棕色"></div>
+                                    <div class="color-option" style="background-color: #FF0000;" data-color="红色"></div>
+                                    <div class="color-option" style="background-color: #FFA500;" data-color="橙色"></div>
+                                    <div class="color-option" style="background-color: #FFFF00;" data-color="黄色"></div>
+                                    <div class="color-option" style="background-color: #008000;" data-color="绿色"></div>
+                                    <div class="color-option" style="background-color: #0000FF;" data-color="蓝色"></div>
+                                    <div class="color-option" style="background-color: #800080;" data-color="紫色"></div>
+                                    <div class="color-option" style="background-color: #FFC0CB;" data-color="粉色"></div>
+                                    <div class="color-option" style="background-color: #D3D3C3;" data-color="米色"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>适用季节</label>
+                                <div class="tag-selector" id="season-selector">
+                                    <div class="tag-option" data-season="春季">春季</div>
+                                    <div class="tag-option" data-season="夏季">夏季</div>
+                                    <div class="tag-option" data-season="秋季">秋季</div>
+                                    <div class="tag-option" data-season="冬季">冬季</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>风格标签</label>
+                                <div class="tag-selector" id="style-selector">
+                                    <div class="tag-option" data-style="基础">基础</div>
+                                    <div class="tag-option" data-style="时尚">时尚</div>
+                                    <div class="tag-option" data-style="宽松">宽松</div>
+                                    <div class="tag-option" data-style="修身">修身</div>
+                                    <div class="tag-option" data-style="复古">复古</div>
+                                    <div class="tag-option" data-style="休闲">休闲</div>
+                                    <div class="tag-option" data-style="优雅">优雅</div>
+                                    <div class="tag-option" data-style="运动">运动</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>自定义标签</label>
+                                <div class="custom-tag-input-group" style="display: flex; margin-bottom: 10px;">
+                                    <input type="text" id="custom-tag-input" placeholder="添加自定义标签" style="flex: 1; margin-right: 5px;">
+                                    <button id="add-custom-tag" style="background-color: #3a7bd5; color: white; border: none; border-radius: 5px; padding: 0 15px;">添加</button>
+                                </div>
+                                <div id="custom-tags-container" style="display: flex; flex-wrap: wrap; gap: 5px;"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>场合</label>
+                                <div class="tag-selector" id="occasion-selector">
+                                    <div class="tag-option" data-occasion="日常">日常</div>
+                                    <div class="tag-option" data-occasion="职场">职场</div>
+                                    <div class="tag-option" data-occasion="约会">约会</div>
+                                    <div class="tag-option" data-occasion="派对">派对</div>
+                                    <div class="tag-option" data-occasion="运动">运动</div>
+                                    <div class="tag-option" data-occasion="旅行">旅行</div>
+                                </div>
+                            </div>
+                            
+                            <button class="submit-button add-animation" id="add-cloth-submit">添加到衣橱</button>
+                        </div>
+                        
+                        <!-- 智能扫描面板 -->
+                        <div class="add-cloth-panel" id="scan-panel">
+                            <div class="scan-placeholder">
+                                <div class="plus-feature">
+                                    <div class="plus-icon">✨</div>
+                                    <h3>LITATA PLUS专属功能</h3>
+                                    <p>智能扫描可自动识别衣物，一键录入衣橱<br>支持批量扫描，极速便捷</p>
+                                    <button class="upgrade-button">升级PLUS会员</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1391,6 +1553,20 @@
                 });
             });
             
+            // 场景筛选点击
+            const filterChips = document.querySelectorAll('.filter-chip');
+            filterChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    // 移除所有active类
+                    filterChips.forEach(c => c.classList.remove('active'));
+                    // 给当前点击的添加active类
+                    this.classList.add('active');
+                    
+                    console.log('场景筛选: ' + this.textContent);
+                    // 这里可以添加根据场景筛选衣物的逻辑
+                });
+            });
+            
             // 查看全部/收起 功能
             const viewAllButtons = document.querySelectorAll('.view-all');
             viewAllButtons.forEach(button => {
@@ -1416,6 +1592,7 @@
             const organizerCountDisplay = document.querySelector('.organizer-count-display');
             const confirmDialog = document.getElementById('confirm-dialog');
             const confirmMessage = document.getElementById('confirm-message');
+            const organizerIndicator = document.querySelector('.organizer-indicator');
             
             // 存储整理栏中的衣物
             let organizerItems = [];
@@ -1649,16 +1826,474 @@
                     clearTimeout(pressTimer);
                 });
             });
+
+            // 添加衣物功能
+            const addBtn = document.querySelector('.add-btn-corner');
+            const addClothModal = document.getElementById('add-cloth-modal');
+            const closeAddModal = document.getElementById('close-add-modal');
             
-            // 从本地存储加载
-            document.addEventListener('DOMContentLoaded', function() {
-                const savedItems = localStorage.getItem('organizerItems');
-                if (savedItems) {
-                    organizerItems = JSON.parse(savedItems);
-                    updateOrganizerView();
+            // 添加按钮点击事件
+            if (addBtn) {
+                addBtn.addEventListener('click', function() {
+                    console.log('添加按钮被点击');
+                    if (addClothModal) {
+                        addClothModal.classList.add('active');
+                        console.log('模态框被激活');
+                    } else {
+                        console.error('找不到添加衣物模态框元素');
+                    }
+                });
+            } else {
+                console.error('找不到添加按钮元素');
+            }
+            
+            // 关闭添加衣物模态框
+            if (closeAddModal) {
+                closeAddModal.addEventListener('click', function() {
+                    addClothModal.classList.remove('active');
+                    console.log('模态框被关闭');
+                });
+            }
+            
+            // 初始化添加衣物表单
+            initAddClothForm();
+            
+            // 从本地存储加载整理栏衣物
+            const savedItems = localStorage.getItem('organizerItems');
+            if (savedItems) {
+                organizerItems = JSON.parse(savedItems);
+                updateOrganizerView();
+            }
+            
+            // 批量删除功能
+            document.getElementById('batch-delete').addEventListener('click', function() {
+                if (organizerItems.length > 0) {
+                    confirmMessage.textContent = '确定要删除选中的衣物吗？此操作不可恢复。';
+                    confirmDialog.classList.add('active');
+                    
+                    document.getElementById('confirm-action').onclick = function() {
+                        alert('批量删除功能将在下一版本开放！');
+                        confirmDialog.classList.remove('active');
+                    };
+                } else {
+                    alert('请先选择至少1件衣物');
                 }
             });
+            
+            // 加载用户添加的衣物数据
+            loadAndDisplayClothItems();
         });
+
+        // 添加衣物表单初始化函数
+        function initAddClothForm() {
+            console.log('初始化添加衣物表单');
+            
+            // 获取模态框相关元素
+            const addClothModal = document.getElementById('add-cloth-modal');
+            const closeAddModal = document.getElementById('close-add-modal');
+            const addClothTabs = document.querySelectorAll('.add-cloth-tab');
+            const addClothPanels = document.querySelectorAll('.add-cloth-panel');
+            const uploadPreview = document.getElementById('upload-preview');
+            const clothImageInput = document.getElementById('cloth-image');
+            const previewImage = document.getElementById('preview-image');
+            const colorOptions = document.querySelectorAll('.color-option');
+            const seasonOptions = document.querySelectorAll('#season-selector .tag-option');
+            const styleOptions = document.querySelectorAll('#style-selector .tag-option');
+            const occasionOptions = document.querySelectorAll('#occasion-selector .tag-option');
+            const addClothSubmit = document.getElementById('add-cloth-submit');
+            const customTagInput = document.getElementById('custom-tag-input');
+            const addCustomTagBtn = document.getElementById('add-custom-tag');
+            const customTagsContainer = document.getElementById('custom-tags-container');
+            
+            if (!addClothModal) {
+                console.error('初始化失败：找不到添加衣物模态框');
+                return;
+            }
+            
+            // 自定义标签数组
+            let customTags = [];
+            
+            // 标签页切换
+            if (addClothTabs && addClothTabs.length > 0) {
+                addClothTabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        const tabTarget = this.dataset.tab;
+                        
+                        // 移除所有active类
+                        addClothTabs.forEach(t => t.classList.remove('active'));
+                        addClothPanels.forEach(p => p.classList.remove('active'));
+                        
+                        // 添加active类到当前选中的
+                        this.classList.add('active');
+                        const targetPanel = document.getElementById(tabTarget + '-panel');
+                        if (targetPanel) {
+                            targetPanel.classList.add('active');
+                        }
+                    });
+                });
+            }
+            
+            // 图片上传预览
+            if (uploadPreview && clothImageInput && previewImage) {
+                uploadPreview.addEventListener('click', function() {
+                    clothImageInput.click();
+                });
+                
+                clothImageInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            previewImage.src = e.target.result;
+                            previewImage.style.display = 'block';
+                            const placeholder = document.querySelector('.upload-placeholder');
+                            if (placeholder) {
+                                placeholder.style.display = 'none';
+                            }
+                        };
+                        
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+            }
+            
+            // 颜色选择
+            if (colorOptions && colorOptions.length > 0) {
+                colorOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        // 移除其他选项的selected类
+                        colorOptions.forEach(o => o.classList.remove('selected'));
+                        // 添加selected类到当前选项
+                        this.classList.add('selected');
+                    });
+                });
+            }
+            
+            // 标签选择（可多选）
+            function setupTagOptions(options) {
+                if (options && options.length > 0) {
+                    options.forEach(option => {
+                        option.addEventListener('click', function() {
+                            this.classList.toggle('selected');
+                        });
+                    });
+                }
+            }
+            
+            setupTagOptions(seasonOptions);
+            setupTagOptions(styleOptions);
+            setupTagOptions(occasionOptions);
+            
+            // 自定义标签
+            if (addCustomTagBtn && customTagInput && customTagsContainer) {
+                // 添加标签函数
+                function addCustomTag() {
+                    const tagText = customTagInput.value.trim();
+                    if (tagText && !customTags.includes(tagText)) {
+                        customTags.push(tagText);
+                        updateCustomTagsDisplay();
+                        customTagInput.value = '';
+                    }
+                }
+                
+                // 更新标签显示
+                function updateCustomTagsDisplay() {
+                    customTagsContainer.innerHTML = '';
+                    customTags.forEach((tag, index) => {
+                        const tagElement = document.createElement('div');
+                        tagElement.className = 'custom-tag';
+                        
+                        tagElement.innerHTML = `
+                            ${tag}
+                            <span class="remove-tag" data-index="${index}">×</span>
+                        `;
+                        
+                        customTagsContainer.appendChild(tagElement);
+                    });
+                    
+                    // 绑定删除标签事件
+                    document.querySelectorAll('.remove-tag').forEach(btn => {
+                        btn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const index = parseInt(this.dataset.index);
+                            customTags.splice(index, 1);
+                            updateCustomTagsDisplay();
+                        });
+                    });
+                }
+                
+                // 点击添加按钮
+                addCustomTagBtn.addEventListener('click', addCustomTag);
+                
+                // 按Enter添加
+                customTagInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addCustomTag();
+                    }
+                });
+            }
+            
+            // 表单提交
+            if (addClothSubmit) {
+                addClothSubmit.addEventListener('click', function() {
+                    // 获取表单数据
+                    const clothName = document.getElementById('cloth-name').value;
+                    const clothCategory = document.getElementById('cloth-category').value;
+                    const selectedColor = document.querySelector('.color-option.selected');
+                    const selectedSeasons = Array.from(document.querySelectorAll('#season-selector .tag-option.selected')).map(el => el.textContent);
+                    const selectedStyles = Array.from(document.querySelectorAll('#style-selector .tag-option.selected')).map(el => el.textContent);
+                    const selectedOccasions = Array.from(document.querySelectorAll('#occasion-selector .tag-option.selected')).map(el => el.textContent);
+                    
+                    // 验证必填字段
+                    if (!clothName) {
+                        alert('请输入衣物名称');
+                        return;
+                    }
+                    
+                    if (!clothCategory) {
+                        alert('请选择衣物分类');
+                        return;
+                    }
+                    
+                    if (!selectedColor) {
+                        alert('请选择衣物颜色');
+                        return;
+                    }
+                    
+                    if (!previewImage.src || previewImage.style.display === 'none') {
+                        alert('请上传衣物图片');
+                        return;
+                    }
+                    
+                    // 创建衣物对象
+                    const newCloth = {
+                        id: Date.now(), // 使用时间戳作为唯一ID
+                        name: clothName,
+                        category: clothCategory,
+                        color: selectedColor ? selectedColor.dataset.color : null,
+                        seasons: selectedSeasons,
+                        styles: selectedStyles,
+                        occasions: selectedOccasions,
+                        customTags: customTags,
+                        image: previewImage.src
+                    };
+                    
+                    // 存储到本地存储
+                    saveNewCloth(newCloth);
+                    
+                    // 显示成功提示
+                    showToast('添加成功！衣物已加入您的衣橱');
+                    
+                    // 重置表单
+                    resetForm();
+                    
+                    // 关闭模态框
+                    addClothModal.classList.remove('active');
+                });
+            }
+            
+            // 保存新衣物到本地存储
+            function saveNewCloth(newCloth) {
+                let clothItems = [];
+                try {
+                    const storedItems = localStorage.getItem('clothItems');
+                    if (storedItems) {
+                        clothItems = JSON.parse(storedItems);
+                    }
+                } catch (error) {
+                    console.error('解析存储的衣物数据出错:', error);
+                }
+                
+                // 添加新衣物
+                clothItems.push(newCloth);
+                
+                // 保存回本地存储
+                localStorage.setItem('clothItems', JSON.stringify(clothItems));
+                
+                console.log('新衣物已保存到本地存储', newCloth);
+            }
+            
+            // 显示提示信息
+            function showToast(message) {
+                // 创建提示元素
+                const toast = document.createElement('div');
+                toast.className = 'toast-message';
+                toast.textContent = message;
+                toast.style.position = 'fixed';
+                toast.style.bottom = '80px';
+                toast.style.left = '50%';
+                toast.style.transform = 'translateX(-50%)';
+                toast.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                toast.style.color = 'white';
+                toast.style.padding = '10px 15px';
+                toast.style.borderRadius = '20px';
+                toast.style.zIndex = '9999';
+                
+                // 添加到文档
+                document.body.appendChild(toast);
+                
+                // 2秒后移除
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 500);
+                }, 2000);
+            }
+            
+            // 重置表单
+            function resetForm() {
+                if (document.getElementById('cloth-name')) {
+                    document.getElementById('cloth-name').value = '';
+                }
+                
+                if (document.getElementById('cloth-category')) {
+                    document.getElementById('cloth-category').value = '';
+                }
+                
+                if (document.querySelectorAll('.color-option').length > 0) {
+                    document.querySelectorAll('.color-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                }
+                
+                if (document.querySelectorAll('.tag-option').length > 0) {
+                    document.querySelectorAll('.tag-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                }
+                
+                if (document.getElementById('preview-image')) {
+                    document.getElementById('preview-image').style.display = 'none';
+                    document.getElementById('preview-image').src = '';
+                }
+                
+                if (document.querySelector('.upload-placeholder')) {
+                    document.querySelector('.upload-placeholder').style.display = 'block';
+                }
+                
+                // 清空自定义标签
+                customTags = [];
+                if (customTagsContainer) {
+                    customTagsContainer.innerHTML = '';
+                }
+            }
+        }
+
+        // 加载并显示衣物数据
+        function loadAndDisplayClothItems() {
+            console.log('加载衣物数据');
+            try {
+                // 从localStorage获取数据
+                const clothItemsString = localStorage.getItem('clothItems');
+                if (clothItemsString) {
+                    console.log('从本地存储加载到衣物数据');
+                    const clothItems = JSON.parse(clothItemsString);
+                    if (clothItems && clothItems.length > 0) {
+                        // 根据分类整理衣物数据
+                        const categorizedItems = {};
+                        clothItems.forEach(item => {
+                            if (!categorizedItems[item.category]) {
+                                categorizedItems[item.category] = [];
+                            }
+                            categorizedItems[item.category].push(item);
+                        });
+                        
+                        // 为每个已存在的分类添加衣物
+                        for (const [category, items] of Object.entries(categorizedItems)) {
+                            // 这里查找最匹配的subcategory-section元素
+                            const categoryParts = category.split('-');
+                            const mainCategory = categoryParts[0]; // 例如 "上装"
+                            const subcategory = categoryParts[1] || '基础款'; // 例如 "基础款"
+                            
+                            // 查找对应的section
+                            const sections = document.querySelectorAll('.subcategory-section');
+                            let targetSection = null;
+                            sections.forEach(section => {
+                                if (section.dataset.category === mainCategory) {
+                                    const titleElement = section.querySelector('.subcategory-title span');
+                                    if (titleElement && titleElement.textContent === subcategory) {
+                                        targetSection = section;
+                                    }
+                                }
+                            });
+                            
+                            if (targetSection) {
+                                // 找到分类的网格
+                                const grid = targetSection.querySelector('.clothes-grid');
+                                if (grid) {
+                                    // 添加衣物到网格
+                                    items.forEach(item => {
+                                        const clothElement = document.createElement('div');
+                                        clothElement.className = 'cloth-item';
+                                        clothElement.setAttribute('draggable', 'true');
+                                        clothElement.innerHTML = `
+                                            <img src="${item.image}" alt="${item.name}">
+                                            <div class="cloth-name">${item.name}</div>
+                                        `;
+                                        grid.appendChild(clothElement);
+                                        
+                                        // 添加拖拽功能
+                                        clothElement.addEventListener('dragstart', function(e) {
+                                            e.dataTransfer.setData('text/plain', item.name);
+                                            this.style.opacity = '0.5';
+                                            this.setAttribute('dragging', 'true');
+                                        });
+                                        
+                                        clothElement.addEventListener('dragend', function() {
+                                            this.style.opacity = '1';
+                                            setTimeout(() => {
+                                                this.removeAttribute('dragging');
+                                            }, 100);
+                                        });
+                                        
+                                        // 添加长按多选功能
+                                        let pressTimer;
+                                        clothElement.addEventListener('mousedown', function() {
+                                            pressTimer = window.setTimeout(() => {
+                                                clothElement.classList.toggle('selected');
+                                                if (clothElement.classList.contains('selected')) {
+                                                    clothElement.style.outline = '2px solid #3a7bd5';
+                                                    
+                                                    // 添加到整理栏
+                                                    const organizerIndicator = document.querySelector('.organizer-indicator');
+                                                    const imgSrc = clothElement.querySelector('img').src;
+                                                    const name = clothElement.querySelector('.cloth-name').textContent;
+                                                    
+                                                    // 找到添加到整理栏的函数
+                                                    const addToOrganizerFn = window.addToOrganizer;
+                                                    if (typeof addToOrganizerFn === 'function') {
+                                                        addToOrganizerFn({ imgSrc, name });
+                                                    }
+                                                } else {
+                                                    clothElement.style.outline = 'none';
+                                                }
+                                            }, 500);
+                                        });
+                                        
+                                        clothElement.addEventListener('mouseup', function() {
+                                            clearTimeout(pressTimer);
+                                        });
+                                        
+                                        clothElement.addEventListener('mouseleave', function() {
+                                            clearTimeout(pressTimer);
+                                        });
+                                    });
+                                }
+                            } else {
+                                console.log(`未找到匹配的分类: ${category}`);
+                            }
+                        }
+                    }
+                } else {
+                    console.log('本地存储中没有衣物数据');
+                }
+            } catch (error) {
+                console.error('加载衣物数据出错:', error);
+            }
+        }
     </script>
 </body>
 </html> 
