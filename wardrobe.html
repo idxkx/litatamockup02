@@ -287,13 +287,16 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
             margin-bottom: 15px;
-            max-height: 150px;
             overflow: hidden;
-            transition: max-height 0.3s ease;
         }
-
-        .clothes-grid.expanded {
-            max-height: 1000px; /* 足够大的高度以显示所有内容 */
+        
+        /* 隐藏超过4个的元素 */
+        .clothes-grid .cloth-item:nth-child(n+5) {
+            display: none;
+        }
+        
+        .clothes-grid.expanded .cloth-item:nth-child(n+5) {
+            display: block;
         }
 
         .cloth-item {
@@ -1138,6 +1141,21 @@
         .add-animation {
             animation: buttonPulse 1.5s ease infinite;
         }
+
+        /* 查看全部按钮样式 */
+        .view-all {
+            text-align: right;
+            color: #3a7bd5;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            display: none; /* 默认隐藏 */
+        }
+        
+        .view-all.visible {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -1567,22 +1585,43 @@
                 });
             });
             
-            // 查看全部/收起 功能
-            const viewAllButtons = document.querySelectorAll('.view-all');
-            viewAllButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const targetId = this.dataset.target;
+            // 添加处理查看全部功能的代码
+            function setupViewAllButtons() {
+                // 获取所有查看全部按钮
+                const viewAllButtons = document.querySelectorAll('.view-all');
+                
+                viewAllButtons.forEach(button => {
+                    const targetId = button.dataset.target;
                     const grid = document.getElementById(targetId);
                     
-                    if (grid.classList.contains('expanded')) {
-                        grid.classList.remove('expanded');
-                        this.textContent = '查看全部';
+                    // 检查衣物数量
+                    const clothItems = grid.querySelectorAll('.cloth-item');
+                    
+                    // 如果衣物数量大于4，显示查看全部按钮
+                    if (clothItems.length > 4) {
+                        button.style.display = 'inline-block';
+                        
+                        // 添加查看全部的点击事件
+                        button.addEventListener('click', function() {
+                            if (grid.classList.contains('expanded')) {
+                                // 收起
+                                grid.classList.remove('expanded');
+                                this.textContent = '查看全部';
+                            } else {
+                                // 展开
+                                grid.classList.add('expanded');
+                                this.textContent = '收起';
+                            }
+                        });
                     } else {
-                        grid.classList.add('expanded');
-                        this.textContent = '收起';
+                        // 如果衣物数量不超过4个，隐藏查看全部按钮
+                        button.style.display = 'none';
                     }
                 });
-            });
+            }
+            
+            // 调用设置函数
+            setupViewAllButtons();
             
             // 整理栏相关功能
             const organizerPanel = document.querySelector('.organizer-panel');
@@ -1882,6 +1921,38 @@
             
             // 加载用户添加的衣物数据
             loadAndDisplayClothItems();
+
+            // 底部导航栏点击
+            const tabItemsBottom = document.querySelectorAll('.tab-item-bottom');
+            tabItemsBottom.forEach(item => {
+                item.addEventListener('click', function() {
+                    // 移除所有active类
+                    tabItemsBottom.forEach(t => t.classList.remove('active'));
+                    // 添加active类到当前点击的项
+                    this.classList.add('active');
+                    
+                    // 获取当前点击的导航项文本
+                    const tabText = this.querySelector('span').textContent;
+                    console.log('底部导航点击:', tabText);
+                    
+                    // 这里可以根据点击的导航项执行相应的操作
+                    // 例如切换页面或跳转到其他页面
+                    switch(tabText) {
+                        case '首页':
+                            window.location.href = 'home.html';
+                            break;
+                        case '穿搭':
+                            window.location.href = 'outfit.html';
+                            break;
+                        case '衣橱':
+                            // 当前页面，无需处理
+                            break;
+                        case '我的':
+                            window.location.href = 'profile.html';
+                            break;
+                    }
+                });
+            });
         });
 
         // 添加衣物表单初始化函数
