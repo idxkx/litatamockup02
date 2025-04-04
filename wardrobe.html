@@ -1156,6 +1156,206 @@
         .view-all.visible {
             display: block;
         }
+
+        /* 穿搭频率标签样式 */
+        .outfit-frequency {
+            position: absolute;
+            bottom: 30px;
+            right: 5px;
+            background: rgba(58, 123, 213, 0.8);
+            color: white;
+            font-size: 10px;
+            padding: 2px 5px;
+            border-radius: 10px;
+        }
+        
+        /* 购物平台导入样式 */
+        .platform-selection {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            background-color: #f5f8ff;
+            padding: 10px;
+        }
+
+        .platform-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 23%;
+            text-align: center;
+        }
+
+        .platform-option:hover {
+            background-color: #e8f0ff;
+        }
+
+        .platform-option.active {
+            background-color: #3a7bd5;
+            color: white;
+        }
+
+        .platform-logo {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 5px;
+        }
+
+        .platform-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        /* 链接输入区域样式 */
+        .link-input-area {
+            margin-bottom: 20px;
+        }
+
+        #product-link, #batch-links {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            resize: none;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .input-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .primary-btn {
+            background-color: #3a7bd5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .secondary-btn {
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .link-tips {
+            display: flex;
+            align-items: center;
+            background-color: #f5f8ff;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .tip-icon {
+            margin-right: 10px;
+        }
+
+        /* 商品预览样式 */
+        .product-preview {
+            margin-top: 20px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .platform-badge {
+            background-color: #3a7bd5;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .product-info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 15px;
+        }
+
+        .product-image-container {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
+
+        #product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .status-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .status-option {
+            background-color: #f2f2f2;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .status-option.active {
+            background-color: #3a7bd5;
+            color: white;
+        }
+
+        /* 批量导入区域样式 */
+        .batch-import-section {
+            margin-top: 20px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            cursor: pointer;
+        }
+
+        .section-toggle {
+            color: #3a7bd5;
+        }
+
+        .section-content {
+            padding: 0 15px 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .section-desc {
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        #batch-import {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -1403,6 +1603,7 @@
                     <div class="add-cloth-tabs">
                         <div class="add-cloth-tab active" data-tab="manual">手动录入</div>
                         <div class="add-cloth-tab" data-tab="scan">智能扫描<span class="plus-tag">PLUS</span></div>
+                        <div class="add-cloth-tab" data-tab="import">购物平台导入</div>
                     </div>
                     
                     <div class="add-cloth-content">
@@ -1513,6 +1714,121 @@
                                     <h3>LITATA PLUS专属功能</h3>
                                     <p>智能扫描可自动识别衣物，一键录入衣橱<br>支持批量扫描，极速便捷</p>
                                     <button class="upgrade-button">升级PLUS会员</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 购物平台导入面板 -->
+                        <div class="add-cloth-panel" id="import-panel">
+                            <div class="platform-selection">
+                                <div class="platform-option active" data-platform="all">
+                                    <span class="platform-icon">🔗</span>
+                                    <span>自动识别</span>
+                                </div>
+                                <div class="platform-option" data-platform="jd">
+                                    <span class="platform-icon">🛒</span>
+                                    <span>京东</span>
+                                </div>
+                                <div class="platform-option" data-platform="taobao">
+                                    <span class="platform-icon">📦</span>
+                                    <span>淘宝/天猫</span>
+                                </div>
+                                <div class="platform-option" data-platform="pdd">
+                                    <span class="platform-icon">🔖</span>
+                                    <span>拼多多</span>
+                                </div>
+                            </div>
+                            
+                            <div class="link-input-area">
+                                <textarea id="product-link" placeholder="粘贴商品链接，如：https://item.jd.com/xxx 或 https://item.taobao.com/xxx" rows="3"></textarea>
+                                <div class="input-actions">
+                                    <button id="paste-from-clipboard" class="secondary-btn">从剪贴板粘贴</button>
+                                    <button id="recognize-link" class="primary-btn">识别链接</button>
+                                </div>
+                                <div class="link-tips">
+                                    <div class="tip-icon">💡</div>
+                                    <div class="tip-text">支持京东、淘宝/天猫、拼多多的商品详情页链接，系统会自动识别平台</div>
+                                </div>
+                            </div>
+                            
+                            <div class="product-preview" style="display: none;">
+                                <div class="preview-header">
+                                    <h3>商品信息预览</h3>
+                                    <span class="platform-badge">京东</span>
+                                </div>
+                                
+                                <div class="product-info-grid">
+                                    <div class="product-image-container">
+                                        <img id="product-image" src="" alt="商品图片">
+                                    </div>
+                                    
+                                    <div class="product-details">
+                                        <div class="form-group">
+                                            <label for="product-name">商品名称</label>
+                                            <input type="text" id="product-name" value="">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="product-category">分类</label>
+                                            <select id="product-category">
+                                                <option value="上装-基础款">上装-基础款</option>
+                                                <option value="上装-外套">上装-外套</option>
+                                                <option value="下装-裤装">下装-裤装</option>
+                                                <option value="下装-裙装">下装-裙装</option>
+                                                <option value="连体服饰">连体服饰</option>
+                                                <option value="鞋靴">鞋靴</option>
+                                                <option value="配饰">配饰</option>
+                                                <option value="功能服饰">功能服饰</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label>颜色</label>
+                                            <div class="color-selector" id="import-color-selector">
+                                                <div class="color-option" style="background-color: #FFFFFF;" data-color="白色"></div>
+                                                <div class="color-option" style="background-color: #000000;" data-color="黑色"></div>
+                                                <div class="color-option" style="background-color: #808080;" data-color="灰色"></div>
+                                                <div class="color-option" style="background-color: #A52A2A;" data-color="棕色"></div>
+                                                <div class="color-option" style="background-color: #FF0000;" data-color="红色"></div>
+                                                <div class="color-option" style="background-color: #0000FF;" data-color="蓝色"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label>标签</label>
+                                            <div class="tag-selector">
+                                                <div class="tag-option selected" data-tag="休闲">休闲</div>
+                                                <div class="tag-option selected" data-tag="日常">日常</div>
+                                                <div class="tag-option" data-tag="职场">职场</div>
+                                                <div class="tag-option" data-tag="派对">派对</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label>商品状态</label>
+                                            <div class="status-selector">
+                                                <div class="status-option active" data-status="owned">已购买</div>
+                                                <div class="status-option" data-status="wishlist">心愿单</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="product-actions">
+                                    <button id="add-to-wardrobe" class="submit-button add-animation">添加到衣橱</button>
+                                </div>
+                            </div>
+                            
+                            <div class="batch-import-section">
+                                <div class="section-header">
+                                    <h3>批量导入</h3>
+                                    <span class="section-toggle">展开 ▼</span>
+                                </div>
+                                
+                                <div class="section-content" style="display: none;">
+                                    <p class="section-desc">一次性添加多个商品链接，每行一个链接</p>
+                                    <textarea id="batch-links" placeholder="每行粘贴一个商品链接，如：&#10;https://item.jd.com/xxx&#10;https://item.taobao.com/xxx" rows="5"></textarea>
+                                    <button id="batch-import" class="primary-btn">开始批量导入</button>
                                 </div>
                             </div>
                         </div>
@@ -2249,6 +2565,243 @@
                 customTags = [];
                 if (customTagsContainer) {
                     customTagsContainer.innerHTML = '';
+                }
+            }
+
+            // 购物平台导入功能
+            initImportFeature();
+            
+            function initImportFeature() {
+                // 平台选择功能
+                const platformOptions = document.querySelectorAll('.platform-option');
+                if (platformOptions.length > 0) {
+                    platformOptions.forEach(option => {
+                        option.addEventListener('click', function() {
+                            platformOptions.forEach(opt => opt.classList.remove('active'));
+                            this.classList.add('active');
+                        });
+                    });
+                }
+                
+                // 剪贴板粘贴功能
+                const pasteButton = document.getElementById('paste-from-clipboard');
+                if (pasteButton) {
+                    pasteButton.addEventListener('click', async function() {
+                        try {
+                            const text = await navigator.clipboard.readText();
+                            document.getElementById('product-link').value = text;
+                        } catch (err) {
+                            alert('无法访问剪贴板，请手动粘贴链接');
+                            console.error('剪贴板访问错误:', err);
+                        }
+                    });
+                }
+                
+                // 链接识别功能
+                const recognizeButton = document.getElementById('recognize-link');
+                if (recognizeButton) {
+                    recognizeButton.addEventListener('click', function() {
+                        const linkText = document.getElementById('product-link').value.trim();
+                        if (!linkText) {
+                            alert('请输入商品链接');
+                            return;
+                        }
+                        
+                        // 显示加载状态
+                        this.textContent = '识别中...';
+                        this.disabled = true;
+                        
+                        // 模拟API调用延迟
+                        setTimeout(() => {
+                            // 识别成功后显示预览区域
+                            document.querySelector('.product-preview').style.display = 'block';
+                            
+                            // 根据链接判断平台
+                            let platform = '';
+                            if (linkText.includes('jd.com')) {
+                                platform = '京东';
+                            } else if (linkText.includes('taobao.com') || linkText.includes('tmall.com')) {
+                                platform = '淘宝/天猫';
+                            } else if (linkText.includes('pinduoduo') || linkText.includes('pdd')) {
+                                platform = '拼多多';
+                            } else {
+                                platform = '未识别';
+                            }
+                            
+                            // 更新预览信息
+                            document.querySelector('.platform-badge').textContent = platform;
+                            
+                            // 模拟商品数据
+                            document.getElementById('product-image').src = 'https://img14.360buyimg.com/n0/jfs/t1/117805/8/28892/157110/6319da3fE5c5c816d/3276a99b01c01dba.jpg';
+                            document.getElementById('product-name').value = '经典商务修身衬衫';
+                            
+                            // 模拟选中分类和颜色
+                            document.getElementById('product-category').value = '上装-基础款';
+                            
+                            // 重置按钮状态
+                            this.textContent = '识别链接';
+                            this.disabled = false;
+                        }, 1500);
+                    });
+                }
+                
+                // 商品状态切换
+                const statusOptions = document.querySelectorAll('.status-option');
+                if (statusOptions.length > 0) {
+                    statusOptions.forEach(option => {
+                        option.addEventListener('click', function() {
+                            statusOptions.forEach(opt => opt.classList.remove('active'));
+                            this.classList.add('active');
+                        });
+                    });
+                }
+                
+                // 添加到衣橱按钮
+                const addToWardrobeBtn = document.getElementById('add-to-wardrobe');
+                if (addToWardrobeBtn) {
+                    addToWardrobeBtn.addEventListener('click', function() {
+                        const productName = document.getElementById('product-name').value.trim();
+                        const productCategory = document.getElementById('product-category').value;
+                        
+                        if (!productName) {
+                            alert('请输入商品名称');
+                            return;
+                        }
+                        
+                        if (!productCategory) {
+                            alert('请选择商品分类');
+                            return;
+                        }
+                        
+                        // 模拟添加成功
+                        showToast('商品已成功添加到您的衣橱');
+                        
+                        // 创建衣物对象
+                        const newCloth = {
+                            id: Date.now(),
+                            name: productName,
+                            category: productCategory,
+                            color: getSelectedColor('#import-color-selector'),
+                            image: document.getElementById('product-image').src,
+                            status: document.querySelector('.status-option.active').dataset.status
+                        };
+                        
+                        // 保存到本地存储
+                        saveNewCloth(newCloth);
+                        
+                        // 重置表单
+                        document.getElementById('product-link').value = '';
+                        document.querySelector('.product-preview').style.display = 'none';
+                        
+                        // 如果是"已购买"状态，关闭模态框
+                        if (newCloth.status === 'owned') {
+                            addClothModal.classList.remove('active');
+                        }
+                    });
+                }
+                
+                // 辅助函数：获取选中的颜色
+                function getSelectedColor(selectorId) {
+                    const selectedColor = document.querySelector(`${selectorId} .color-option.selected`);
+                    return selectedColor ? selectedColor.dataset.color : null;
+                }
+                
+                // 批量导入部分的展开/收起
+                const sectionToggle = document.querySelector('.section-toggle');
+                if (sectionToggle) {
+                    sectionToggle.addEventListener('click', function() {
+                        const content = document.querySelector('.section-content');
+                        if (content.style.display === 'none') {
+                            content.style.display = 'block';
+                            this.textContent = '收起 ▲';
+                        } else {
+                            content.style.display = 'none';
+                            this.textContent = '展开 ▼';
+                        }
+                    });
+                }
+                
+                // 批量导入功能
+                const batchImportBtn = document.getElementById('batch-import');
+                if (batchImportBtn) {
+                    batchImportBtn.addEventListener('click', function() {
+                        const batchLinks = document.getElementById('batch-links').value.trim();
+                        if (!batchLinks) {
+                            alert('请输入商品链接');
+                            return;
+                        }
+                        
+                        const links = batchLinks.split('\n').filter(link => link.trim());
+                        if (links.length === 0) {
+                            alert('未检测到有效链接');
+                            return;
+                        }
+                        
+                        // 显示批量导入进度
+                        this.textContent = `导入中 (0/${links.length})`;
+                        this.disabled = true;
+                        
+                        // 模拟批量导入过程
+                        let processed = 0;
+                        
+                        function processNextLink(index) {
+                            if (index >= links.length) {
+                                // 所有链接处理完毕
+                                showToast(`成功导入 ${processed} 件衣物到您的衣橱`);
+                                batchImportBtn.textContent = "开始批量导入";
+                                batchImportBtn.disabled = false;
+                                document.getElementById('batch-links').value = '';
+                                return;
+                            }
+                            
+                            // 更新进度
+                            batchImportBtn.textContent = `导入中 (${index+1}/${links.length})`;
+                            
+                            // 模拟处理当前链接
+                            setTimeout(() => {
+                                // 假设90%的链接导入成功
+                                if (Math.random() < 0.9) {
+                                    processed++;
+                                    
+                                    // 创建一个衣物对象并保存
+                                    const names = ['商务衬衫', '休闲T恤', '牛仔裤', '运动卫衣', '针织毛衣'];
+                                    const categories = ['上装-基础款', '上装-外套', '下装-裤装', '鞋靴', '配饰'];
+                                    const colors = ['白色', '黑色', '蓝色', '灰色', '红色'];
+                                    
+                                    const randomItem = {
+                                        id: Date.now() + index,
+                                        name: names[Math.floor(Math.random() * names.length)],
+                                        category: categories[Math.floor(Math.random() * categories.length)],
+                                        color: colors[Math.floor(Math.random() * colors.length)],
+                                        image: 'https://img14.360buyimg.com/n0/jfs/t1/117805/8/28892/157110/6319da3fE5c5c816d/3276a99b01c01dba.jpg',
+                                        status: 'owned'
+                                    };
+                                    
+                                    // 保存到本地存储
+                                    saveNewCloth(randomItem);
+                                }
+                                
+                                // 处理下一个链接
+                                processNextLink(index + 1);
+                            }, 300);
+                        }
+                        
+                        // 开始处理第一个链接
+                        processNextLink(0);
+                    });
+                }
+                
+                // 为导入面板的颜色选择器添加事件
+                const importColorOptions = document.querySelectorAll('#import-color-selector .color-option');
+                if (importColorOptions.length > 0) {
+                    importColorOptions.forEach(option => {
+                        option.addEventListener('click', function() {
+                            // 移除其他选项的selected类
+                            importColorOptions.forEach(o => o.classList.remove('selected'));
+                            // 添加selected类到当前选项
+                            this.classList.add('selected');
+                        });
+                    });
                 }
             }
         }
