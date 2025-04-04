@@ -78,30 +78,6 @@
             }
         }
 
-        /* 额外的辅助工具 - 在页面底部添加返回顶部按钮 */
-        .back-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 9999;
-        }
-
-        .back-to-top.visible {
-            opacity: 1;
-        }
-
         /* 动态岛 */
         .dynamic-island {
             position: absolute;
@@ -173,37 +149,7 @@
             font-weight: 700;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .action-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: #f2f2f2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-        }
-
-        .scan-btn {
-            background-color: #3a7bd5;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .scan-btn svg {
-            width: 18px;
-            height: 18px;
-            fill: #fff;
-        }
-
-        /* 分类选项卡 */
+        /* 一级分类选项卡 */
         .category-tabs {
             display: flex;
             overflow-x: auto;
@@ -222,6 +168,7 @@
             font-size: 14px;
             color: #666;
             position: relative;
+            cursor: pointer;
         }
 
         .tab-item.active {
@@ -278,6 +225,7 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            cursor: pointer;
         }
 
         .filter-chip.active {
@@ -313,6 +261,10 @@
         }
 
         /* 子分类标题 */
+        .subcategory-section {
+            margin-bottom: 25px;
+        }
+
         .subcategory-title {
             font-size: 16px;
             font-weight: 600;
@@ -327,1016 +279,168 @@
             color: #3a7bd5;
             font-weight: normal;
             cursor: pointer;
-            user-select: none;
-        }
-
-        /* 手风琴效果样式 */
-        .expanded-content {
-            margin-top: 10px;
-            border-top: 1px solid #f5f5f5;
-            padding-top: 15px;
-            overflow: hidden;
-            display: none; /* 默认隐藏 */
-        }
-        
-        .expanded-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-top: 5px;
-            padding-top: 5px;
-            border-top: 1px dashed #f2f2f2;
-        }
-        
-        /* 展开时的样式变化 */
-        .subcategory.expanded .view-all {
-            color: #ff7b4e;
-            position: relative;
-        }
-        
-        .subcategory.expanded .view-all::after {
-            content: '';
-            display: inline-block;
-            width: 0;
-            height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-bottom: 5px solid #ff7b4e;
-            margin-left: 5px;
-            transform: rotate(180deg);
-            transition: transform 0.3s ease;
-        }
-        
-        .subcategory:not(.expanded) .view-all::after {
-            content: '';
-            display: inline-block;
-            width: 0;
-            height: 0;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-top: 5px solid #3a7bd5;
-            margin-left: 5px;
-            transition: transform 0.3s ease;
-        }
-        
-        /* 展开/收起按钮过渡效果 */
-        .view-all {
-            transition: color 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            cursor: pointer;
-            padding: 3px 8px;
-            border-radius: 12px;
-            background-color: rgba(0,0,0,0.03);
-        }
-        
-        .view-all:hover {
-            background-color: rgba(0,0,0,0.05);
-        }
-        
-        /* 展开动画 */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .expanded-content .clothes-item {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-        
-        /* 错开动画延迟 */
-        .expanded-content .clothes-item:nth-child(2n) {
-            animation-delay: 0.05s;
-        }
-        
-        .expanded-content .clothes-item:nth-child(3n) {
-            animation-delay: 0.1s;
-        }
-        
-        .expanded-content .clothes-item:nth-child(4n) {
-            animation-delay: 0.15s;
-        }
-        
-        /* 网格大小适配 */
-        .clothes-container.grid-small .expanded-grid,
-        .expanded-grid.grid-small {
-            grid-template-columns: repeat(3, 1fr);
-        }
-        
-        .clothes-container.grid-medium .expanded-grid,
-        .expanded-grid.grid-medium {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        
-        .clothes-container.grid-large .expanded-grid,
-        .expanded-grid.grid-large {
-            grid-template-columns: repeat(1, 1fr);
         }
 
         /* 衣物网格 */
         .clothes-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 10px;
+            margin-bottom: 15px;
+            max-height: 150px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
         }
 
-        /* 状态指示器样式 */
-        .item-badge {
-            display: none; /* 隐藏所有状态标签 */
+        .clothes-grid.expanded {
+            max-height: 1000px; /* 足够大的高度以显示所有内容 */
         }
 
-        /* 衣物项样式统一 */
-        .clothes-item {
+        .cloth-item {
             position: relative;
-            border-radius: 8px;
+            aspect-ratio: 0.75/1;
+            background-color: #f2f2f2;
+            border-radius: 10px;
             overflow: hidden;
-            background-color: #f9f9f9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
         }
 
-        .clothes-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        .cloth-item .public-tag {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 10px;
+            padding: 2px 4px;
+            border-radius: 4px;
+            z-index: 5;
         }
 
-        .clothes-img {
+        .cloth-item img {
             width: 100%;
-            aspect-ratio: 1;
+            height: 80%;
             object-fit: cover;
-            display: block;
         }
 
-        .item-name {
-            font-size: 12px;
+        .cloth-item .cloth-name {
+            height: 20%;
+            font-size: 11px;
             color: #666;
-            margin-top: 5px;
-            padding: 0 3px 5px 3px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            background-color: white;
         }
 
         /* 底部导航栏 */
-        .bottom-nav {
+        .tab-bar {
             position: absolute;
             bottom: 0;
+            left: 0;
             width: 100%;
             height: 85px;
-            background-color: #fff;
+            background-color: white;
+            border-top: 1px solid #f2f2f2;
             display: flex;
             justify-content: space-around;
-            align-items: center;
-            border-top: 1px solid #eee;
-            padding-bottom: 20px;
+            padding: 10px 0 25px;
+            z-index: 90;
         }
 
-        .nav-item {
+        .tab-item-bottom {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-        }
-
-        .nav-icon {
-            width: 28px;
-            height: 28px;
-            font-size: 24px;
-            display: flex;
             justify-content: center;
-            align-items: center;
-        }
-
-        .nav-text {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .nav-item.active .nav-icon {
-            color: #3a7bd5;
-            transform: scale(1.1);
-        }
-
-        .nav-item.active .nav-text {
-            color: #3a7bd5;
-            font-weight: 500;
-        }
-
-        /* 底部安全区域 */
-        .bottom-safe-area {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 20px;
-            background-color: #fff;
-            z-index: 10;
-        }
-
-        /* 添加按钮 */
-        .add-item-btn {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background-color: #3a7bd5;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-            font-size: 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 50;
-        }
-
-        /* 设置模态框和菜单 */
-        .settings-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 200;
-            display: none;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .settings-modal.show {
-            opacity: 1;
-        }
-        
-        .settings-menu {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            max-height: 60%;
-            background-color: #f2f2f6;
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
-            z-index: 210;
-            overflow: hidden;
-            display: none;
-            transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        
-        .settings-menu.show {
-            transform: translateY(0);
-        }
-        
-        .settings-header {
-            padding: 12px 15px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #f2f2f6;
-            position: sticky;
-            top: 0;
-            z-index: 5;
-        }
-        
-        .settings-header:before {
-            content: '';
-            position: absolute;
-            top: 0px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 4px;
-            background-color: #d1d1d6;
-            border-radius: 2px;
-            margin-top: 5px;
-        }
-        
-        .settings-header h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-            color: #111;
-        }
-        
-        .close-settings {
-            background: none;
-            border: none;
-            font-size: 16px;
-            color: #007aff;
-            cursor: pointer;
-            padding: 5px;
-        }
-        
-        .settings-content {
-            padding: 0;
-            max-height: calc(60% - 50px);
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .settings-item {
-            margin-bottom: 10px;
-            background-color: #fff;
-        }
-        
-        .settings-item-title {
-            font-size: 14px;
-            font-weight: 600;
-            padding: 8px 15px;
-            margin: 0;
-            color: #8E8E93;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            background-color: #f2f2f6;
-        }
-        
-        .settings-item-options {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .settings-option {
-            padding: 12px 15px;
-            color: #000;
-            font-size: 15px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-            background-color: #fff;
-        }
-        
-        .settings-option:last-child {
-            border-bottom: none;
-        }
-        
-        .settings-option:after {
-            content: '›';
-            font-size: 20px;
-            color: #bbb;
-            font-weight: 300;
-        }
-        
-        /* 相机模态框 */
-        .camera-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000;
-            z-index: 200;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .camera-modal.show {
-            opacity: 1;
-        }
-        
-        .camera-header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 5;
-        }
-        
-        .camera-header h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-            color: #fff;
-        }
-        
-        .close-camera {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: #fff;
-            cursor: pointer;
-            padding: 5px;
-        }
-        
-        .camera-viewfinder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .camera-placeholder {
-            text-align: center;
-            color: #fff;
-        }
-        
-        .camera-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-        
-        #cameraView {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .camera-controls {
-            position: absolute;
-            bottom: 30px;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-        }
-        
-        #startCameraBtn {
-            padding: 12px 25px;
-            background-color: #fff;
-            color: #000;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        .camera-capture-btn {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 4px solid #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        .capture-icon {
-            width: 30px;
-            height: 30px;
-            background-color: #fff;
-            border-radius: 50%;
-        }
-
-        /* 整理栏样式 */
-        .organizer-bar-container {
-            position: fixed;
-            right: 0;
-            top: 60px;
-            height: calc(100% - 145px);
-            width: 280px;
-            z-index: 100;
-            transition: transform 0.3s ease;
-            transform: translateX(100%);
-        }
-
-        .organizer-bar-container.show {
-            transform: translateX(0);
-        }
-
-        /* 整理栏容器特定样式 */
-        .iphone-container .organizer-bar-container {
-            position: absolute;
-            right: 0;
-            top: 60px;
-            height: calc(100% - 145px);
-            width: 280px;
-            z-index: 50;
-        }
-
-        .organizer-bar-handle {
-            width: 20px;
-            height: 100%;
-            background-color: #fff;
-            border-top-left-radius: 15px;
-            border-bottom-left-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-            position: absolute;
-            left: -20px;
-        }
-
-        .organizer-bar-handle:before {
-            content: '';
-            height: 40px;
-            width: 4px;
-            background-color: #ccc;
-            border-radius: 2px;
-        }
-
-        .organizer-bar {
-            background-color: #fff;
-            padding: 15px;
-            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .organizer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .organizer-title {
-            font-size: 16px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .organizer-count {
-            background-color: #3a7bd5;
-            color: #fff;
-            font-size: 12px;
-            padding: 2px 8px;
-            border-radius: 10px;
-        }
-
-        .organizer-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .organizer-clear {
-            font-size: 13px;
-            color: #ff6b6b;
-            background: none;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .organizer-clear:hover {
-            background-color: rgba(255, 107, 107, 0.1);
-        }
-
-        .organizer-minimize {
-            font-size: 13px;
-            color: #666;
-            background: none;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 15px;
-        }
-
-        .organizer-minimize:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .organizer-items {
-            flex: 1;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            padding: 5px 0;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
-        }
-
-        .organizer-items::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .organizer-items::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .organizer-items::-webkit-scrollbar-thumb {
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 4px;
-        }
-
-        .organizer-item {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1;
-            flex-shrink: 0;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .guide-button {
-            background-color: #3a7bd5;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-
-        .organizer-item-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .organizer-item-remove {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 18px;
-            height: 18px;
-            background-color: rgba(255, 0, 0, 0.7);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             font-size: 10px;
-            cursor: pointer;
-        }
-
-        .organizer-placeholder {
-            width: 100%;
-            height: 100%;
-            min-height: 150px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            color: #999;
-            font-size: 12px;
-            text-align: center;
-            padding: 10px;
-            grid-column: span 3;
-        }
-
-        .organizer-placeholder-icon {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .organizer-batch-actions {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            padding: 10px 0;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        .batch-action {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-        }
-
-        .batch-action:hover {
-            background-color: #f0f0f0;
-        }
-
-        .batch-action-icon {
-            font-size: 20px;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: white;
-            border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .batch-action-text {
-            font-size: 12px;
             color: #666;
+            cursor: pointer;
+        }
+
+        .tab-item-bottom.active {
+            color: #3a7bd5;
+        }
+
+        .tab-icon {
+            font-size: 22px;
+            margin-bottom: 3px;
         }
 
         /* 整理栏指示器 */
         .organizer-indicator {
             position: fixed;
-            top: 70px;
-            right: 20px;
-            background-color: #3a7bd5;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            z-index: 99;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .organizer-indicator.show {
-            opacity: 1;
-        }
-
-        /* 拖动相关样式 */
-        .clothes-item.dragging {
-            opacity: 0.5;
-            transform: scale(0.95);
-        }
-
-        .drag-preview {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .drag-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .clothes-item.draggable {
-            cursor: grab;
-        }
-
-        .clothes-item.draggable:active {
-            cursor: grabbing;
-        }
-
-        /* 拖拽提示 */
-        .drop-zone-hint {
-            position: absolute;
-            right: 290px;
+            right: 0;
             top: 50%;
             transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            pointer-events: none;
-            z-index: 200;
-            opacity: 0;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        .drop-zone-hint.show {
-            opacity: 1;
-            transform: translateY(-50%) translateX(-10px);
-        }
-
-        /* 确认对话框 */
-        .confirm-dialog {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            z-index: 1000;
-            width: 85%;
-            max-width: 350px;
-            display: none;
-        }
-
-        .confirm-dialog.show {
-            display: block;
-            animation: dialog-show 0.3s ease forwards;
-        }
-
-        @keyframes dialog-show {
-            from { opacity: 0; transform: translate(-50%, -40%); }
-            to { opacity: 1; transform: translate(-50%, -50%); }
-        }
-
-        .confirm-dialog-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .confirm-dialog-message {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .confirm-dialog-buttons {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .confirm-dialog-button {
-            flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .confirm-button-cancel {
-            background-color: #f2f2f2;
-            color: #666;
-        }
-
-        .confirm-button-confirm {
+            width: 30px;
+            height: 80px;
             background-color: #3a7bd5;
+            border-radius: 8px 0 0 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             color: white;
+            font-size: 12px;
+            padding: 5px 0;
+            cursor: pointer;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
         }
 
-        .confirm-dialog-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            backdrop-filter: blur(3px);
-            display: none;
-        }
-
-        .confirm-dialog-backdrop.show {
-            display: block;
-        }
-
-        /* 衣物项选择状态 */
-        .clothes-item.selected {
-            position: relative;
-            border: 2px solid #3a7bd5;
-        }
-
-        .clothes-item.selected:after {
-            content: '✓';
-            position: absolute;
-            top: 5px;
-            right: 5px;
+        .organizer-count {
             width: 20px;
             height: 20px;
+            background-color: white;
+            color: #3a7bd5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* 右上角添加按钮 */
+        .add-btn-corner {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             background-color: #3a7bd5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.6);
             color: white;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 12px;
-        }
-
-        /* 选择模式提示 */
-        .selection-mode-indicator {
-            position: fixed;
-            top: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            z-index: 200;
-            display: none;
-        }
-
-        .selection-mode-indicator.show {
-            display: block;
-            animation: selection-indicator-show 0.3s ease forwards;
-        }
-
-        @keyframes selection-indicator-show {
-            from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-
-        /* 菜单覆盖层 */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 990;
-            display: none;
-        }
-
-        .overlay.show {
-            display: block;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* 首次使用引导 */
-        .guide-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(3px);
-        }
-
-        .guide-overlay.show {
-            display: flex;
-        }
-
-        .guide-content {
-            background-color: white;
-            padding: 25px;
-            border-radius: 15px;
-            max-width: 85%;
-            width: 350px;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .guide-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .guide-description {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .guide-image {
-            margin: 15px 0;
-            width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .guide-button {
-            background-color: #3a7bd5;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            margin-top: 10px;
+            font-size: 20px;
             cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 9999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
         }
     </style>
 </head>
@@ -1355,24 +459,17 @@
                     <div class="icon">🔋</div>
                 </div>
             </div>
-
-            <!-- 应用主内容 -->
+            
+            <!-- 主体内容 -->
             <div class="app-container">
                 <!-- 顶部导航 -->
                 <div class="wardrobe-header">
                     <div class="header-row">
                         <h1 class="page-title">衣橱</h1>
-                        <div class="action-buttons">
-                            <button class="action-btn scan-btn" id="scanBtn">
-                                📷
-                            </button>
-                            <button class="action-btn settings-icon" id="settingsBtn">
-                                ⚙️
-                            </button>
-                        </div>
+                        <div class="add-btn-corner">+</div>
                     </div>
                     
-                    <!-- 分类选项卡 -->
+                    <!-- 一级分类选项卡 -->
                     <div class="category-tabs">
                         <div class="tab-item active">全部</div>
                         <div class="tab-item">上装</div>
@@ -1381,7 +478,6 @@
                         <div class="tab-item">鞋靴</div>
                         <div class="tab-item">配饰</div>
                         <div class="tab-item">功能服饰</div>
-                        <div class="tab-item">特殊场景</div>
                     </div>
                 </div>
                 
@@ -1389,1381 +485,163 @@
                 <div class="wardrobe-content">
                     <!-- 快捷筛选栏 -->
                     <div class="filter-bar">
-                        <div class="filter-chip active">全部季节</div>
+                        <div class="filter-chip active">全部</div>
                         <div class="filter-chip">春季</div>
                         <div class="filter-chip">夏季</div>
                         <div class="filter-chip">秋季</div>
                         <div class="filter-chip">冬季</div>
-                        <div class="filter-chip">场景筛选</div>
-                        <div class="filter-chip">清洁状态</div>
+                        <div class="filter-chip">职场</div>
+                        <div class="filter-chip">休闲</div>
+                        <div class="filter-chip">运动</div>
+                        <div class="filter-chip">约会</div>
                     </div>
                     
                     <!-- 搜索栏 -->
                     <div class="search-bar">
                         <div class="search-icon">🔍</div>
-                        <input type="text" placeholder="搜索衣物" class="search-input">
+                        <input type="text" class="search-input" placeholder="搜索衣物...">
                     </div>
                     
                     <!-- 上装-基础款 -->
-                    <div class="subcategory">
+                    <div class="subcategory-section" data-category="上装">
                         <div class="subcategory-title">
-                            上装 - 基础款
-                            <span class="view-all">查看全部 ></span>
+                            <span>基础款</span>
+                            <span class="view-all" data-target="basics">查看全部</span>
                         </div>
                         
-                        <div class="clothes-grid clothes-container">
-                            <div class="clothes-item">
-                                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=380&auto=format&fit=crop" alt="T恤衫" class="clothes-img">
-                                <div class="item-badge unworn">未穿着</div>
-                                <div class="item-name">T恤衫</div>
+                        <div class="clothes-grid" id="basics">
+                            <div class="cloth-item" draggable="true">
+                                <img src="https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dCUyMHNoaXJ0fGVufDB8fDB8fHww" alt="白色T恤">
+                                <div class="cloth-name">白色基础T恤</div>
                             </div>
-                            <div class="clothes-item">
-                                <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=387&auto=format&fit=crop" alt="牛仔裤" class="clothes-img">
-                                <div class="item-badge">已穿着</div>
-                                <div class="item-name">牛仔裤</div>
+                            <div class="cloth-item" draggable="true">
+                                <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="黑色T恤">
+                                <div class="cloth-name">黑色基础T恤</div>
                             </div>
-                            <div class="clothes-item">
-                                <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?q=80&w=388&auto=format&fit=crop" alt="衬衫" class="clothes-img">
-                                <div class="item-badge">已穿着</div>
-                                <div class="item-name">衬衫</div>
+                            <div class="cloth-item" draggable="true">
+                                <span class="public-tag">公</span>
+                                <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8c2hpcnR8ZW58MHx8MHx8fDA%3D" alt="格子衬衫">
+                                <div class="cloth-name">蓝色格子衬衫</div>
                             </div>
-                            <div class="clothes-item">
-                                <img src="https://images.unsplash.com/photo-1550639525-c97d455acf70?q=80&w=387&auto=format&fit=crop" alt="连衣裙" class="clothes-img">
-                                <div class="item-badge">已穿着</div>
-                                <div class="item-name">连衣裙</div>
+                            <div class="cloth-item" draggable="true">
+                                <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fHN3ZWF0ZXJ8ZW58MHx8MHx8fDA%3D" alt="针织衫">
+                                <div class="cloth-name">米色针织衫</div>
+                            </div>
+                            <div class="cloth-item" draggable="true">
+                                <img src="https://images.unsplash.com/photo-1608234808654-2a8875faa7fd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHBvbG8lMjBzaGlydHxlbnwwfHwwfHx8MA%3D%3D" alt="POLO衫">
+                                <div class="cloth-name">蓝色POLO衫</div>
+                            </div>
+                            <div class="cloth-item" draggable="true">
+                                <span class="public-tag">公</span>
+                                <img src="https://images.unsplash.com/photo-1626497764746-6dc36546b388?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHNoaXJ0fGVufDB8fDB8fHww" alt="白衬衫">
+                                <div class="cloth-name">白色商务衬衫</div>
+                            </div>
+                            <div class="cloth-item" draggable="true">
+                                <img src="https://images.unsplash.com/photo-1580331451062-99ff652288d7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8aG9vZGllfGVufDB8fDB8fHww" alt="卫衣">
+                                <div class="cloth-name">灰色基础卫衣</div>
+                            </div>
+                            <div class="cloth-item" draggable="true">
+                                <span class="public-tag">公</span>
+                                <img src="https://images.unsplash.com/photo-1519568470290-c0c1fbfff16f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHZlc3R8ZW58MHx8MHx8fDA%3D" alt="马甲">
+                                <div class="cloth-name">黑色西装马甲</div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- 上装-外套 -->
-                    <div class="subcategory">
+                    <div class="subcategory-section" data-category="上装">
                         <div class="subcategory-title">
-                            上装 - 外套
-                            <span class="view-all">查看全部 ></span>
+                            <span>外套</span>
+                            <span class="view-all" data-target="outerwear">查看全部</span>
                         </div>
                         
-                        <div class="clothes-grid">
-                            <div class="clothes-item">
-                                <img src="https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?q=80&w=369&auto=format&fit=crop" class="clothes-img" alt="牛仔外套">
-                                <div class="item-name">深蓝色牛仔外套</div>
+                        <div class="clothes-grid" id="outerwear">
+                            <div class="cloth-item" draggable="true">
+                                <img src="https://images.unsplash.com/photo-1548126032-079a0fb0099d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8amFja2V0fGVufDB8fDB8fHww" alt="牛仔外套">
+                                <div class="cloth-name">复古牛仔外套</div>
                             </div>
-                            
-                            <div class="clothes-item">
-                                <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=436&auto=format&fit=crop" class="clothes-img" alt="西装外套">
-                                <div class="item-badge">已穿着</div>
-                                <div class="item-name">灰色西装外套</div>
+                            <div class="cloth-item" draggable="true">
+                                <span class="public-tag">公</span>
+                                <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8amFja2V0fGVufDB8fDB8fHww" alt="夹克">
+                                <div class="cloth-name">黑色休闲夹克</div>
                             </div>
-                            
-                            <div class="clothes-item">
-                                <img src="https://images.unsplash.com/photo-1543076447-215ad9ba6923?q=80&w=1374&auto=format&fit=crop" class="clothes-img" alt="黑色皮夹克">
-                                <div class="item-name">黑色皮夹克</div>
+                            <div class="cloth-item" draggable="true">
+                                <img src="https://images.unsplash.com/photo-1551232864-3f0890e580d9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3VpdHxlbnwwfHwwfHx8MA%3D%3D" alt="西装">
+                                <div class="cloth-name">灰色商务西装</div>
                             </div>
-                            
-                            <div class="clothes-item">
-                                <img src="https://images.unsplash.com/photo-1584865288642-42078afe6942?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="格子大衣">
-                                <div class="item-badge idle">闲置</div>
-                                <div class="item-name">驼色格子大衣</div>
+                            <div class="cloth-item" draggable="true">
+                                <img src="https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29hdHxlbnwwfHwwfHx8MA%3D%3D" alt="大衣">
+                                <div class="cloth-name">驼色呢大衣</div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- 下装-裤装 -->
-                    <div class="subcategory">
+                    <div class="subcategory-section" data-category="下装">
                         <div class="subcategory-title">
-                            下装 - 裤装
-                            <span class="view-all">查看全部 ></span>
+                            <span>裤装</span>
+                            <span class="view-all" data-target="pants">查看全部</span>
                         </div>
                         
-                        <div class="clothes-grid">
-                            <div class="clothes-item">
-                                <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="牛仔裤">
-                                <div class="item-badge">已穿着</div>
-                                <div class="item-name">蓝色直筒牛仔裤</div>
+                        <div class="clothes-grid" id="pants">
+                            <div class="cloth-item" draggable="true">
+                                <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8amVhbnN8ZW58MHx8MHx8fDA%3D" alt="牛仔裤">
+                                <div class="cloth-name">蓝色直筒牛仔裤</div>
                             </div>
-                            
-                            <div class="clothes-item">
-                                <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="休闲裤">
-                                <div class="item-name">米色休闲裤</div>
+                            <div class="cloth-item" draggable="true">
+                                <span class="public-tag">公</span>
+                                <img src="https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8dHJvdXNlcnN8ZW58MHx8MHx8fDA%3D" alt="休闲裤">
+                                <div class="cloth-name">卡其色休闲裤</div>
                             </div>
-                            
-                            <div class="clothes-item">
-                                <img src="https://images.unsplash.com/photo-1473966968600-fa801b869a1a?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="运动裤">
-                                <div class="item-name">黑色运动裤</div>
+                            <div class="cloth-item" draggable="true">
+                                <img src="https://images.unsplash.com/photo-1594938374182-087432564782?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="西装裤">
+                                <div class="cloth-name">黑色修身西装裤</div>
                             </div>
-                            
-                            <div class="clothes-item">
-                                <img src="https://images.unsplash.com/photo-1584865288642-42078afe6942?q=80&w=387&auto=format&fit=crop" class="clothes-img" alt="西装裤">
-                                <div class="item-name">灰色西装裤</div>
+                            <div class="cloth-item" draggable="true">
+                                <img src="https://images.unsplash.com/photo-1549062573-edc78a53ffa6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="运动裤">
+                                <div class="cloth-name">灰色运动裤</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- 添加衣物按钮 -->
-                <div class="add-item-btn">+</div>
-                
-                <!-- 底部导航栏 -->
-                <div class="bottom-nav">
-                    <div class="nav-item">
-                        <div class="nav-icon">🏠</div>
-                        <div class="nav-text">首页</div>
-                    </div>
-                    <div class="nav-item">
-                        <div class="nav-icon">✨</div>
-                        <div class="nav-text">穿搭</div>
-                    </div>
-                    <div class="nav-item active">
-                        <div class="nav-icon">👚</div>
-                        <div class="nav-text">衣橱</div>
-                    </div>
-                    <div class="nav-item">
-                        <div class="nav-icon">👤</div>
-                        <div class="nav-text">我的</div>
-                    </div>
+            </div>
+            
+            <!-- 底部导航栏 -->
+            <div class="tab-bar">
+                <div class="tab-item-bottom">
+                    <div class="tab-icon">🏠</div>
+                    <span>首页</span>
                 </div>
-                
-                <!-- 整理栏 -->
-                <div class="organizer-bar-container" id="organizerContainer">
-                    <div class="organizer-bar-handle" id="organizerHandle"></div>
-                    <div class="organizer-bar">
-                        <div class="organizer-header">
-                            <div class="organizer-title">
-                                整理栏 <span class="organizer-count" id="organizerCount">0</span>
-                            </div>
-                            <div class="organizer-actions">
-                                <button class="organizer-clear" id="organizerClear">清空</button>
-                                <button class="organizer-minimize" id="organizerMinimize">收起</button>
-                            </div>
-                        </div>
-                        <div class="organizer-items" id="organizerItems">
-                            <div class="organizer-placeholder" id="organizerPlaceholder">
-                                <div class="organizer-placeholder-icon">📥</div>
-                                <div>将衣物拖拽至此进行批量操作</div>
-                            </div>
-                        </div>
-                        <div class="organizer-batch-actions">
-                            <div class="batch-action" id="batchOutfit">
-                                <div class="batch-action-icon">👔</div>
-                                <div class="batch-action-text">创建穿搭</div>
-                            </div>
-                            <div class="batch-action" id="batchMove">
-                                <div class="batch-action-icon">📂</div>
-                                <div class="batch-action-text">移动分类</div>
-                            </div>
-                            <div class="batch-action" id="batchHide">
-                                <div class="batch-action-icon">👁️</div>
-                                <div class="batch-action-text">隐藏推荐</div>
-                            </div>
-                            <div class="batch-action" id="batchDelete">
-                                <div class="batch-action-icon">🗑️</div>
-                                <div class="batch-action-text">删除</div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="tab-item-bottom">
+                    <div class="tab-icon">👔</div>
+                    <span>穿搭</span>
                 </div>
-
-                <!-- 整理栏提示器 -->
-                <div class="organizer-indicator" id="organizerIndicator">
-                    <span>打开整理栏</span>
-                    <span class="organizer-count" id="indicatorCount">0</span>
+                <div class="tab-item-bottom active">
+                    <div class="tab-icon">👚</div>
+                    <span>衣橱</span>
                 </div>
-
-                <!-- 拖拽提示 -->
-                <div class="drop-zone-hint" id="dropZoneHint">将衣物拖拽到整理栏</div>
-                
-                <!-- 底部安全区域 -->
-                <div class="bottom-safe-area"></div>
+                <div class="tab-item-bottom">
+                    <div class="tab-icon">👤</div>
+                    <span>我的</span>
+                </div>
+            </div>
+            
+            <!-- 整理栏指示器 -->
+            <div class="organizer-indicator">
+                <div class="organizer-count">0</div>
+                <span>整</span>
+                <span>理</span>
+                <span>栏</span>
             </div>
         </div>
     </div>
-
-    <!-- 选择模式提示 -->
-    <div class="selection-mode-indicator" id="selectionModeIndicator">
-        <span>多选模式已开启，点击衣物选择</span>
-    </div>
-
-    <!-- 确认对话框 -->
-    <div class="confirm-dialog" id="confirmDialog">
-        <div class="confirm-dialog-title" id="confirmTitle">确认操作</div>
-        <div class="confirm-dialog-message" id="confirmMessage">您确定要执行此操作吗？</div>
-        <div class="confirm-dialog-buttons">
-            <button class="confirm-dialog-button confirm-button-cancel" id="confirmCancel">取消</button>
-            <button class="confirm-dialog-button confirm-button-confirm" id="confirmOk">确定</button>
-        </div>
-    </div>
-    <div class="confirm-dialog-backdrop" id="confirmBackdrop"></div>
-
-    <!-- 菜单覆盖层 -->
-    <div class="overlay" id="overlay"></div>
 
     <!-- 返回顶部按钮 -->
     <div class="back-to-top" id="back-to-top">↑</div>
 
-    <!-- 设置模态框和菜单 -->
-    <div class="settings-modal">
-        <div class="settings-menu">
-            <div class="settings-header">
-                <div></div>
-                <h3>设置</h3>
-                <button class="close-settings">✕</button>
-            </div>
-            <div class="settings-content">
-                <div class="settings-item">
-                    <div class="settings-item-title">外观</div>
-                    <div class="settings-item-options">
-                        <div class="settings-option" data-setting="grid-size">
-                            <span>网格大小</span>
-                        </div>
-                        <div class="settings-option" data-setting="theme">
-                            <span>主题</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="settings-item">
-                    <div class="settings-item-title">管理</div>
-                    <div class="settings-item-options">
-                        <div class="settings-option" data-setting="categories">
-                            <span>分类管理</span>
-                        </div>
-                        <div class="settings-option" data-setting="tags">
-                            <span>标签管理</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="settings-item">
-                    <div class="settings-item-title">数据</div>
-                    <div class="settings-item-options">
-                        <div class="settings-option" data-setting="backup">
-                            <span>备份数据</span>
-                        </div>
-                        <div class="settings-option" data-setting="import">
-                            <span>导入数据</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 相机模态框 -->
-    <div class="camera-modal">
-        <div class="camera-header">
-            <button class="close-camera">✕</button>
-            <h3>拍照搜索</h3>
-            <div></div>
-        </div>
-        <div class="camera-viewfinder">
-            <div class="camera-placeholder">
-                <div class="camera-icon">📷</div>
-                <p>点击下方按钮开启相机</p>
-            </div>
-            <video id="cameraView" autoplay playsinline style="display: none;"></video>
-        </div>
-        <div class="camera-controls">
-            <button class="camera-btn" id="startCameraBtn">开启相机</button>
-            <button class="camera-capture-btn" id="captureBtn" style="display: none;">
-                <div class="capture-icon"></div>
-            </button>
-        </div>
-    </div>
-
-    <!-- 首次使用引导 -->
-    <div class="guide-overlay" id="organizerGuide">
-        <div class="guide-content">
-            <div class="guide-title">整理栏新功能</div>
-            <div class="guide-description">
-                整理栏现在位于右侧，可以帮助您批量管理衣物，有两种方式添加衣物到整理栏：
-            </div>
-            <div style="display: flex; margin: 15px 0; gap: 10px; justify-content: center;">
-                <div style="text-align: center; flex: 1;">
-                    <div style="width: 60px; height: 60px; border-radius: 50%; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; margin: 0 auto; font-size: 24px;">👆</div>
-                    <div style="font-size: 13px; margin-top: 5px; color: #666;">长按衣物进入多选模式</div>
-                </div>
-                <div style="text-align: center; flex: 1;">
-                    <div style="width: 60px; height: 60px; border-radius: 50%; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center; margin: 0 auto; font-size: 24px;">✋</div>
-                    <div style="font-size: 13px; margin-top: 5px; color: #666;">拖拽衣物到右侧整理栏</div>
-                </div>
-            </div>
-            <div class="guide-description">
-                整理栏中的衣物可以进行批量操作，如创建穿搭、移动分类、隐藏推荐和删除。
-            </div>
-            <button class="guide-button" id="guideCloseButton">了解了</button>
-        </div>
-    </div>
-
     <script>
-        // 执行页面初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('页面已加载完成');
-            
-            // 首先初始化衣物的数据属性
-            initClothesItemsAttributes();
-            
-            // 处理导航栏点击
-            setupNavigation();
-            
-            // 初始化分类滑块
-            initCategorySlider();
-            
-            // 设置筛选栏
-            initFilterBar();
-            
-            // 初始化"查看全部"按钮
-            initViewAllButtons();
-            
-            // 初始化衣物悬停效果
-            initClothesItemHover();
-            
-            // 初始化衣物点击事件
-            initClothesItemClick();
-            
-            // 添加设置按钮点击处理
-            document.querySelector('#settingsBtn').addEventListener('click', handleSettingsClick);
-            
-            // 添加扫描按钮点击处理
-            document.querySelector('#scanBtn').addEventListener('click', handleScanClick);
-            
-            // 关闭设置菜单按钮
-            document.querySelector('.close-settings').addEventListener('click', closeSettingsMenu);
-            
-            // 关闭相机模态框按钮
-            document.querySelector('.close-camera').addEventListener('click', closeCameraModal);
-            
-            // 开启相机按钮
-            document.querySelector('#startCameraBtn').addEventListener('click', startCamera);
-            
-            // 拍照按钮
-            document.querySelector('#captureBtn').addEventListener('click', capturePhoto);
-            
-            // 初始化设置功能
-            initializeSettingsFeatures();
-            
-            // 初始化添加按钮
-            document.querySelector('.add-item-btn').addEventListener('click', function() {
-                showToast('添加衣物功能尚未实现');
-            });
-            
-            // 初始化拖放功能
-            initDragAndDrop();
-            
-            // 初始化整理栏
-            initOrganizerBar();
-            
-            // 初始化批量操作功能
-            initBatchActions();
-            
-            // 初始化确认对话框
-            initConfirmDialog();
-            
-            // 初始化引导
-            initGuide();
-            
-            // 初始化返回顶部功能
-            initBackToTop();
-        });
-        
-        // 扫描按钮点击处理函数
-        function handleScanClick() {
-            showToast('打开相机扫描');
-            
-            // 显示相机模态框
-            const cameraModal = document.querySelector('.camera-modal');
-            if (cameraModal) {
-                cameraModal.style.display = 'block';
-                // 触发重绘以启用过渡效果
-                void cameraModal.offsetWidth;
-                cameraModal.classList.add('show');
-            }
-            
-            // 添加iOS风格触感反馈
-            if (window.navigator && window.navigator.vibrate) {
-                window.navigator.vibrate(5);
-            }
-        }
-        
-        // 关闭相机模态框
-        function closeCameraModal() {
-            const cameraModal = document.querySelector('.camera-modal');
-            if (cameraModal) {
-                cameraModal.classList.remove('show');
-                
-                // 等待过渡效果完成后隐藏元素
-                setTimeout(() => {
-                    cameraModal.style.display = 'none';
-                    
-                    // 停止相机
-                    stopCamera();
-                }, 300);
-            }
-        }
-        
-        // 开启相机
-        function startCamera() {
-            const cameraView = document.getElementById('cameraView');
-            const startBtn = document.getElementById('startCameraBtn');
-            const captureBtn = document.getElementById('captureBtn');
-            const placeholder = document.querySelector('.camera-placeholder');
-            
-            // 检查浏览器是否支持getUserMedia
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-                    .then(function(stream) {
-                        // 显示视频流
-                        cameraView.srcObject = stream;
-                        cameraView.style.display = 'block';
-                        
-                        // 隐藏开始按钮，显示拍照按钮
-                        startBtn.style.display = 'none';
-                        captureBtn.style.display = 'block';
-                        
-                        // 隐藏占位符
-                        placeholder.style.display = 'none';
-                        
-                        showToast('相机已开启');
-                    })
-                    .catch(function(error) {
-                        console.error('相机开启失败:', error);
-                        showToast('无法开启相机: ' + error.message);
-                    });
-            } else {
-                showToast('您的浏览器不支持相机功能');
-            }
-        }
-        
-        // 停止相机
-        function stopCamera() {
-            const cameraView = document.getElementById('cameraView');
-            const startBtn = document.getElementById('startCameraBtn');
-            const captureBtn = document.getElementById('captureBtn');
-            const placeholder = document.querySelector('.camera-placeholder');
-            
-            // 停止视频流
-            if (cameraView.srcObject) {
-                const tracks = cameraView.srcObject.getTracks();
-                tracks.forEach(track => track.stop());
-                cameraView.srcObject = null;
-            }
-            
-            // 重置UI
-            cameraView.style.display = 'none';
-            startBtn.style.display = 'block';
-            captureBtn.style.display = 'none';
-            placeholder.style.display = 'block';
-        }
-        
-        // 拍照并识别
-        function capturePhoto() {
-            const cameraView = document.getElementById('cameraView');
-            
-            // 创建画布捕获视频当前帧
-            const canvas = document.createElement('canvas');
-            canvas.width = cameraView.videoWidth;
-            canvas.height = cameraView.videoHeight;
-            
-            const context = canvas.getContext('2d');
-            context.drawImage(cameraView, 0, 0, canvas.width, canvas.height);
-            
-            // 获取图片数据
-            const imageData = canvas.toDataURL('image/jpeg');
-            
-            // 在实际应用中，这里应该发送图片到服务器或本地AI处理
-            // 模拟识别过程
-            showToast('正在识别图片...');
-            
-            // 关闭相机模态框
-            closeCameraModal();
-            
-            // 模拟一个延时，假装在识别
-            setTimeout(() => {
-                // 随机选择一个识别结果
-                const results = [
-                    '牛仔裤',
-                    'T恤',
-                    '连衣裙',
-                    '皮夹克'
-                ];
-                const result = results[Math.floor(Math.random() * results.length)];
-                
-                showToast(`识别结果: ${result}，正在搜索相似衣物...`);
-                
-                // 模拟搜索过程
-                setTimeout(() => {
-                    showToast(`已找到5件相似的${result}`);
-                    
-                    // 这里可以实现搜索结果展示逻辑
-                }, 1000);
-            }, 1500);
-        }
-
-        // 网格大小调整功能变量与设置
-        let gridSizeOptions = [
-            { name: '小', value: 'small', columns: 3 },
-            { name: '中', value: 'medium', columns: 2 },
-            { name: '大', value: 'large', columns: 1 }
-        ];
-        let currentGridSize = localStorage.getItem('wardrobeGridSize') || 'medium';
-        
-        // 全局变量，用于记录当前筛选状态
-        let currentCategory = '全部';
-        let currentSeason = '全部季节';
-        let currentScene = '日常';
-        
-        // 初始化设置项
-        function initializeSettingsFeatures() {
-            // 首先初始化原有的设置菜单关闭功能
-            initializeSettingsMenu();
-            
-            // 然后初始化各个设置功能
-            initializeGridSizeSettings();
-        }
-        
-        // 初始化网格大小设置
-        function initializeGridSizeSettings() {
-            // 找到网格大小设置选项
-            const gridSizeOption = document.querySelector('.settings-option');
-            
-            if (gridSizeOption) {
-                gridSizeOption.addEventListener('click', function() {
-                    showGridSizeMenu();
-                });
-                
-                // 应用保存的网格大小设置
-                applyGridSizeSettings(currentGridSize);
-            }
-        }
-        
-        // 显示网格大小设置菜单
-        function showGridSizeMenu() {
-            // 关闭当前的设置菜单
-            const settingsModal = document.querySelector('.settings-modal');
-            const settingsMenu = document.querySelector('.settings-menu');
-            settingsMenu.classList.remove('show');
-            
-            // 创建网格大小设置子菜单
-            const gridSizeSubMenu = document.createElement('div');
-            gridSizeSubMenu.className = 'settings-submenu';
-            gridSizeSubMenu.innerHTML = `
-                <div class="settings-header">
-                    <div class="back-button">
-                        <span>←</span>
-                    </div>
-                    <h3>网格大小</h3>
-                    <div></div>
-                </div>
-                <div class="settings-content">
-                    <div class="settings-item">
-                        <div class="settings-item-options">
-                            ${gridSizeOptions.map(option => `
-                                <div class="settings-option grid-size-option" data-size="${option.value}">
-                                    <div class="option-left">
-                                        <span class="grid-preview grid-${option.value}"></span>
-                                        <span>${option.name}</span>
-                                    </div>
-                                    <span class="option-check ${currentGridSize === option.value ? 'checked' : ''}">✓</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            settingsModal.appendChild(gridSizeSubMenu);
-            
-            // 显示子菜单
-            setTimeout(() => {
-                gridSizeSubMenu.classList.add('show');
-                
-                // 添加返回按钮事件
-                const backButton = gridSizeSubMenu.querySelector('.back-button');
-                backButton.addEventListener('click', function() {
-                    hideSubmenu(gridSizeSubMenu);
-                });
-                
-                // 添加网格大小选项点击事件
-                const gridOptions = gridSizeSubMenu.querySelectorAll('.grid-size-option');
-                gridOptions.forEach(option => {
-                    option.addEventListener('click', function() {
-                        const size = this.getAttribute('data-size');
-                        // 更新选中状态
-                        gridSizeSubMenu.querySelectorAll('.option-check').forEach(check => {
-                            check.classList.remove('checked');
-                        });
-                        this.querySelector('.option-check').classList.add('checked');
-                        
-                        // 保存设置
-                        localStorage.setItem('wardrobeGridSize', size);
-                        currentGridSize = size;
-                        
-                        // 应用设置
-                        applyGridSizeSettings(size);
-                        
-                        // 显示成功提示
-                        showToast('网格大小已更新');
-                        
-                        // 延迟关闭子菜单
-                        setTimeout(() => {
-                            hideSubmenu(gridSizeSubMenu);
-                        }, 500);
-                    });
-                });
-            }, 50);
-        }
-        
-        // 隐藏子菜单
-        function hideSubmenu(submenu) {
-            submenu.classList.remove('show');
-            
-            // 显示主设置菜单
-            const settingsMenu = document.querySelector('.settings-menu');
-            settingsMenu.classList.add('show');
-            
-            // 移除子菜单
-            setTimeout(() => {
-                if (submenu.parentNode) {
-                    submenu.parentNode.removeChild(submenu);
-                }
-            }, 300);
-        }
-        
-        // 应用网格大小设置
-        function applyGridSizeSettings(size) {
-            const clothesContainer = document.querySelector('.clothes-grid');
-            
-            if (clothesContainer) {
-                // 移除现有的网格类
-                clothesContainer.classList.remove('grid-small', 'grid-medium', 'grid-large');
-                
-                // 添加新的网格类
-                clothesContainer.classList.add(`grid-${size}`);
-                
-                // 重新排列衣物布局
-                adjustClothesLayout();
-            }
-        }
-        
-        // 调整衣物布局
-        function adjustClothesLayout() {
-            const clothesItems = document.querySelectorAll('.clothes-item');
-            
-            // 根据当前网格大小设置，调整衣物显示
-            const selectedOption = gridSizeOptions.find(option => option.value === currentGridSize);
-            if (selectedOption) {
-                clothesItems.forEach(item => {
-                    item.style.width = `calc(${100/selectedOption.columns}% - 10px)`;
-                });
-            }
-        }
-        
-        // 设置按钮点击处理函数
-        function handleSettingsClick() {
-            showToast('打开设置菜单');
-            console.log('设置按钮被点击');
-            
-            // 显示设置菜单
-            const settingsModal = document.querySelector('.settings-modal');
-            const settingsMenu = document.querySelector('.settings-menu');
-            
-            if (settingsModal && settingsMenu) {
-                // 首先显示模态背景
-                settingsModal.style.display = 'block';
-                // 触发重绘以启用过渡效果
-                void settingsModal.offsetWidth;
-                settingsModal.classList.add('show');
-                
-                // 然后显示设置菜单（从底部滑入）
-                settingsMenu.style.display = 'block';
-                // 触发重绘以启用过渡效果
-                void settingsMenu.offsetWidth;
-                settingsMenu.classList.add('show');
-            }
-            
-            // 添加iOS风格触感反馈
-            if (window.navigator && window.navigator.vibrate) {
-                window.navigator.vibrate(5);
-            }
-        }
-        
-        // 初始化设置菜单关闭按钮
-        function initializeSettingsMenu() {
-            const closeSettingsBtn = document.querySelector('.close-settings');
-            const settingsModal = document.querySelector('.settings-modal');
-            const settingsMenu = document.querySelector('.settings-menu');
-            
-            if (closeSettingsBtn && settingsModal) {
-                closeSettingsBtn.addEventListener('click', closeSettingsMenu);
-                
-                // 点击模态背景关闭设置
-                settingsModal.addEventListener('click', function(e) {
-                    if (e.target === settingsModal) {
-                        closeSettingsMenu();
-                    }
-                });
-                
-                // 添加手势滑动关闭功能
-                if (settingsMenu) {
-                    let startY = 0;
-                    let currentY = 0;
-                    
-                    settingsMenu.addEventListener('touchstart', function(e) {
-                        startY = e.touches[0].clientY;
-                    });
-                    
-                    settingsMenu.addEventListener('touchmove', function(e) {
-                        currentY = e.touches[0].clientY;
-                        const diffY = currentY - startY;
-                        
-                        // 只允许向下滑动关闭
-                        if (diffY > 0) {
-                            this.style.transform = `translateY(${diffY}px)`;
-                            e.preventDefault(); // 防止页面滚动
-                        }
-                    });
-                    
-                    settingsMenu.addEventListener('touchend', function() {
-                        const diffY = currentY - startY;
-                        if (diffY > 70) { // 如果下滑超过70px则关闭
-                            closeSettingsMenu();
-                        } else {
-                            // 否则恢复原位
-                            this.style.transform = '';
-                            this.classList.add('show');
-                        }
-                    });
-                }
-                
-                // 设置选项点击效果
-                const settingsOptions = document.querySelectorAll('.settings-option');
-                settingsOptions.forEach(option => {
-                    option.addEventListener('click', function() {
-                        const optionText = this.textContent.trim();
-                        showToast(`您选择了: ${optionText}`);
-                        
-                        // 添加点击反馈
-                        this.style.backgroundColor = 'rgba(0,0,0,0.05)';
-                        setTimeout(() => {
-                            this.style.backgroundColor = '';
-                        }, 200);
-                        
-                        // 添加iOS风格触感反馈
-                        if (window.navigator && window.navigator.vibrate) {
-                            window.navigator.vibrate(3);
-                        }
-                    });
-                });
-            }
-        }
-        
-        // 关闭设置菜单函数
-        function closeSettingsMenu() {
-            const settingsModal = document.querySelector('.settings-modal');
-            const settingsMenu = document.querySelector('.settings-menu');
-            
-            if (settingsModal && settingsMenu) {
-                // 先移除show类以触发过渡效果
-                settingsModal.classList.remove('show');
-                settingsMenu.classList.remove('show');
-                
-                // 重置可能存在的内联样式
-                settingsMenu.style.transform = 'translateY(100%)';
-                
-                // 等待过渡效果完成后隐藏元素
-                setTimeout(() => {
-                    settingsModal.style.display = 'none';
-                    settingsMenu.style.display = 'none';
-                    // 恢复默认状态
-                    settingsMenu.style.transform = '';
-                }, 400); // 略长于CSS过渡时间
-            }
-        }
-        
-        // 显示提示消息
-        function showToast(message) {
-            // 检查是否已有toast，如果有则移除
-            const existingToast = document.querySelector('.toast-message');
-            if (existingToast) {
-                document.body.removeChild(existingToast);
-            }
-            
-            // 创建新的toast元素
-            const toast = document.createElement('div');
-            toast.className = 'toast-message';
-            toast.textContent = message;
-            
-            // 添加toast样式
-            toast.style.position = 'fixed';
-            toast.style.bottom = '100px';
-            toast.style.left = '50%';
-            toast.style.transform = 'translateX(-50%)';
-            toast.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-            toast.style.color = 'white';
-            toast.style.padding = '10px 20px';
-            toast.style.borderRadius = '20px';
-            toast.style.zIndex = '1000';
-            toast.style.opacity = '0';
-            toast.style.transition = 'opacity 0.3s ease';
-            
-            // 将toast添加到页面中
-            document.body.appendChild(toast);
-            
-            // 触发重绘以启用过渡效果
-            void toast.offsetWidth;
-            toast.style.opacity = '1';
-            
-            // 设置自动消失的定时器
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => {
-                    if (toast.parentNode) {
-                        document.body.removeChild(toast);
-                    }
-                }, 300);
-            }, 2000);
-        }
-        
-        // 导航功能
-        function setupNavigation() {
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach((item, index) => {
-                item.addEventListener('click', function() {
-                    // 移除其他项目的active类
-                    navItems.forEach(navItem => navItem.classList.remove('active'));
-                    // 给当前项目添加active类
-                    this.classList.add('active');
-                    
-                    // 导航到相应页面
-                    switch(index) {
-                        case 0:
-                            // 首页
-                            showToast('导航到首页');
-                            window.location.href = 'index.html';
-                            break;
-                        case 1:
-                            // 衣橱
-                            showToast('导航到衣橱');
-                            window.location.href = 'wardrobe.html';
-                            break;
-                        case 2:
-                            // 穿搭
-                            showToast('导航到穿搭');
-                            window.location.href = 'outfit.html';
-                            break;
-                        case 3:
-                            // 我的
-                            showToast('导航到我的');
-                            window.location.href = 'profile.html';
-                            break;
-                    }
-                });
-            });
-        }
-
-        // 初始化分类滑块
-        function initCategorySlider() {
-            const tabs = document.querySelectorAll('.category-tabs .tab-item');
-            console.log(`找到 ${tabs.length} 个分类标签，文本内容:`, Array.from(tabs).map(t => t.textContent.trim()));
-            
-            tabs.forEach((tab, index) => {
-                tab.addEventListener('click', function() {
-                    // 移除其他标签的active类
-                    tabs.forEach(t => t.classList.remove('active'));
-                    // 给当前标签添加active类
-                    this.classList.add('active');
-                    
-                    const category = this.textContent.trim();
-                    console.log(`点击分类标签: "${category}", 索引: ${index}`);
-                    showToast(`已切换到${category}分类`);
-                    
-                    // 筛选相关衣物和子分类
-                    filterByCategory(category);
-                });
-            });
-        }
-        
-        // 初始化衣物数据属性
-        function initClothesItemsAttributes() {
-            console.log('正在初始化衣物数据属性');
-            
-            // 获取所有子分类
-            const subcategories = document.querySelectorAll('.subcategory');
-            console.log(`找到 ${subcategories.length} 个子分类`);
-            
-            // 遍历所有子分类，为衣物设置属性
-            subcategories.forEach((subcat, index) => {
-                const titleEl = subcat.querySelector('.subcategory-title');
-                if (!titleEl) {
-                    console.log(`子分类 ${index} 没有标题元素`);
-                    return;
-                }
-                
-                // 直接获取子分类标题文本，例如"上装 - 基础款"
-                const titleText = titleEl.textContent.trim().split('>')[0].trim();
-                console.log(`处理子分类: "${titleText}"`);
-                
-                // 提取主要分类，例如"上装" 和子分类 "基础款"
-                const parts = titleText.split('-').map(part => part.trim());
-                if (parts.length < 2) {
-                    console.log(`子分类标题 "${titleText}" 格式不符合"分类-类型"格式`);
-                    return;
-                }
-                
-                const mainCategory = parts[0]; // 例如"上装"
-                const subcategoryType = parts[1]; // 例如"基础款"
-                
-                console.log(`提取分类: 主分类="${mainCategory}", 子分类="${subcategoryType}"`);
-                
-                // 获取该子分类下所有衣物
-                const items = subcat.querySelectorAll('.clothes-item');
-                console.log(`子分类 "${titleText}" 下有 ${items.length} 件衣物`);
-                
-                // 为每件衣物设置数据属性
-                items.forEach(item => {
-                    const nameEl = item.querySelector('.item-name');
-                    const name = nameEl ? nameEl.textContent.trim() : '未命名';
-                    
-                    // 设置主分类和子分类
-                    item.setAttribute('data-category', mainCategory);
-                    item.setAttribute('data-subcategory', subcategoryType);
-                    
-                    // 根据名称设置季节
-                    let seasons = [];
-                    if (name.includes('春') || name.toLowerCase().includes('spring')) seasons.push('春季');
-                    if (name.includes('夏') || name.toLowerCase().includes('summer')) seasons.push('夏季');
-                    if (name.includes('秋') || name.toLowerCase().includes('fall') || name.toLowerCase().includes('autumn')) seasons.push('秋季');
-                    if (name.includes('冬') || name.toLowerCase().includes('winter')) seasons.push('冬季');
-                    
-                    // 如果没有明确的季节，根据衣物类型推断
-                    if (seasons.length === 0) {
-                        if (name.includes('T恤') || name.includes('短袖') || name.includes('短裤')) {
-                            seasons.push('夏季');
-                        } else if (name.includes('毛衣') || name.includes('大衣') || name.includes('羽绒')) {
-                            seasons.push('冬季');
-                        } else if (name.includes('风衣') || name.includes('夹克')) {
-                            seasons.push('春季', '秋季');
-                        } else {
-                            seasons.push('春季', '夏季', '秋季', '冬季'); // 默认全季节
-                        }
-                    }
-                    
-                    item.setAttribute('data-season', seasons.join(','));
-                    
-                    // 根据名称设置场景
-                    let scenes = [];
-                    if (name.includes('休闲') || name.includes('日常')) scenes.push('日常', '休闲');
-                    if (name.includes('正装') || name.includes('西装') || name.includes('西服')) scenes.push('正式', '职场');
-                    if (name.includes('运动')) scenes.push('运动');
-                    if (name.includes('派对') || name.includes('约会')) scenes.push('约会');
-                    
-                    // 如果没有明确的场景，根据衣物类型推断
-                    if (scenes.length === 0) {
-                        if (subcategoryType.includes('基础') || name.includes('T恤')) {
-                            scenes.push('日常', '休闲');
-                        } else if (name.includes('外套') || name.includes('西装')) {
-                            scenes.push('职场', '正式');
-                        } else {
-                            scenes.push('日常'); // 默认日常场景
-                        }
-                    }
-                    
-                    item.setAttribute('data-scene', scenes.join(','));
-                    
-                    console.log(`衣物 "${name}" - 分类:${mainCategory}, 子分类:${subcategoryType}, 季节:${seasons.join(',')}, 场景:${scenes.join(',')}`);
-                });
-            });
-            
-            // 调试输出：统计各个分类的衣物数量
-            setTimeout(() => {
-                const allItems = document.querySelectorAll('.clothes-item');
-                const categoryCounts = {};
-                
-                allItems.forEach(item => {
-                    const cat = item.getAttribute('data-category');
-                    categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
-                });
-                
-                console.log('分类统计:', categoryCounts);
-                
-                // 特别检查"上装"分类
-                const topsItems = Array.from(allItems).filter(item => 
-                    item.getAttribute('data-category') === '上装');
-                console.log(`"上装"分类共有 ${topsItems.length} 件衣物:`, 
-                    topsItems.map(item => item.querySelector('.item-name')?.textContent || '未命名'));
-            }, 100);
-            
-            console.log('衣物数据属性初始化完成');
-        }
-        
-        // 组合筛选（同时考虑分类、季节和场景）
-        function applyFilters() {
-            console.log(`应用筛选 - 分类:"${currentCategory}", 季节:"${currentSeason}", 场景:"${currentScene}"`);
-            
-            const clothesItems = document.querySelectorAll('.clothes-item');
-            console.log(`找到 ${clothesItems.length} 个衣物项`);
-            
-            // 更灵活的分类匹配函数
-            function categoryMatches(itemCategory, selectedCategory) {
-                if (selectedCategory === '全部') return true;
-                if (!itemCategory) return false;
-                
-                // 精确匹配
-                if (itemCategory === selectedCategory) return true;
-                
-                // 部分匹配（处理可能的空格或其他差异）
-                const normalizedItem = itemCategory.replace(/\s+/g, '');
-                const normalizedSelected = selectedCategory.replace(/\s+/g, '');
-                
-                return normalizedItem === normalizedSelected;
-            }
-            
-            // 根据当前选中的分类、季节和场景进行筛选
-            let visibleCount = 0;
-            clothesItems.forEach(item => {
-                const itemCategory = item.getAttribute('data-category');
-                const itemSeasons = item.getAttribute('data-season') || '';
-                const itemScenes = item.getAttribute('data-scene') || '';
-                const name = item.querySelector('.item-name')?.textContent || '未命名';
-                
-                const matchesCategory = categoryMatches(itemCategory, currentCategory);
-                const matchesSeason = currentSeason === '全部季节' || itemSeasons.includes(currentSeason);
-                const matchesScene = !currentScene || currentScene === '日常' || itemScenes.includes(currentScene);
-                
-                // 输出筛选详情
-                if (!matchesCategory) {
-                    console.log(`衣物 "${name}" 分类不匹配 - 衣物:"${itemCategory}", 选中:"${currentCategory}"`);
-                }
-                
-                if (matchesCategory && matchesSeason && matchesScene) {
-                    item.style.display = '';
-                    visibleCount++;
-                    console.log(`显示衣物: "${name}", 分类="${itemCategory}"`);
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-            
-            console.log(`筛选结果: 显示 ${visibleCount}/${clothesItems.length} 个衣物`);
-            
-            // 处理子分类的显示/隐藏
-            const subcategories = document.querySelectorAll('.subcategory');
-            subcategories.forEach(subcat => {
-                const titleEl = subcat.querySelector('.subcategory-title');
-                if (!titleEl) return;
-                
-                const titleText = titleEl.textContent.trim().split('>')[0].trim();
-                const parts = titleText.split('-').map(part => part.trim());
-                if (parts.length < 2) return;
-                
-                const subcatCategory = parts[0]; // 例如"上装"
-                
-                // 检查是否有可见的衣物
-                const visibleItems = Array.from(subcat.querySelectorAll('.clothes-item')).filter(
-                    item => item.style.display !== 'none'
-                );
-                
-                const hasVisibleItems = visibleItems.length > 0;
-                
-                // 更灵活的子分类匹配
-                const matchesCategory = categoryMatches(subcatCategory, currentCategory);
-                
-                if ((currentCategory === '全部' || matchesCategory) && hasVisibleItems) {
-                    subcat.style.display = '';
-                    console.log(`显示子分类: "${titleText}", 分类="${subcatCategory}", 匹配=${matchesCategory}`);
-                } else {
-                    subcat.style.display = 'none';
-                    console.log(`隐藏子分类: "${titleText}", 分类="${subcatCategory}", 匹配=${matchesCategory}, 有可见衣物=${hasVisibleItems}`);
-                }
-            });
-            
-            // 处理没有结果的情况
-            if (visibleCount === 0) {
-                console.log('筛选结果为空，没有匹配的衣物');
-                showToast('没有符合条件的衣物');
-            }
-        }
-        
-        // 按分类筛选衣物
-        function filterByCategory(category) {
-            console.log(`执行分类筛选: "${category}"`);
-            
-            // 更新当前选中的分类
-            currentCategory = category;
-            
-            // 调用组合筛选
-            applyFilters();
-        }
-        
-        // 按季节筛选衣物
-        function filterBySeason(season) {
-            // 更新当前选中的季节
-            currentSeason = season;
-            
-            // 调用组合筛选
-            applyFilters();
-        }
-        
-        // 按场景筛选衣物
-        function filterByScene(scene) {
-            // 更新当前选中的场景
-            currentScene = scene;
-            
-            // 调用组合筛选
-            applyFilters();
-        }
-
-        // 初始化模拟数据
-        function initializeWardrobeData() {
-            // 这里可以添加模拟数据的初始化逻辑
-        }
-
-        // 整理栏相关功能
-        function initializeOrganizerBar() {
-            // 这个是旧的空函数，保持为空即可
-        }
-
-        // 拖拽功能
-        function makeItemsDraggable() {
-            // 这个是旧的空函数，保持为空即可
-        }
-
-        // 初始化筛选栏
-        function initFilterBar() {
-            const filterChips = document.querySelectorAll('.filter-chip');
-            let currentFilter = '全部季节';
-            
-            // 添加新的场景筛选选项
-            const filterBar = document.querySelector('.filter-bar');
-            if (filterBar) {
-                // 移除现有的"场景筛选"选项
-                const sceneFilter = Array.from(filterChips).find(chip => chip.textContent.trim() === '场景筛选');
-                if (sceneFilter) {
-                    sceneFilter.remove();
-                }
-                
-                // 添加具体的场景筛选选项
-                const sceneFilters = ['日常', '职场', '约会', '运动', '正式', '休闲'];
-                sceneFilters.forEach(scene => {
-                    const sceneChip = document.createElement('div');
-                    sceneChip.className = 'filter-chip';
-                    sceneChip.textContent = scene;
-                    sceneChip.setAttribute('data-filter-type', 'scene');
-                    filterBar.appendChild(sceneChip);
-                });
-            }
-            
-            // 为所有筛选选项添加点击事件（包括新添加的）
-            const allFilterChips = document.querySelectorAll('.filter-chip');
-            allFilterChips.forEach(chip => {
-                chip.addEventListener('click', function() {
-                    const filterType = this.getAttribute('data-filter-type') || 'season';
-                    const filter = this.textContent.trim();
-                    
-                    // 只移除同类筛选项的active类
-                    allFilterChips.forEach(c => {
-                        if ((c.getAttribute('data-filter-type') || 'season') === filterType) {
-                            c.classList.remove('active');
-                        }
-                    });
-                    
-                    // 给当前筛选项添加active类
-                    this.classList.add('active');
-                    
-                    showToast(`${filterType === 'scene' ? '场景' : '季节'}筛选: ${filter}`);
-                    
-                    // 根据筛选类型调用不同的筛选函数
-                    if (filterType === 'scene') {
-                        filterByScene(filter);
-                    } else {
-                        filterBySeason(filter);
-                    }
-                });
-            });
-            
-            // 标记季节筛选选项
-            const seasonFilters = ['全部季节', '春季', '夏季', '秋季', '冬季'];
-            allFilterChips.forEach(chip => {
-                const text = chip.textContent.trim();
-                if (seasonFilters.includes(text)) {
-                    chip.setAttribute('data-filter-type', 'season');
-                }
-            });
-        }
-
-        // 初始化查看全部功能
-        function initViewAllButtons() {
-            console.log("开始初始化查看全部按钮");
-            
-            // 清除之前可能存在的事件监听器
-            document.querySelectorAll('.expanded-content').forEach(item => {
-                if(item.parentNode) {
-                    item.parentNode.removeChild(item);
-                }
-            });
-            
-            // 获取所有查看全部按钮并添加事件监听器
-            const viewAllButtons = document.querySelectorAll('.view-all');
-            console.log(`找到 ${viewAllButtons.length} 个查看全部按钮`);
-            
-            viewAllButtons.forEach(button => {
-                // 移除可能存在的旧事件监听器
-                const newButton = button.cloneNode(true);
-                if (button.parentNode) {
-                    button.parentNode.replaceChild(newButton, button);
-                }
-                
-                // 添加新的事件监听器
-                newButton.addEventListener('click', function(e) {
-                    console.log('查看全部按钮被点击');
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    // 获取包含此按钮的子分类容器
-                    const subcategory = this.closest('.subcategory');
-                    if (!subcategory) {
-                        console.error('找不到父级子分类容器');
-                        return;
-                    }
-                    
-                    // 获取子分类标题
-                    const titleEl = subcategory.querySelector('.subcategory-title');
-                    const subcategoryTitle = titleEl ? titleEl.textContent.split('查看全部')[0].trim() : '未知子分类';
-                    
-                    // 检查当前是否已经展开
-                    const isExpanded = subcategory.classList.contains('expanded');
-                    console.log(`当前状态: ${isExpanded ? '已展开' : '未展开'}, 子分类: ${subcategoryTitle}`);
-                    
-                    if (isExpanded) {
-                        // 收起内容
-                        console.log('执行收起操作');
-                        this.textContent = '查看全部 >';
-                        this.style.color = '';
-                        subcategory.classList.remove('expanded');
-                        
-                        // 隐藏扩展内容
-                        const expandedContent = subcategory.querySelector('.expanded-content');
-                        if (expandedContent) {
-                            expandedContent.style.display = 'none';
-                        }
-                        
-                        showToast(`已收起${subcategoryTitle}`);
-                    } else {
-                        // 展开内容
-                        console.log('执行展开操作');
-                        this.textContent = '收起';
-                        this.style.color = '#ff7b4e';
-                        subcategory.classList.add('expanded');
-                        
-                        // 获取或创建扩展内容
-                        let expandedContent = subcategory.querySelector('.expanded-content');
-                        
-                        if (!expandedContent) {
-                            console.log('创建新的扩展内容');
-                            expandedContent = document.createElement('div');
-                            expandedContent.className = 'expanded-content';
-                            expandedContent.style.display = 'block';
-                            
-                            // 根据分类获取对应的衣物列表
-                            const clothesItems = generateItemsForCategory(subcategoryTitle);
-                            
-                            // 添加网格容器
-                            const grid = document.createElement('div');
-                            grid.className = 'expanded-grid';
-                            
-                            // 向网格中添加衣物
-                            clothesItems.forEach(item => {
-                                const clothesItem = document.createElement('div');
-                                clothesItem.className = 'clothes-item';
-                                clothesItem.innerHTML = `
-                                    <img src="${item.img}" class="clothes-img" alt="${item.name}">
-                                    <div class="item-name">${item.name}</div>
-                                `;
-                                
-                                // 设置数据属性，与筛选逻辑保持一致
-                                if (subcategoryTitle.includes('上装')) {
-                                    clothesItem.setAttribute('data-category', '上装');
-                                } else if (subcategoryTitle.includes('下装')) {
-                                    clothesItem.setAttribute('data-category', '下装');
-                                }
-                                clothesItem.setAttribute('data-season', '春季,夏季,秋季,冬季');
-                                clothesItem.setAttribute('data-scene', '日常');
-                                
-                                // 添加点击事件
-                                clothesItem.addEventListener('click', function() {
-                                    showToast(`查看衣物: ${item.name}`);
-                                });
-                                
-                                grid.appendChild(clothesItem);
-                            });
-                            
-                            // 将网格添加到扩展内容
-                            expandedContent.appendChild(grid);
-                            
-                            // 将扩展内容添加到子分类
-                            subcategory.appendChild(expandedContent);
-                        } else {
-                            // 如果已存在，显示它
-                            expandedContent.style.display = 'block';
-                        }
-                        
-                        showToast(`已展开${subcategoryTitle}`);
-                    }
-                });
-            });
-            
-            console.log("查看全部按钮初始化完成");
-        }
-        
-        // 根据分类生成对应的衣物数据
-        function generateItemsForCategory(categoryTitle) {
-            console.log(`为分类 "${categoryTitle}" 生成扩展衣物`);
-            
-            if (categoryTitle.includes('上装') && categoryTitle.includes('基础款')) {
-                return [
-                    { name: '白色基础T恤', img: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=387&auto=format&fit=crop' },
-                    { name: '黑色休闲卫衣', img: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=387&auto=format&fit=crop' },
-                    { name: '灰色棉质衬衫', img: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=387&auto=format&fit=crop' },
-                    { name: '条纹长袖T恤', img: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=387&auto=format&fit=crop' }
-                ];
-            } else if (categoryTitle.includes('上装') && categoryTitle.includes('外套')) {
-                return [
-                    { name: '深蓝色牛仔夹克', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=387&auto=format&fit=crop' },
-                    { name: '黑色皮夹克', img: 'https://images.unsplash.com/photo-1548126032-079a0fb0099d?w=387&auto=format&fit=crop' },
-                    { name: '灰色西装外套', img: 'https://images.unsplash.com/photo-1525450824786-227cbef70703?w=387&auto=format&fit=crop' },
-                    { name: '米色风衣', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=387&auto=format&fit=crop' }
-                ];
-            } else if (categoryTitle.includes('下装') && categoryTitle.includes('裤装')) {
-                return [
-                    { name: '深蓝色直筒牛仔裤', img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=387&auto=format&fit=crop' },
-                    { name: '卡其色休闲裤', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=387&auto=format&fit=crop' },
-                    { name: '黑色运动裤', img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=387&auto=format&fit=crop' },
-                    { name: '灰色西装裤', img: 'https://images.unsplash.com/photo-1542272604-787c3835535d?w=387&auto=format&fit=crop' }
-                ];
-            } else {
-                return [
-                    { name: '基础服饰1', img: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=387&auto=format&fit=crop' },
-                    { name: '基础服饰2', img: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=387&auto=format&fit=crop' },
-                    { name: '基础服饰3', img: 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=387&auto=format&fit=crop' },
-                    { name: '基础服饰4', img: 'https://images.unsplash.com/photo-1525450824786-227cbef70703?w=387&auto=format&fit=crop' }
-                ];
-            }
-        }
-        
-        // 初始化衣物悬停效果
-        function initClothesItemHover() {
-            // 为所有衣物项添加悬停效果
-            document.querySelectorAll('.clothes-item').forEach(item => {
-                item.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-2px)';
-                    this.style.boxShadow = '0 3px 8px rgba(0,0,0,0.1)';
-                });
-                
-                item.addEventListener('mouseleave', function() {
-                    this.style.transform = '';
-                    this.style.boxShadow = '';
-                });
-            });
-        }
-
         // 返回顶部功能
-        function initBackToTop() {
+        document.addEventListener('DOMContentLoaded', function() {
             const backToTopBtn = document.getElementById('back-to-top');
             const container = document.querySelector('.responsive-container');
             
@@ -2783,864 +661,142 @@
                     behavior: 'smooth'
                 });
             });
-        }
-
-        // 初始化衣物点击事件
-        function initClothesItemClick() {
-            const items = document.querySelectorAll('.clothes-item');
             
-            items.forEach(item => {
-                item.addEventListener('click', function(e) {
-                    // 检查是否在多选模式
-                    if (isMultiSelectMode) {
-                        // 如果是多选模式，切换选中状态
-                        toggleItemSelection(this);
-                        e.preventDefault();
-                        e.stopPropagation();
-                        return;
-                    }
+            // 分类标签点击
+            const tabItems = document.querySelectorAll('.tab-item');
+            tabItems.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有active类
+                    tabItems.forEach(t => t.classList.remove('active'));
+                    // 给当前点击的添加active类
+                    this.classList.add('active');
                     
-                    // 如果是长按模式或点击操作，显示详细信息
-                    const name = this.querySelector('.item-name')?.textContent || '未命名衣物';
-                    showToast(`查看衣物: ${name}`);
+                    // 滚动到对应分类
+                    const category = this.textContent;
+                    const sections = document.querySelectorAll('.subcategory-section');
                     
-                    // 模拟衣物详情页
-                    /*
-                    window.location.href = `item-detail.html?id=${this.getAttribute('data-id')}`;
-                    */
-                });
-                
-                // 添加长按识别
-                let longPressTimer;
-                item.addEventListener('touchstart', function(e) {
-                    longPressTimer = setTimeout(() => {
-                        // 长按开启多选模式
-                        enterMultiSelectMode();
-                        toggleItemSelection(this);
-                        // 添加触感反馈
-                        if (window.navigator && window.navigator.vibrate) {
-                            window.navigator.vibrate(50);
-                        }
-                    }, 500); // 500ms长按
-                });
-                
-                item.addEventListener('touchend', function() {
-                    clearTimeout(longPressTimer);
-                });
-                
-                item.addEventListener('touchmove', function() {
-                    clearTimeout(longPressTimer);
-                });
-            });
-        }
-        
-        // 拖放相关变量
-        let draggedItem = null;
-        let dragPreview = null;
-        let isMultiSelectMode = false;
-        let selectedItems = new Set();
-        let dragStartX = 0;
-        let dragStartY = 0;
-        
-        // 初始化整理栏功能
-        function initOrganizerBar() {
-            const organizerContainer = document.getElementById('organizerContainer');
-            const organizerHandle = document.getElementById('organizerHandle');
-            const organizerMinimizeBtn = document.getElementById('organizerMinimize');
-            const organizerClearBtn = document.getElementById('organizerClear');
-            const organizerIndicator = document.getElementById('organizerIndicator');
-            
-            // 设置整理栏展开/收起功能
-            organizerHandle.addEventListener('click', function() {
-                toggleOrganizerBar();
-            });
-            
-            organizerMinimizeBtn.addEventListener('click', function() {
-                hideOrganizerBar();
-            });
-            
-            // 设置整理栏指示器点击功能
-            organizerIndicator.addEventListener('click', function() {
-                showOrganizerBar();
-            });
-            
-            // 设置清空按钮功能
-            organizerClearBtn.addEventListener('click', function() {
-                if (getOrganizerItemsCount() > 0) {
-                    showConfirmDialog(
-                        '清空整理栏', 
-                        '确定要清空整理栏中的所有衣物吗？', 
-                        clearOrganizerItems
-                    );
-                } else {
-                    showToast('整理栏已经是空的');
-                }
-            });
-            
-            // 从本地存储中恢复整理栏状态
-            restoreOrganizerState();
-        }
-        
-        // 初始化拖放功能
-        function initDragAndDrop() {
-            // 创建拖拽预览元素
-            createDragPreview();
-            
-            // 为所有衣物添加拖拽功能
-            makeItemsDraggable();
-            
-            // 设置整理栏为接收区域
-            setupDropZone();
-        }
-        
-        // 创建拖拽预览元素
-        function createDragPreview() {
-            if (!document.getElementById('dragPreview')) {
-                dragPreview = document.createElement('div');
-                dragPreview.id = 'dragPreview';
-                dragPreview.className = 'drag-preview';
-                dragPreview.style.display = 'none';
-                document.body.appendChild(dragPreview);
-            } else {
-                dragPreview = document.getElementById('dragPreview');
-            }
-        }
-        
-        // 为所有衣物添加拖拽功能
-        function makeItemsDraggable() {
-            const items = document.querySelectorAll('.clothes-item');
-            
-            items.forEach(item => {
-                item.classList.add('draggable');
-                
-                // 添加拖拽事件监听器 (触摸设备)
-                item.addEventListener('touchstart', handleDragStart);
-                
-                // 添加拖拽事件监听器 (鼠标)
-                item.addEventListener('mousedown', handleDragStart);
-            });
-            
-            // 为文档添加移动和结束拖拽事件
-            document.addEventListener('mousemove', handleDragMove);
-            document.addEventListener('touchmove', handleDragMove, { passive: false });
-            document.addEventListener('mouseup', handleDragEnd);
-            document.addEventListener('touchend', handleDragEnd);
-        }
-        
-        // 处理拖拽开始
-        function handleDragStart(e) {
-            // 检查是否是多选模式，如果是则不启动拖拽
-            if (isMultiSelectMode) return;
-            
-            // 获取初始拖拽位置
-            if (e.type === 'mousedown') {
-                dragStartX = e.clientX;
-                dragStartY = e.clientY;
-            } else if (e.type === 'touchstart') {
-                dragStartX = e.touches[0].clientX;
-                dragStartY = e.touches[0].clientY;
-            }
-            
-            // 设置延时，防止意外拖拽
-            setTimeout(() => {
-                if (!isMultiSelectMode) {
-                    draggedItem = this;
-                    this.classList.add('dragging');
-                    
-                    // 更新拖拽预览
-                    const img = this.querySelector('img');
-                    if (img) {
-                        dragPreview.innerHTML = `<img src="${img.src}" alt="预览">`;
-                        
-                        // 设置预览位置
-                        if (e.type === 'mousedown') {
-                            dragPreview.style.left = `${e.clientX}px`;
-                            dragPreview.style.top = `${e.clientY}px`;
-                        } else if (e.type === 'touchstart') {
-                            dragPreview.style.left = `${e.touches[0].clientX}px`;
-                            dragPreview.style.top = `${e.touches[0].clientY}px`;
-                        }
-                        
-                        dragPreview.style.display = 'block';
-                    }
-                    
-                    // 显示拖拽提示
-                    showDropZoneHint();
-                }
-            }, 100);
-            
-            // 防止默认行为（例如文本选择）
-            e.preventDefault();
-        }
-        
-        // 处理拖拽移动
-        function handleDragMove(e) {
-            if (!draggedItem) return;
-            
-            // 获取当前位置
-            let clientX, clientY;
-            if (e.type === 'mousemove') {
-                clientX = e.clientX;
-                clientY = e.clientY;
-            } else if (e.type === 'touchmove') {
-                clientX = e.touches[0].clientX;
-                clientY = e.touches[0].clientY;
-                
-                // 防止页面滚动
-                e.preventDefault();
-            }
-            
-            // 移动预览元素
-            dragPreview.style.left = `${clientX}px`;
-            dragPreview.style.top = `${clientY}px`;
-            
-            // 检查是否在整理栏上方
-            checkIfOverDropZone(clientX, clientY);
-        }
-        
-        // 检查是否在放置区域上方
-        function checkIfOverDropZone(x, y) {
-            const dropZone = document.getElementById('organizerContainer');
-            const rect = dropZone.getBoundingClientRect();
-            
-            if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
-                if (!dropZone.classList.contains('hover')) {
-                    dropZone.classList.add('hover');
-                    // 如果整理栏是隐藏的，显示它
-                    if (!dropZone.classList.contains('show')) {
-                        showOrganizerBar(true); // 传入true表示临时显示
-                    }
-                }
-            } else {
-                dropZone.classList.remove('hover');
-            }
-        }
-        
-        // 处理拖拽结束
-        function handleDragEnd(e) {
-            if (!draggedItem) return;
-            
-            // 获取最终位置
-            let clientX, clientY;
-            if (e.type === 'mouseup') {
-                clientX = e.clientX;
-                clientY = e.clientY;
-            } else if (e.type === 'touchend') {
-                // touchend事件不包含坐标，使用最后已知位置
-                clientX = parseInt(dragPreview.style.left);
-                clientY = parseInt(dragPreview.style.top);
-            }
-            
-            // 检查是否在整理栏上方
-            const dropZone = document.getElementById('organizerContainer');
-            const rect = dropZone.getBoundingClientRect();
-            
-            if (clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom) {
-                // 添加到整理栏
-                addToOrganizerBar(draggedItem);
-                showToast('已添加到整理栏');
-            }
-            
-            // 恢复样式
-            draggedItem.classList.remove('dragging');
-            draggedItem = null;
-            dragPreview.style.display = 'none';
-            dropZone.classList.remove('hover');
-            
-            // 隐藏拖拽提示
-            hideDropZoneHint();
-        }
-        
-        // 设置放置区域
-        function setupDropZone() {
-            const dropZone = document.getElementById('organizerItems');
-            
-            // 添加放置事件监听器
-            dropZone.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.classList.add('drag-over');
-            });
-            
-            dropZone.addEventListener('dragleave', function() {
-                this.classList.remove('drag-over');
-            });
-            
-            dropZone.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.classList.remove('drag-over');
-                
-                if (draggedItem) {
-                    addToOrganizerBar(draggedItem);
-                }
-            });
-        }
-        
-        // 添加到整理栏
-        function addToOrganizerBar(item) {
-            // 获取整理栏容器
-            const organizerItems = document.getElementById('organizerItems');
-            const placeholder = document.getElementById('organizerPlaceholder');
-            
-            // 移除占位符
-            if (placeholder && getOrganizerItemsCount() === 0) {
-                placeholder.style.display = 'none';
-            }
-            
-            // 检查是否已经在整理栏中
-            const itemId = item.getAttribute('data-id') || generateItemId(item);
-            if (document.querySelector(`.organizer-item[data-item-id="${itemId}"]`)) {
-                showToast('该衣物已在整理栏中');
-                return;
-            }
-            
-            // 创建整理栏项
-            const organizerItem = document.createElement('div');
-            organizerItem.className = 'organizer-item';
-            organizerItem.setAttribute('data-item-id', itemId);
-            
-            // 复制图片
-            const img = item.querySelector('img');
-            if (img) {
-                organizerItem.innerHTML = `
-                    <img src="${img.src}" alt="整理栏衣物" class="organizer-item-img">
-                    <div class="organizer-item-remove">×</div>
-                `;
-            } else {
-                organizerItem.innerHTML = `
-                    <div class="organizer-item-img" style="background-color: #ddd;"></div>
-                    <div class="organizer-item-remove">×</div>
-                `;
-            }
-            
-            // 添加移除按钮功能
-            const removeBtn = organizerItem.querySelector('.organizer-item-remove');
-            removeBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                removeFromOrganizerBar(organizerItem);
-            });
-            
-            // 将项添加到整理栏
-            organizerItems.appendChild(organizerItem);
-            
-            // 更新计数
-            updateOrganizerCount();
-            
-            // 保存整理栏状态
-            saveOrganizerState();
-            
-            // 显示整理栏（如果它是隐藏的）
-            showOrganizerBar();
-        }
-        
-        // 从整理栏移除
-        function removeFromOrganizerBar(item) {
-            item.remove();
-            
-            // 更新计数
-            updateOrganizerCount();
-            
-            // 如果整理栏为空，恢复占位符
-            if (getOrganizerItemsCount() === 0) {
-                const placeholder = document.getElementById('organizerPlaceholder');
-                if (placeholder) {
-                    placeholder.style.display = 'flex';
-                }
-            }
-            
-            // 保存整理栏状态
-            saveOrganizerState();
-        }
-        
-        // 清空整理栏
-        function clearOrganizerItems() {
-            const organizerItems = document.getElementById('organizerItems');
-            const placeholder = document.getElementById('organizerPlaceholder');
-            
-            // 删除所有整理栏项（除了占位符）
-            const items = organizerItems.querySelectorAll('.organizer-item');
-            items.forEach(item => item.remove());
-            
-            // 恢复占位符
-            if (placeholder) {
-                placeholder.style.display = 'flex';
-            }
-            
-            // 更新计数
-            updateOrganizerCount();
-            
-            // 清除选中状态
-            clearSelections();
-            
-            // 保存整理栏状态
-            saveOrganizerState();
-            
-            showToast('整理栏已清空');
-        }
-        
-        // 更新整理栏计数
-        function updateOrganizerCount() {
-            const count = getOrganizerItemsCount();
-            const countEl = document.getElementById('organizerCount');
-            const indicatorCountEl = document.getElementById('indicatorCount');
-            const indicator = document.getElementById('organizerIndicator');
-            
-            if (countEl) countEl.textContent = count;
-            if (indicatorCountEl) indicatorCountEl.textContent = count;
-            
-            // 更新指示器可见性
-            if (indicator) {
-                if (count > 0) {
-                    indicator.classList.add('show');
-                } else {
-                    indicator.classList.remove('show');
-                }
-            }
-        }
-        
-        // 获取整理栏中的项目数量
-        function getOrganizerItemsCount() {
-            return document.querySelectorAll('.organizer-item').length;
-        }
-        
-        // 显示整理栏
-        function showOrganizerBar(temporary = false) {
-            const organizerContainer = document.getElementById('organizerContainer');
-            organizerContainer.classList.add('show');
-            
-            if (!temporary) {
-                // 存储整理栏状态
-                localStorage.setItem('organizerBarVisible', 'true');
-            }
-        }
-        
-        // 隐藏整理栏
-        function hideOrganizerBar() {
-            const organizerContainer = document.getElementById('organizerContainer');
-            organizerContainer.classList.remove('show');
-            
-            // 存储整理栏状态
-            localStorage.setItem('organizerBarVisible', 'false');
-            
-            // 显示指示器
-            updateOrganizerCount();
-        }
-        
-        // 切换整理栏可见性
-        function toggleOrganizerBar() {
-            const organizerContainer = document.getElementById('organizerContainer');
-            if (organizerContainer.classList.contains('show')) {
-                hideOrganizerBar();
-            } else {
-                showOrganizerBar();
-            }
-        }
-        
-        // 保存整理栏状态
-        function saveOrganizerState() {
-            const organizerItems = document.querySelectorAll('.organizer-item');
-            const itemsData = [];
-            
-            organizerItems.forEach(item => {
-                const imgSrc = item.querySelector('img')?.src || '';
-                const itemId = item.getAttribute('data-item-id') || '';
-                
-                itemsData.push({
-                    id: itemId,
-                    imgSrc: imgSrc
-                });
-            });
-            
-            localStorage.setItem('organizerItems', JSON.stringify(itemsData));
-        }
-        
-        // 恢复整理栏状态
-        function restoreOrganizerState() {
-            // 恢复整理栏可见性
-            const isVisible = localStorage.getItem('organizerBarVisible') === 'true';
-            if (isVisible) {
-                showOrganizerBar();
-            }
-            
-            // 恢复整理栏中的项目
-            const savedItems = localStorage.getItem('organizerItems');
-            if (savedItems) {
-                try {
-                    const itemsData = JSON.parse(savedItems);
-                    const organizerItems = document.getElementById('organizerItems');
-                    const placeholder = document.getElementById('organizerPlaceholder');
-                    
-                    if (itemsData.length > 0 && placeholder) {
-                        placeholder.style.display = 'none';
-                    }
-                    
-                    itemsData.forEach(itemData => {
-                        if (itemData.imgSrc) {
-                            const organizerItem = document.createElement('div');
-                            organizerItem.className = 'organizer-item';
-                            organizerItem.setAttribute('data-item-id', itemData.id);
-                            
-                            organizerItem.innerHTML = `
-                                <img src="${itemData.imgSrc}" alt="整理栏衣物" class="organizer-item-img">
-                                <div class="organizer-item-remove">×</div>
-                            `;
-                            
-                            // 添加移除按钮功能
-                            const removeBtn = organizerItem.querySelector('.organizer-item-remove');
-                            removeBtn.addEventListener('click', function(e) {
-                                e.stopPropagation();
-                                removeFromOrganizerBar(organizerItem);
-                            });
-                            
-                            // 将项添加到整理栏
-                            organizerItems.appendChild(organizerItem);
+                    sections.forEach(section => {
+                        if (category === '全部' || section.dataset.category === category) {
+                            section.style.display = 'block';
+                        } else {
+                            section.style.display = 'none';
                         }
                     });
+                });
+            });
+            
+            // 查看全部/收起 功能
+            const viewAllButtons = document.querySelectorAll('.view-all');
+            viewAllButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.dataset.target;
+                    const grid = document.getElementById(targetId);
                     
-                    // 更新计数
-                    updateOrganizerCount();
-                } catch (error) {
-                    console.error('恢复整理栏状态失败:', error);
-                }
-            }
-        }
-        
-        // 生成唯一的项目ID
-        function generateItemId(item) {
-            const id = 'item_' + Math.random().toString(36).substr(2, 9);
-            item.setAttribute('data-id', id);
-            return id;
-        }
-        
-        // 显示拖拽提示
-        function showDropZoneHint() {
-            const hint = document.getElementById('dropZoneHint');
-            if (hint) {
-                hint.classList.add('show');
-            }
-        }
-        
-        // 隐藏拖拽提示
-        function hideDropZoneHint() {
-            const hint = document.getElementById('dropZoneHint');
-            if (hint) {
-                hint.classList.remove('show');
-            }
-        }
-        
-        // 初始化批量操作功能
-        function initBatchActions() {
-            // 创建穿搭
-            document.getElementById('batchOutfit').addEventListener('click', function() {
-                if (getOrganizerItemsCount() < 2) {
-                    showToast('至少需要2件衣物才能创建穿搭');
-                    return;
-                }
-                
-                showToast('创建穿搭功能尚未实现');
-                // 实际实现中应导航到创建穿搭页面，并传入选择的衣物
-            });
-            
-            // 移动分类
-            document.getElementById('batchMove').addEventListener('click', function() {
-                if (getOrganizerItemsCount() === 0) {
-                    showToast('请先选择需要移动的衣物');
-                    return;
-                }
-                
-                showToast('移动分类功能尚未实现');
-                // 实际实现中应显示分类选择对话框
-            });
-            
-            // 隐藏推荐
-            document.getElementById('batchHide').addEventListener('click', function() {
-                if (getOrganizerItemsCount() === 0) {
-                    showToast('请先选择需要隐藏的衣物');
-                    return;
-                }
-                
-                showConfirmDialog(
-                    '隐藏衣物', 
-                    `确定要将选中的${getOrganizerItemsCount()}件衣物从AI推荐中隐藏吗？`, 
-                    function() {
-                        showToast(`已将${getOrganizerItemsCount()}件衣物从推荐中隐藏`);
-                        clearOrganizerItems();
+                    if (grid.classList.contains('expanded')) {
+                        grid.classList.remove('expanded');
+                        this.textContent = '查看全部';
+                    } else {
+                        grid.classList.add('expanded');
+                        this.textContent = '收起';
                     }
-                );
+                });
             });
             
-            // 删除
-            document.getElementById('batchDelete').addEventListener('click', function() {
-                if (getOrganizerItemsCount() === 0) {
-                    showToast('请先选择需要删除的衣物');
-                    return;
-                }
-                
-                showConfirmDialog(
-                    '删除衣物', 
-                    `确定要删除选中的${getOrganizerItemsCount()}件衣物吗？此操作不可恢复。`, 
-                    function() {
-                        showToast(`已删除${getOrganizerItemsCount()}件衣物`);
-                        clearOrganizerItems();
-                    }
-                );
-            });
-        }
-        
-        // 初始化确认对话框
-        function initConfirmDialog() {
-            const dialog = document.getElementById('confirmDialog');
-            const backdrop = document.getElementById('confirmBackdrop');
-            const cancelBtn = document.getElementById('confirmCancel');
-            const okBtn = document.getElementById('confirmOk');
+            // 模拟拖拽功能
+            const clothItems = document.querySelectorAll('.cloth-item');
+            const organizerIndicator = document.querySelector('.organizer-indicator');
+            const organizerCount = document.querySelector('.organizer-count');
             
-            // 设置取消按钮
-            cancelBtn.addEventListener('click', function() {
-                hideConfirmDialog();
-            });
+            let selectedCount = 0;
             
-            // 设置背景点击关闭
-            backdrop.addEventListener('click', function() {
-                hideConfirmDialog();
-            });
-        }
-        
-        // 显示确认对话框
-        function showConfirmDialog(title, message, confirmCallback) {
-            const dialog = document.getElementById('confirmDialog');
-            const backdrop = document.getElementById('confirmBackdrop');
-            const titleEl = document.getElementById('confirmTitle');
-            const messageEl = document.getElementById('confirmMessage');
-            const okBtn = document.getElementById('confirmOk');
-            
-            // 设置对话框内容
-            titleEl.textContent = title;
-            messageEl.textContent = message;
-            
-            // 设置确认按钮
-            okBtn.onclick = function() {
-                hideConfirmDialog();
-                if (typeof confirmCallback === 'function') {
-                    confirmCallback();
-                }
-            };
-            
-            // 显示对话框
-            dialog.classList.add('show');
-            backdrop.classList.add('show');
-        }
-        
-        // 隐藏确认对话框
-        function hideConfirmDialog() {
-            const dialog = document.getElementById('confirmDialog');
-            const backdrop = document.getElementById('confirmBackdrop');
-            
-            dialog.classList.remove('show');
-            backdrop.classList.remove('show');
-        }
-        
-        // 进入多选模式
-        function enterMultiSelectMode() {
-            isMultiSelectMode = true;
-            
-            // 显示多选模式提示
-            const indicator = document.getElementById('selectionModeIndicator');
-            indicator.classList.add('show');
-            
-            // 添加退出多选模式的按钮
-            if (!document.getElementById('exitSelectionMode')) {
-                const exitButton = document.createElement('button');
-                exitButton.id = 'exitSelectionMode';
-                exitButton.className = 'exit-selection-mode';
-                exitButton.textContent = '完成';
-                exitButton.style.position = 'fixed';
-                exitButton.style.top = '60px';
-                exitButton.style.right = '20px';
-                exitButton.style.padding = '5px 15px';
-                exitButton.style.backgroundColor = '#3a7bd5';
-                exitButton.style.color = 'white';
-                exitButton.style.border = 'none';
-                exitButton.style.borderRadius = '20px';
-                exitButton.style.fontSize = '14px';
-                exitButton.style.zIndex = '200';
-                
-                exitButton.addEventListener('click', function() {
-                    exitMultiSelectMode();
+            clothItems.forEach(item => {
+                item.addEventListener('dragstart', function(e) {
+                    e.dataTransfer.setData('text/plain', 'dragged');
+                    this.style.opacity = '0.5';
                 });
                 
-                document.body.appendChild(exitButton);
-            }
-            
-            // 添加iOS风格触感反馈
-            if (window.navigator && window.navigator.vibrate) {
-                window.navigator.vibrate(10);
-            }
-        }
-        
-        // 退出多选模式
-        function exitMultiSelectMode() {
-            isMultiSelectMode = false;
-            
-            // 隐藏多选模式提示
-            const indicator = document.getElementById('selectionModeIndicator');
-            indicator.classList.remove('show');
-            
-            // 移除退出按钮
-            const exitButton = document.getElementById('exitSelectionMode');
-            if (exitButton) {
-                exitButton.remove();
-            }
-            
-            // 如果有选中的项目，添加到整理栏
-            if (selectedItems.size > 0) {
-                addSelectedItemsToOrganizer();
-            }
-            
-            // 清除选中状态
-            clearSelections();
-        }
-        
-        // 切换选中状态
-        function toggleItemSelection(item) {
-            const itemId = item.getAttribute('data-id') || generateItemId(item);
-            
-            if (item.classList.contains('selected')) {
-                // 取消选中
-                item.classList.remove('selected');
-                selectedItems.delete(itemId);
-            } else {
-                // 选中
-                item.classList.add('selected');
-                selectedItems.add(itemId);
-                
-                // 添加触感反馈
-                if (window.navigator && window.navigator.vibrate) {
-                    window.navigator.vibrate(5);
-                }
-            }
-            
-            // 更新选中计数
-            updateSelectedCount();
-        }
-        
-        // 更新选中计数
-        function updateSelectedCount() {
-            const indicator = document.getElementById('selectionModeIndicator');
-            if (indicator) {
-                indicator.querySelector('span').textContent = 
-                    `多选模式已开启，已选择 ${selectedItems.size} 件衣物`;
-            }
-        }
-        
-        // 清除所有选中
-        function clearSelections() {
-            document.querySelectorAll('.clothes-item.selected').forEach(item => {
-                item.classList.remove('selected');
-            });
-            selectedItems.clear();
-            updateSelectedCount();
-        }
-        
-        // 添加选中的项目到整理栏
-        function addSelectedItemsToOrganizer() {
-            let addedCount = 0;
-            
-            document.querySelectorAll('.clothes-item.selected').forEach(item => {
-                // 获取整理栏容器
-                const organizerItems = document.getElementById('organizerItems');
-                const placeholder = document.getElementById('organizerPlaceholder');
-                
-                // 移除占位符
-                if (placeholder && getOrganizerItemsCount() === 0) {
-                    placeholder.style.display = 'none';
-                }
-                
-                // 检查是否已经在整理栏中
-                const itemId = item.getAttribute('data-id');
-                if (document.querySelector(`.organizer-item[data-item-id="${itemId}"]`)) {
-                    return; // 跳过已在整理栏的项目
-                }
-                
-                // 创建整理栏项
-                const organizerItem = document.createElement('div');
-                organizerItem.className = 'organizer-item';
-                organizerItem.setAttribute('data-item-id', itemId);
-                
-                // 复制图片
-                const img = item.querySelector('img');
-                if (img) {
-                    organizerItem.innerHTML = `
-                        <img src="${img.src}" alt="整理栏衣物" class="organizer-item-img">
-                        <div class="organizer-item-remove">×</div>
-                    `;
-                } else {
-                    organizerItem.innerHTML = `
-                        <div class="organizer-item-img" style="background-color: #ddd;"></div>
-                        <div class="organizer-item-remove">×</div>
-                    `;
-                }
-                
-                // 添加移除按钮功能
-                const removeBtn = organizerItem.querySelector('.organizer-item-remove');
-                removeBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    removeFromOrganizerBar(organizerItem);
+                item.addEventListener('dragend', function() {
+                    this.style.opacity = '1';
                 });
                 
-                // 将项添加到整理栏
-                organizerItems.appendChild(organizerItem);
-                addedCount++;
+                // 长按进入多选模式
+                let pressTimer;
+                
+                item.addEventListener('mousedown', function() {
+                    pressTimer = window.setTimeout(function() {
+                        item.classList.toggle('selected');
+                        if (item.classList.contains('selected')) {
+                            item.style.outline = '2px solid #3a7bd5';
+                            selectedCount++;
+                        } else {
+                            item.style.outline = 'none';
+                            selectedCount--;
+                        }
+                        
+                        organizerCount.textContent = selectedCount;
+                    }, 500);
+                });
+                
+                item.addEventListener('mouseup', function() {
+                    clearTimeout(pressTimer);
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    clearTimeout(pressTimer);
+                });
             });
             
-            if (addedCount > 0) {
+            // 整理栏放置区域
+            organizerIndicator.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.backgroundColor = '#2a5b9d';
+            });
+            
+            organizerIndicator.addEventListener('dragleave', function() {
+                this.style.backgroundColor = '#3a7bd5';
+            });
+            
+            organizerIndicator.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.backgroundColor = '#3a7bd5';
+                
                 // 更新计数
-                updateOrganizerCount();
+                selectedCount++;
+                organizerCount.textContent = selectedCount;
                 
-                // 保存整理栏状态
-                saveOrganizerState();
-                
-                // 显示整理栏
-                showOrganizerBar();
-                
-                // 显示提示
-                showToast(`已添加${addedCount}件衣物到整理栏`);
-            }
-        }
-
-        // 初始化引导
-        function initGuide() {
-            const hasSeenGuide = localStorage.getItem('hasSeenOrganizerGuide') === 'true';
-            
-            if (!hasSeenGuide) {
-                // 显示引导
-                showGuide();
-                
-                // 标记为已经看过引导
-                localStorage.setItem('hasSeenOrganizerGuide', 'true');
-            }
-            
-            // 引导关闭按钮
-            document.getElementById('guideCloseButton').addEventListener('click', function() {
-                hideGuide();
-                // 引导关闭后显示整理栏
-                showOrganizerBar();
+                // 添加动画效果
+                this.classList.add('drop-effect');
+                setTimeout(() => {
+                    this.classList.remove('drop-effect');
+                }, 300);
             });
-        }
-        
-        // 显示引导
-        function showGuide() {
-            const guide = document.getElementById('organizerGuide');
-            if (guide) {
-                guide.classList.add('show');
-            }
-        }
-        
-        // 隐藏引导
-        function hideGuide() {
-            const guide = document.getElementById('organizerGuide');
-            if (guide) {
-                guide.classList.remove('show');
-            }
-        }
+            
+            // 点击添加按钮
+            const addBtn = document.querySelector('.add-btn-corner');
+            addBtn.addEventListener('click', function() {
+                alert('添加衣物功能将在下一版本开放！');
+            });
+            
+            // 筛选芯片点击
+            const filterChips = document.querySelectorAll('.filter-chip');
+            filterChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    filterChips.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // 底部导航栏点击
+            const tabBottomItems = document.querySelectorAll('.tab-item-bottom');
+            tabBottomItems.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.querySelector('span').textContent;
+                    if (tabName !== '衣橱') {
+                        alert(`即将跳转至${tabName}页面！`);
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html> 
